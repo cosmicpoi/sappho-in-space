@@ -1,15 +1,13 @@
-type Position = {
-  x: number;
-  y: number;
-}
+
 
 function getChar(i: number): string {
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   // return characters.charAt(Math.floor(Math.random() * characters.length));
-  return characters.charAt(i % characters.length)
+  return characters.charAt(i % characters.length);
 }
 
-class CharPixel {
+class _CharPixel {
   private element: HTMLSpanElement;
   private idx: Position;
 
@@ -23,7 +21,7 @@ class CharPixel {
       y: idx.y * 15,
     };
 
-    this.element = document.createElement('span');
+    this.element = document.createElement("span");
     this.element.innerHTML = "@";
     this.element.className = "charPixel";
 
@@ -38,39 +36,12 @@ class CharPixel {
   }
 }
 
-function App(): HTMLDivElement {
-  const element = document.createElement('div');
-  element.className = "container";
-
-  const pixels: CharPixel[] = [];
-
-  for (var i = 0; i < 1000; i++) {
-    for (var j = 0; j < 140; j++) {
-      if (Math.random() < 0.1) pixels.push(new CharPixel(element, { x: i, y: j }));
-    }
-  }
-
-  var frames = 0;
-  const loop = () => {
-    frames++;
-    for (const pixel of pixels) {
-      pixel.setCharacter(getChar(frames));
-    }
-
-    window.requestAnimationFrame(loop)
-  }
-
-
-
-  return element;
-}
-
-document.body.appendChild(App());
 
 document.addEventListener("keydown", (e: KeyboardEvent) => {
   const delta = 15;
   console.log("key pressed");
-  var offX = 0, offY = 0;
+  var offX = 0,
+    offY = 0;
   if (e.key == "ArrowUp") {
     offY = -delta;
   } else if (e.key == "ArrowDown") {
