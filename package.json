@@ -1,0 +1,15 @@
+{
+  "name": "sappho-in-space",
+  "version": "1.0.0",
+  "description": "",
+  "private": "true",
+  "dependencies": {
+    "esbuild": "^0.15.16",
+    "typescript": "^4.9.3"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --outfile=dist/main.js --servedir=dist"
+  },
+  "author": "",
+  "license": "ISC"
+}
