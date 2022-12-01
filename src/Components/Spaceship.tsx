@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { KEYS } from "../Engine/InputManager";
 import { t_v } from "../Utils/consts";
+import { useFrame, useKeyDown } from "../Utils/Hooks";
 import { Position3D } from "../Utils/Position";
 
 function Collider({ x, y, z }: Position3D) {
@@ -68,39 +69,31 @@ export function Spaceship() {
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
-  useEffect(() => {
-    const { unsubscribe } = gM.frame$.subscribe(() => {
-      const hozDir = iM.resolveHozDirection();
-      const vertDir = iM.resolveVertDirection();
+  const onFrame = useCallback(() => {
+    const hozDir = iM.resolveHozDirection();
+    const vertDir = iM.resolveVertDirection();
 
-      setY((y) => y + vertDir);
-      setX((x) => x + hozDir);
-    });
+    setY((y) => y + vertDir);
+    setX((x) => x + hozDir);
+  }, [iM, setX, setY]);
+  useFrame(onFrame);
 
-    return unsubscribe;
-  });
-
-  useEffect(() => {
-    const { unsubscribe: uD } = iM.bindKeyDown(KEYS.Down, () => {
-      setDir(Direction.Down);
-    });
-    const { unsubscribe: uU } = iM.bindKeyDown(KEYS.Up, () => {
-      setDir(Direction.Up);
-    });
-    const { unsubscribe: uL } = iM.bindKeyDown(KEYS.Left, () => {
-      setDir(Direction.Left);
-    });
-    const { unsubscribe: uR } = iM.bindKeyDown(KEYS.Right, () => {
-      setDir(Direction.Right);
-    });
-
-    return () => {
-      uD();
-      uU();
-      uL();
-      uR();
-    };
+  const d1 = useCallback(() => {
+    setDir(Direction.Down);
   }, []);
+  useKeyDown(KEYS.Down, d1);
+  const d2 = useCallback(() => {
+    setDir(Direction.Up);
+  }, []);
+  useKeyDown(KEYS.Up, d2);
+  const d3 = useCallback(() => {
+    setDir(Direction.Left);
+  }, []);
+  useKeyDown(KEYS.Left, d3);
+  const d4 = useCallback(() => {
+    setDir(Direction.Right);
+  }, []);
+  useKeyDown(KEYS.Right, d4);
 
   // sync chars to direction
   useLayoutEffect(() => {

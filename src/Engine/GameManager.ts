@@ -10,7 +10,7 @@ export class GameManager {
   public charPixelGridManager: CharPixelGridManager;
   public soundManager: SoundManager
   public inputManager: InputManager;
-  public viewportManager: ViewportManager;
+  public viewportManager: ViewportManager | undefined;
 
   public frame$ = monomitter<void>();
   private frameRequestId: ReturnType<typeof requestAnimationFrame>;
@@ -18,9 +18,10 @@ export class GameManager {
   constructor() {
     autoBind(this);
     this.charPixelGridManager = new CharPixelGridManager();
-    this.viewportManager = new ViewportManager();
     this.inputManager = new InputManager();
+    this.viewportManager = new ViewportManager();
   }
+
 
   private loop() {
     this.frame$.publish();

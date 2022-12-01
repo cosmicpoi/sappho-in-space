@@ -27,12 +27,12 @@ function App() {
 
   const containerRef = useRef<HTMLDivElement>();
   useEffect(() => {
-    const { x, y } = gameManager.viewportManager.getCenter();
+    if (containerRef.current)
+    gameManager.viewportManager.setContainer(containerRef.current);
+  }, [containerRef]);
 
-    containerRef.current.scroll(
-      wToS(x) - window.innerWidth / 2,
-      wToS(y) - window.innerHeight / 2
-    );
+  useEffect(() => {
+    gameManager.viewportManager.scrollToCenter();
   }, [containerRef]);
 
   const [center] = useState<Position>(gameManager.viewportManager.getCenter());

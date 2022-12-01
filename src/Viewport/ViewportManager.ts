@@ -8,8 +8,26 @@ export class ViewportManager {
   private width: number = CANVAS_WIDTH;
   private height: number = CANVAS_HEIGHT;
 
+  private container: HTMLDivElement;
+
   constructor() {
     autoBind(this);
+  }
+
+  public setContainer(container: HTMLDivElement): void {
+    this.container = container;
+  }
+
+  public scrollToCenter() {
+    const { x, y } = this.getCenter();
+
+    this.container.scroll(
+      wToS(x) - window.innerWidth / 2,
+      wToS(y) - window.innerHeight / 2
+    );
+  }
+  public scrollDelta({ x, y }: Position) {
+    this.container.scroll(this.container.scrollLeft + x, this.container.scrollTop + y)
   }
 
 
@@ -18,5 +36,9 @@ export class ViewportManager {
 
   public getCenter(): Position {
     return { x: this.width / 2, y: this.height / 2 };
+  }
+
+  public follow(pos: Position) {
+    // if ()
   }
 }
