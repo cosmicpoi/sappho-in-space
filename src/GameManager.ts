@@ -1,9 +1,9 @@
 import autoBind from "auto-bind";
 import { CharPixelGridManager } from "./CharPixelLib/CharPixelGrid";
+import { ViewportManager } from "./Viewport/ViewportManager";
 
 type SoundManager = {};
 type InputManager = {};
-type ViewportManager = {};
 
 export class GameManager {
   public charPixelGridManager: CharPixelGridManager;
@@ -14,5 +14,6 @@ export class GameManager {
   constructor() {
     autoBind(this);
     this.charPixelGridManager = new CharPixelGridManager();
+    this.viewportManager = new ViewportManager();
   }
 }

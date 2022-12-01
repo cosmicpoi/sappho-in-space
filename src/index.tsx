@@ -1,16 +1,19 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
 import { Line } from "./CharPixelLib/CharPixel";
 import { GameManager } from "./GameManager";
 import { Spaceship } from "./Spaceship";
 import { createDefinedContext } from "./Utils/createDefinedContext";
+import { Position } from "./Utils/Position";
+import { Frame } from "./Viewport/Frame";
+import { wToS } from "./Viewport/ViewportManager";
 
 const Container = styled.div`
-  overflow: visible;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   position: relative;
 `;
 
@@ -22,11 +25,26 @@ export const {
 function App() {
   const [gameManager] = useState<GameManager>(new GameManager());
 
+  const containerRef = useRef<HTMLDivElement>();
+  useEffect(() => {
+    const { x, y } = gameManager.viewportManager.getCenter();
+
+    containerRef.current.scroll(
+      wToS(x) - window.innerWidth / 2,
+      wToS(y) - window.innerHeight / 2
+    );
+  }, [containerRef]);
+
+  const [center] = useState<Position>(gameManager.viewportManager.getCenter());
+
   return (
     <GameManagerProvider value={gameManager}>
-      <Container>
+      <Container ref={containerRef}>
+        <Frame />
         <Line y={3} x={5} z={-1} text="de" />
         <Line y={4} x={7} z={-1} text="of my brested friend" />
+
+        <Line y={center.y} x={center.x} z={-1} text="of my brested friend" />
 
         <Line
           y={10}
