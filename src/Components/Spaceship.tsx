@@ -70,10 +70,11 @@ export function Spaceship() {
 
   useEffect(() => {
     const { unsubscribe } = gM.frame$.subscribe(() => {
-      if (iM.isKeyDown(KEYS.Down)) setY((y) => y + 1);
-      else if (iM.isKeyDown(KEYS.Up)) setY((y) => y - 1);
-      else if (iM.isKeyDown(KEYS.Left)) setX((x) => x - 1);
-      else if (iM.isKeyDown(KEYS.Right)) setX((x) => x + 1);
+      const hozDir = iM.resolveHozDirection();
+      const vertDir = iM.resolveVertDirection();
+
+      setY((y) => y + vertDir);
+      setX((x) => x + hozDir);
     });
 
     return unsubscribe;

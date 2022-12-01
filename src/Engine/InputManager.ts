@@ -28,6 +28,20 @@ export class InputManager {
     return this.keyIsDown?.get(key) === true;
   }
 
+  public resolveVertDirection(): number {
+    const downHeld = this.isKeyDown(KEYS.Down);
+    const upHeld = this.isKeyDown(KEYS.Up);
+
+    return (downHeld ? 1 : 0) + (upHeld ? -1 : 0);
+  }
+  public resolveHozDirection(): number {
+    const leftHeld = this.isKeyDown(KEYS.Left);
+    const rightHeld = this.isKeyDown(KEYS.Right);
+
+    return (rightHeld ? 1 : 0) + (leftHeld ? -1 : 0);
+  }
+
+
 
   public bindListeners(): () => void {
     const onKeyDown = (e: KeyboardEvent) => {
