@@ -7,7 +7,7 @@ import { Spaceship } from "./Components/Spaceship";
 import { createDefinedContext } from "./Utils/createDefinedContext";
 import { Position } from "./Utils/Position";
 import { Frame } from "./Viewport/Frame";
-import { wToS } from "./Viewport/ViewportManager";
+import { unit_wToS } from "./Viewport/ViewportManager";
 import { Line } from "./Components/Line";
 
 const Container = styled.div`

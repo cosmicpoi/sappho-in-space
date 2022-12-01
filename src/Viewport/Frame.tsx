@@ -5,7 +5,7 @@ import { CharPixel } from "../CharPixelLib/CharPixel";
 import { Position } from "../Utils/Position";
 
 function Framer({ x, y }: Position) {
-  return <CharPixel char="@" z={0} x={x} y={y} color="red" />;
+  return <CharPixel char="@" z={0} x={x} y={y} />;
 }
 
 export function Frame() {

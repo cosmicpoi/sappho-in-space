@@ -69,6 +69,7 @@ export function Spaceship() {
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
+  // spaceship control
   const onFrame = useCallback(() => {
     const hozDir = iM.resolveHozDirection();
     const vertDir = iM.resolveVertDirection();
@@ -99,6 +100,11 @@ export function Spaceship() {
   useLayoutEffect(() => {
     setChars(dirChars[dir]);
   }, [dir]);
+
+  // camera control
+  useLayoutEffect(() => {
+    vM.follow({ x, y });
+  }, [x, y, vM]);
 
   return (
     <>
