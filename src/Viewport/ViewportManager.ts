@@ -1,5 +1,5 @@
 import autoBind from "auto-bind";
-import { CANVAS_WIDTH, CANVAS_HEIGHT, PIXEL_WIDTH } from "../consts";
+import { CANVAS_WIDTH, CANVAS_HEIGHT, PIXEL_WIDTH } from "../Utils/consts";
 import { Position } from "../Utils/Position";
 
 export const wToS = (w: number) => w * PIXEL_WIDTH;

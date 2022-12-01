@@ -2,7 +2,7 @@ import * as React from "react";
 import { useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { useGameManager } from "..";
-import { PIXEL_WIDTH, t_v } from "../consts";
+import { PIXEL_WIDTH, t_v } from "../Utils/consts";
 import { Position, Position3D } from "../Utils/Position";
 
 type StyledCharPixelProps = Position & { hidden?: boolean; color?: string };
@@ -60,14 +60,5 @@ export function CharPixel({ x, y, z, char, color }: CharPixelProps) {
     <StyledCharPixel x={x} y={y} hidden={hidden} color={color}>
       {content}
     </StyledCharPixel>
-  );
-}
-export function Line({ x, y, z, text }: Position3D & { text: string }) {
-  return (
-    <>
-      {text.split("").map((str: string, i: number) => (
-        <CharPixel x={x + i} y={y} z={z} char={str} key={i} />
-      ))}
-    </>
   );
 }

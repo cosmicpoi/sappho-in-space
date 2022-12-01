@@ -1,10 +1,11 @@
 import * as React from "react";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useGameManager } from ".";
+import { useGameManager } from "..";
 
-import { CharPixel } from "./CharPixelLib/CharPixel";
-import { t_v } from "./consts";
-import { Position3D } from "./Utils/Position";
+import { CharPixel } from "../CharPixelLib/CharPixel";
+import { KEYS } from "../Engine/InputManager";
+import { t_v } from "../Utils/consts";
+import { Position3D } from "../Utils/Position";
 
 function Collider({ x, y, z }: Position3D) {
   const [isTop, setTop] = useState<boolean>(false);
@@ -23,6 +24,12 @@ function SpaceshipPart({ x, y, z, char }: Position3D & { char: string }) {
   else return <CharPixel x={x} y={y} z={z} char={char} />;
 }
 
+enum Direction {
+  Up,
+  Left,
+  Down,
+  Right,
+}
 const spaceshipCharsDown = [
   ["v", " ", "v"],
   ["|", "–", "|"],
@@ -43,10 +50,18 @@ const spaceshipCharsLeft = [
   ["<", "|", " "],
   [" ", "–", "<"],
 ];
+const dirChars: string[][][] = [
+  spaceshipCharsUp,
+  spaceshipCharsLeft,
+  spaceshipCharsDown,
+  spaceshipCharsRight,
+];
 
 export function Spaceship() {
   const gM = useGameManager();
-  const { viewportManager: vM } = gM;
+  const { viewportManager: vM, inputManager: iM } = gM;
+
+  const [dir, setDir] = useState<Direction>(Direction.Up);
 
   const [x, setX] = useState<number>(vM.getCenter().x);
   const [y, setY] = useState<number>(vM.getCenter().y);
@@ -54,24 +69,42 @@ export function Spaceship() {
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
   useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      if (e.key == "ArrowUp") {
-        setY((y) => y - 1);
-        setChars(spaceshipCharsUp);
-      } else if (e.key == "ArrowDown") {
-        setY((y) => y + 1);
-        setChars(spaceshipCharsDown);
-      }
-
-      if (e.key == "ArrowRight") {
-        setX((x) => x + 1);
-        setChars(spaceshipCharsRight);
-      } else if (e.key == "ArrowLeft") {
-        setX((x) => x - 1);
-        setChars(spaceshipCharsLeft);
-      }
+    const { unsubscribe } = gM.frame$.subscribe(() => {
+      if (iM.isKeyDown(KEYS.Down)) setY((y) => y + 1);
+      else if (iM.isKeyDown(KEYS.Up)) setY((y) => y - 1);
+      else if (iM.isKeyDown(KEYS.Left)) setX((x) => x - 1);
+      else if (iM.isKeyDown(KEYS.Right)) setX((x) => x + 1);
     });
+
+    return unsubscribe;
+  });
+
+  useEffect(() => {
+    const { unsubscribe: uD } = iM.bindKeyDown(KEYS.Down, () => {
+      setDir(Direction.Down);
+    });
+    const { unsubscribe: uU } = iM.bindKeyDown(KEYS.Up, () => {
+      setDir(Direction.Up);
+    });
+    const { unsubscribe: uL } = iM.bindKeyDown(KEYS.Left, () => {
+      setDir(Direction.Left);
+    });
+    const { unsubscribe: uR } = iM.bindKeyDown(KEYS.Right, () => {
+      setDir(Direction.Right);
+    });
+
+    return () => {
+      uD();
+      uU();
+      uL();
+      uR();
+    };
   }, []);
+
+  // sync chars to direction
+  useLayoutEffect(() => {
+    setChars(dirChars[dir]);
+  }, [dir]);
 
   return (
     <>
@@ -110,14 +143,3 @@ export function Spaceship() {
     </>
   );
 }
-
-`
- ...
-.V.V.
-.|–|.
- .V.
-
- >–
-  |>
- >-
-`;

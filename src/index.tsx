@@ -2,13 +2,13 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
-import { Line } from "./CharPixelLib/CharPixel";
-import { GameManager } from "./GameManager";
-import { Spaceship } from "./Spaceship";
+import { GameManager } from "./Engine/GameManager";
+import { Spaceship } from "./Components/Spaceship";
 import { createDefinedContext } from "./Utils/createDefinedContext";
 import { Position } from "./Utils/Position";
 import { Frame } from "./Viewport/Frame";
 import { wToS } from "./Viewport/ViewportManager";
+import { Line } from "./Components/Line";
 
 const Container = styled.div`
   width: 100%;
@@ -36,6 +36,10 @@ function App() {
   }, [containerRef]);
 
   const [center] = useState<Position>(gameManager.viewportManager.getCenter());
+
+  useEffect(() => {
+    return gameManager.initialize();
+  }, [gameManager]);
 
   return (
     <GameManagerProvider value={gameManager}>
