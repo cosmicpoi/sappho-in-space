@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 
-import { CharPixel } from "./CharPixel";
+import { CharPixel } from "./CharPixelLib/CharPixel";
 import { t_v } from "./consts";
 
 const spaceshipCharsDown = [

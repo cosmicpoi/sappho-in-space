@@ -1,8 +1,11 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { useState } from "react";
+import { createRoot } from "react-dom/client";
 import styled from "styled-components";
-import { Line } from "./CharPixel";
+import { Line } from "./CharPixelLib/CharPixel";
+import { GameManager } from "./GameManager";
 import { Spaceship } from "./Spaceship";
+import { createDefinedContext } from "./Utils/createDefinedContext";
 
 const Container = styled.div`
   overflow: visible;
@@ -11,15 +14,31 @@ const Container = styled.div`
   position: relative;
 `;
 
-function App() {
-  return (
-    <Container>
-      <Line y={3} x={5} text="delicate" />
-      <Line y={4} x={7} text="of my brested friend" />
+export const {
+  useDefinedContext: useGameManager,
+  provider: GameManagerProvider,
+} = createDefinedContext<GameManager>();
 
-      <Spaceship />
-    </Container>
+function App() {
+  const [gameManager] = useState<GameManager>(new GameManager());
+
+  return (
+    <GameManagerProvider value={gameManager}>
+      <Container>
+        <Line y={3} x={5} z={-1} text="de" />
+        <Line y={4} x={7} z={-1} text="of my brested friend" />
+
+        <Line
+          y={10}
+          x={5}
+          z={-1}
+          text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
+        />
+        <Spaceship />
+      </Container>
+    </GameManagerProvider>
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const root = createRoot(document.getElementById("root"));
+root.render(<App />);
