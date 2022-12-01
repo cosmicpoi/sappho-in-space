@@ -3,4 +3,8 @@ export type Position = {
   y: number;
 };
 
+export type Position3D = Position & {
+  z?: number;
+}
+
 export const getPositionKey = ({ x, y }: Position): string => `${x}-${y}`;

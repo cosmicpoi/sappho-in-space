@@ -1,8 +1,27 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { useGameManager } from ".";
 
 import { CharPixel } from "./CharPixelLib/CharPixel";
 import { t_v } from "./consts";
+import { Position3D } from "./Utils/Position";
+
+function Collider({ x, y, z }: Position3D) {
+  const [isTop, setTop] = useState<boolean>(false);
+  const gM = useGameManager();
+
+  useLayoutEffect(() => {
+    setTop(gM.charPixelGridManager.isOccupied({ x, y }));
+  }, [x, y, z]);
+
+  return (
+    <CharPixel x={x} y={y} z={z} char={isTop ? "." : " "} color={"gray"} />
+  );
+}
+function SpaceshipPart({ x, y, z, char }: Position3D & { char: string }) {
+  if (char == " ") return <Collider x={x} y={y} z={z} />;
+  else return <CharPixel x={x} y={y} z={z} char={char} />;
+}
 
 const spaceshipCharsDown = [
   ["v", " ", "v"],
@@ -55,30 +74,45 @@ export function Spaceship() {
     <>
       {/* First col */}
       <>
-        <CharPixel x={x - 1} y={y - 1} char={chars[0][0]}></CharPixel>
-        <CharPixel x={x - 1} y={y + 0} char={chars[1][0]}></CharPixel>
-        <CharPixel x={x - 1} y={y + 1} char={chars[2][0]}></CharPixel>
+        <SpaceshipPart x={x - 1} y={y - 1} char={chars[0][0]} />
+        <SpaceshipPart x={x - 1} y={y + 0} char={chars[1][0]} />
+        <SpaceshipPart x={x - 1} y={y + 1} char={chars[2][0]} />
       </>
       {/* Second col */}
       <>
-        <CharPixel x={x + 0} y={y - 1} char={chars[0][1]}></CharPixel>
-        <CharPixel x={x + 0} y={y + 0} char={chars[1][1]}></CharPixel>
-        <CharPixel x={x + 0} y={y + 1} char={chars[2][1]}></CharPixel>
+        <SpaceshipPart x={x + 0} y={y - 1} char={chars[0][1]} />
+        <SpaceshipPart x={x + 0} y={y + 0} char={chars[1][1]} />
+        <SpaceshipPart x={x + 0} y={y + 1} char={chars[2][1]} />
       </>
       {/* Third col */}
       <>
-        <CharPixel x={x + 1} y={y - 1} char={chars[0][2]}></CharPixel>
-        <CharPixel x={x + 1} y={y + 0} char={chars[1][2]}></CharPixel>
-        <CharPixel x={x + 1} y={y + 1} char={chars[2][2]}></CharPixel>
+        <SpaceshipPart x={x + 1} y={y - 1} char={chars[0][2]} />
+        <SpaceshipPart x={x + 1} y={y + 0} char={chars[1][2]} />
+        <SpaceshipPart x={x + 1} y={y + 1} char={chars[2][2]} />
       </>
+      {/* Colliders */}
+      <Collider x={x - 1} y={y - 2} />
+      <Collider x={x + 0} y={y - 2} />
+      <Collider x={x + 1} y={y - 2} />
+      <Collider x={x - 1} y={y + 2} />
+      <Collider x={x + 0} y={y + 2} />
+      <Collider x={x + 1} y={y + 2} />
+
+      <Collider x={x - 2} y={y - 1} />
+      <Collider x={x - 2} y={y + 0} />
+      <Collider x={x - 2} y={y + 1} />
+      <Collider x={x + 2} y={y - 1} />
+      <Collider x={x + 2} y={y + 0} />
+      <Collider x={x + 2} y={y + 1} />
     </>
   );
 }
 
 `
-V V
-|–|
- V
+ ...
+.V.V.
+.|–|.
+ .V.
 
  >–
   |>

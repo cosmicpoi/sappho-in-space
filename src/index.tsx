@@ -34,6 +34,30 @@ function App() {
           z={-1}
           text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
         />
+        <Line
+          y={11}
+          x={5}
+          z={-1}
+          text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
+        />
+        <Line
+          y={12}
+          x={5}
+          z={-1}
+          text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
+        />
+        <Line
+          y={13}
+          x={5}
+          z={-1}
+          text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
+        />
+        <Line
+          y={14}
+          x={5}
+          z={-1}
+          text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
+        />
         <Spaceship />
       </Container>
     </GameManagerProvider>

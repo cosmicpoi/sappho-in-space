@@ -1,18 +1,18 @@
 import * as React from "react";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { useGameManager } from "..";
 import { PIXEL_WIDTH, t_v } from "../consts";
-import { Position } from "../Utils/Position";
+import { Position, Position3D } from "../Utils/Position";
 
-type CharPixelProps = Position & { hidden?: boolean };
+type StyledCharPixelProps = Position & { hidden?: boolean; color?: string };
 
-const StyledCharPixel = styled.span.attrs<CharPixelProps>(({ x, y }) => ({
+const StyledCharPixel = styled.span.attrs<StyledCharPixelProps>(({ x, y }) => ({
   style: {
     left: x * PIXEL_WIDTH + "px",
     top: y * PIXEL_WIDTH + "px",
   },
-}))<CharPixelProps>`
+}))<StyledCharPixelProps>`
   position: absolute;
   width: ${PIXEL_WIDTH}px;
   height: ${PIXEL_WIDTH}px;
@@ -24,6 +24,7 @@ const StyledCharPixel = styled.span.attrs<CharPixelProps>(({ x, y }) => ({
   display: inline-block;
 
   ${({ hidden }) => hidden && "opacity: 0;"}
+  ${({ color }) => color && `color: ${color};`}
 `;
 
 const Short = styled.span<{ h?: number }>`
@@ -33,12 +34,8 @@ const Short = styled.span<{ h?: number }>`
 const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
-export function CharPixel({
-  x,
-  y,
-  z,
-  char,
-}: Position & { char: string; z?: number }) {
+export type CharPixelProps = Position3D & { char: string; color?: string };
+export function CharPixel({ x, y, z, char, color }: CharPixelProps) {
   const gM = useGameManager();
 
   var content: React.ReactNode | string = char;
@@ -49,7 +46,7 @@ export function CharPixel({
   const [hidden, setHidden] = useState<boolean>(false);
 
   useLayoutEffect(() => {
-    if (char === " ") return;
+    // if (char === " ") return;
     const unregister = gM.charPixelGridManager.registerPixel(
       { x, y },
       z || 0,
@@ -60,17 +57,12 @@ export function CharPixel({
   }, [x, y, z, char]);
 
   return (
-    <StyledCharPixel x={x} y={y} hidden={hidden}>
+    <StyledCharPixel x={x} y={y} hidden={hidden} color={color}>
       {content}
     </StyledCharPixel>
   );
 }
-export function Line({
-  x,
-  y,
-  z,
-  text,
-}: Position & { z: number; text: string }) {
+export function Line({ x, y, z, text }: Position3D & { text: string }) {
   return (
     <>
       {text.split("").map((str: string, i: number) => (

@@ -66,4 +66,13 @@ export class CharPixelGridManager {
       this.renderPixel(key);
     };
   }
+
+  // has more than one entry
+  public isOccupied(pos: Position) {
+    const key = getPositionKey(pos);
+    return this.pixelMap.get(key)?.size > 1;
+
+    // if (!this.pixelMap.has(key)) return true;
+    // return this.pixelMap.get(key).size == 0;
+  }
 }
