@@ -10,9 +10,18 @@ export function useKeyDown(key: string, cb: () => void) {
   }, [key, cb])
 }
 
-export function useFrame(cb: () => void ) {
+export function useFrame(cb: (fc: number) => void) {
   const gM = useGameManager();
   useEffect(() => {
     return gM.frame$.subscribe(cb).unsubscribe;
+  }, [cb])
+}
+
+export function useNthFrame(cb: (fc: number) => void, n: number) {
+  const gM = useGameManager();
+  useEffect(() => {
+    return gM.frame$.subscribe((fc: number) => {
+      if (fc % n == 0) cb(fc);
+    }).unsubscribe;
   }, [cb])
 }

@@ -12,7 +12,8 @@ export class GameManager {
   public inputManager: InputManager;
   public viewportManager: ViewportManager | undefined;
 
-  public frame$ = monomitter<void>();
+  private frameCount = 0;
+  public frame$ = monomitter<number>();
   private frameRequestId: ReturnType<typeof requestAnimationFrame>;
 
   constructor() {
@@ -24,7 +25,7 @@ export class GameManager {
 
 
   private loop() {
-    this.frame$.publish();
+    this.frame$.publish(this.frameCount++);
     this.frameRequestId = window.requestAnimationFrame(this.loop);
   }
 

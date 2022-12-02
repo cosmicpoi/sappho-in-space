@@ -5,7 +5,8 @@ import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { KEYS } from "../Engine/InputManager";
 import { t_v } from "../Utils/consts";
-import { useFrame, useKeyDown } from "../Utils/Hooks";
+import { useFrame, useKeyDown, useNthFrame } from "../Utils/Hooks";
+import { ObjectMotion } from "../Utils/ObjectMotion";
 import { Position3D } from "../Utils/Position";
 
 function Collider({ x, y, z }: Position3D) {
@@ -62,44 +63,70 @@ export function Spaceship() {
   const gM = useGameManager();
   const { viewportManager: vM, inputManager: iM } = gM;
 
-  const [dir, setDir] = useState<Direction>(Direction.Up);
+  const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
+  const [dirUpdate, setDirUpdate] = useState<boolean>(false);
+  const updateDir = useCallback(
+    (newDir: Direction) => {
+      setFaceDir(newDir);
+      setDirUpdate(true);
+    },
+    [setFaceDir, setDirUpdate]
+  );
+
+  const [hozDir, setHozDir] = useState<number>(0);
+  const [vertDir, setVertDir] = useState<number>(0);
 
   const [x, setX] = useState<number>(vM.getCenter().x);
   const [y, setY] = useState<number>(vM.getCenter().y);
 
+  const [motion] = useState<ObjectMotion>(new ObjectMotion(x, y));
+
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
   // spaceship control
-  const onFrame = useCallback(() => {
-    const hozDir = iM.resolveHozDirection();
-    const vertDir = iM.resolveVertDirection();
-
-    setY((y) => y + vertDir);
-    setX((x) => x + hozDir);
-  }, [iM, setX, setY]);
+  const onFrame = useCallback(
+    (fc: number) => {
+      motion.setAcceleration(hozDir * 0.01, vertDir * 0.01);
+      const { x: nX, y: nY } = motion.onFrame();
+      if (fc % 3 == 0) {
+        setX(nX);
+        setY(nY);
+      }
+    },
+    [iM, setX, setY, motion, hozDir, vertDir]
+  );
   useFrame(onFrame);
 
   const d1 = useCallback(() => {
-    setDir(Direction.Down);
+    updateDir(Direction.Down);
   }, []);
   useKeyDown(KEYS.Down, d1);
   const d2 = useCallback(() => {
-    setDir(Direction.Up);
+    updateDir(Direction.Up);
   }, []);
   useKeyDown(KEYS.Up, d2);
   const d3 = useCallback(() => {
-    setDir(Direction.Left);
+    updateDir(Direction.Left);
   }, []);
   useKeyDown(KEYS.Left, d3);
   const d4 = useCallback(() => {
-    setDir(Direction.Right);
+    updateDir(Direction.Right);
   }, []);
   useKeyDown(KEYS.Right, d4);
 
+  // after a key is pressed, re-resolve inputs
+  useLayoutEffect(() => {
+    if (!dirUpdate) return;
+
+    setHozDir(iM.resolveHozDirection());
+    setVertDir(iM.resolveVertDirection());
+    setDirUpdate(false);
+  }, [dirUpdate]);
+
   // sync chars to direction
   useLayoutEffect(() => {
-    setChars(dirChars[dir]);
-  }, [dir]);
+    setChars(dirChars[faceDir]);
+  }, [faceDir]);
 
   // camera control
   useLayoutEffect(() => {

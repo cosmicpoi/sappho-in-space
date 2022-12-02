@@ -38,8 +38,8 @@ export class ViewportManager {
   }
 
   private scrollMax(): Position {
-    const maxScrollX_w = Math.ceil(this.width - unit_sToW(window.innerWidth));
-    const maxScrollY_w = Math.ceil(this.height - unit_sToW(window.innerHeight));
+    const maxScrollX_w = Math.ceil(this.width - 1 - unit_sToW(window.innerWidth));
+    const maxScrollY_w = Math.ceil(this.height - 1 - unit_sToW(window.innerHeight));
 
 
     return { x: unit_wToS(maxScrollX_w), y: unit_wToS(maxScrollY_w) }
