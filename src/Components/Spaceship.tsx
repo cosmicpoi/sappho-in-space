@@ -18,7 +18,6 @@ import {
   MAX_PARTICLE_LIFETIME,
   getParticleId,
 } from "./SpaceshipParts";
-import { DebugBox } from "./Wall";
 
 const spaceshipCharsDown = [
   ["v", " ", "v"],
@@ -102,7 +101,7 @@ export function Spaceship() {
 
       // make new particles
       if (hoz !== 0 || vert !== 0) {
-        if (fc % 15 === 0) newParticle(fc);
+        if (fc % 5 === 0) newParticle(fc);
       }
 
       // clear out old particles every now and then
@@ -146,7 +145,6 @@ export function Spaceship() {
 
   return (
     <>
-      {/* <DebugBox hitbox={motion.hitboxAt({ x: 0, y: 0 })} /> */}
       {/* First col */}
       <>
         <SpaceshipPart x={x - 1} y={y - 1} char={chars[0][0]} />
