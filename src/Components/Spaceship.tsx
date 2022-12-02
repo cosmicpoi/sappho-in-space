@@ -3,11 +3,11 @@ import { useCallback, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 
 import { CharPixel } from "../CharPixelLib/CharPixel";
-import { KEYS } from "../Engine/InputManager";
 import { t_v } from "../Utils/consts";
-import { useFrame, useKeyDown } from "../Utils/Hooks";
+import { useFrame, useManyKeysDown, useManyKeysUp } from "../Utils/Hooks";
 import { ObjectMotion } from "../Utils/ObjectMotion";
 import { Position3D } from "../Utils/Position";
+import { Direction, directionFromKey, directionKeys } from "../Utils/utils";
 
 function Collider({ x, y, z }: Position3D) {
   const [isTop, setTop] = useState<boolean>(false);
@@ -26,12 +26,6 @@ function SpaceshipPart({ x, y, z, char }: Position3D & { char: string }) {
   else return <CharPixel x={x} y={y} z={z} char={char} />;
 }
 
-enum Direction {
-  Up,
-  Left,
-  Down,
-  Right,
-}
 const spaceshipCharsDown = [
   ["v", " ", "v"],
   ["|", "–", "|"],
@@ -89,23 +83,22 @@ export function Spaceship() {
   );
   useFrame(onFrame);
 
-  const d1 = useCallback(() => {
-    setFaceDir(Direction.Down);
-  }, [setFaceDir]);
-  useKeyDown(KEYS.Down, d1);
-  const d2 = useCallback(() => {
-    setFaceDir(Direction.Up);
-  }, [setFaceDir]);
-  useKeyDown(KEYS.Up, d2);
-  const d3 = useCallback(() => {
-    setFaceDir(Direction.Left);
-  }, [setFaceDir]);
-  useKeyDown(KEYS.Left, d3);
-  const d4 = useCallback(() => {
-    setFaceDir(Direction.Right);
-  }, [setFaceDir]);
-  useKeyDown(KEYS.Right, d4);
+  const onKeyDown = useCallback(
+    (k: string) => {
+      setFaceDir(directionFromKey(k));
+    },
+    [setFaceDir]
+  );
+  useManyKeysDown(directionKeys, onKeyDown);
 
+  const onKeyUp = useCallback(
+    (_k: string) => {
+      const single = gM.inputManager.getSingleDirection();
+      if (single !== undefined) setFaceDir(single);
+    },
+    [gM]
+  );
+  useManyKeysUp(directionKeys, onKeyUp);
   // sync chars to direction
   useLayoutEffect(() => {
     setChars(dirChars[faceDir]);

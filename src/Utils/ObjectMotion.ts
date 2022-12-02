@@ -1,5 +1,4 @@
 import { Position } from "./Position";
-import { clamp } from "./utils";
 
 export class ObjectMotion {
   private rx = 0;
@@ -86,20 +85,19 @@ export class ObjectMotion {
       this.vx *= 0.98;
     }
 
-
     this.vx += this.ax;
     this.vy += this.ay;
 
     if (this.termV !== undefined) {
       const tv = this.termV;
 
-
-      this.vx = clamp(this.vx, -tv, tv);
-      this.vy = clamp(this.vy, -tv, tv);
-
-      this.move(this.vx, this.vy);
-
+      const norm = Math.sqrt(this.vx ** 2 + this.vy ** 2);
+      if (norm > tv) {
+        this.vx *= tv / norm;
+        this.vy *= tv / norm;
+      }
     }
+    this.move(this.vx, this.vy);
 
     return { x: this.x, y: this.y };
   }
