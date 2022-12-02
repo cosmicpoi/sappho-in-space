@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
+import { Spaceship } from "./Components/Spaceship";
 import { GameManager } from "./Engine/GameManager";
 import { GameWorld } from "./GameWorld";
 import { createDefinedContext } from "./Utils/createDefinedContext";
@@ -25,13 +26,12 @@ function App() {
   const containerRef = useRef<HTMLDivElement>();
   useEffect(() => {
     if (containerRef.current)
-    gameManager.viewportManager.setContainer(containerRef.current);
+      gameManager.viewportManager.setContainer(containerRef.current);
   }, [containerRef, gameManager]);
 
   useEffect(() => {
     gameManager.viewportManager.scrollToCenter();
   }, [containerRef, gameManager]);
-
 
   useEffect(() => {
     return gameManager.initialize();

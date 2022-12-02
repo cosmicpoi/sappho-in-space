@@ -9,17 +9,11 @@ type CharPixelStyle = {
   color?: string;
   opacity?: number;
 };
-type StyledCharPixelProps = Position &
-  CharPixelStyle & {
-    hidden?: boolean;
-  };
+type StyledCharPixelProps = CharPixelStyle & {
+  hidden?: boolean;
+};
 
-const StyledCharPixel = styled.span.attrs<StyledCharPixelProps>(({ x, y }) => ({
-  style: {
-    left: x * PIXEL_WIDTH + "px",
-    top: y * PIXEL_WIDTH + "px",
-  },
-}))<StyledCharPixelProps>`
+const StyledCharPixel = styled.span<StyledCharPixelProps>`
   position: absolute;
   width: ${PIXEL_WIDTH}px;
   height: ${PIXEL_WIDTH}px;
@@ -66,11 +60,13 @@ export function CharPixel({ x, y, z, char, color, opacity }: CharPixelProps) {
 
   return (
     <StyledCharPixel
-      x={x}
-      y={y}
       hidden={hidden}
       color={color}
       opacity={opacity}
+      style={{
+        left: x * PIXEL_WIDTH + "px",
+        top: y * PIXEL_WIDTH + "px",
+      }}
     >
       {content}
     </StyledCharPixel>

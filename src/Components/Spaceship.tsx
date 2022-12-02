@@ -14,6 +14,8 @@ import {
   Collider,
   RocketParticle,
   RocketParticleData,
+  MAX_PARTICLE_LIFETIME,
+  getParticleId,
 } from "./SpaceshipParts";
 
 const spaceshipCharsDown = [
@@ -43,7 +45,7 @@ const dirChars: string[][][] = [
   spaceshipCharsRight,
 ];
 
-const TERM_V = 12; // 12 units / sec
+const TERM_V = 20; // 12 units / sec
 export function Spaceship() {
   const gM = useGameManager();
   const { viewportManager: vM, inputManager: iM } = gM;
@@ -59,29 +61,46 @@ export function Spaceship() {
 
   // manage particles
   const [particles, setParticles] = useState<RocketParticleData[]>([]);
-  const newParticle = useCallback(() => {
-    const { x, y } = motion.getPosition();
-    setParticles((p) => [...p, { x, y, dir: faceDir }]);
-  }, [faceDir, motion]);
+  const newParticle = useCallback(
+    (createdOn: number) => {
+      const { x, y } = motion.getPosition();
+      setParticles((p) => [
+        ...p,
+        { x, y, dir: faceDir, createdOn, id: getParticleId() },
+      ]);
+    },
+    [faceDir, motion]
+  );
 
   // spaceship control
   const onFrame = useCallback(
     (fc: number) => {
+      // handle motion
       const hoz = iM.resolveHozDirection();
       const vert = iM.resolveVertDirection();
 
       motion.setAcceleration({ x: hoz * 1.8, y: vert * 1.8 });
       motion.onFrame(true);
-      const { x: nX, y: nY } = motion.getPosition();
 
+      const { x: nX, y: nY } = motion.getPosition();
       setX(nX);
       setY(nY);
 
-      if (fc % 5 === 0) {
-        newParticle();
+      // make new particles
+      if (hoz !== 0 || vert !== 0) {
+        if (fc % 15 === 0) newParticle(fc);
+      }
+
+      // clear out old particles every now and then
+      if (fc % (2 * MAX_PARTICLE_LIFETIME) === 0) {
+        setParticles((pl) =>
+          pl.filter(
+            (p: RocketParticleData) => fc - p.createdOn < MAX_PARTICLE_LIFETIME
+          )
+        );
       }
     },
-    [iM, setX, setY, motion, newParticle]
+    [iM, setX, setY, motion, newParticle, setParticles]
   );
   useFrame(onFrame);
 
@@ -147,8 +166,8 @@ export function Spaceship() {
       <Collider x={x + 2} y={y + 1} />
 
       {/* Particles */}
-      {particles.map(({ x, y, dir }, i) => (
-        <RocketParticle x={x} y={y} dir={dir} z={-1} key={i} />
+      {particles.map(({ x, y, dir, id }) => (
+        <RocketParticle x={x} y={y} dir={dir} key={id} />
       ))}
     </>
   );
