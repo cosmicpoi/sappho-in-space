@@ -79,15 +79,20 @@ export class ViewportManager {
     const screen = this.worldToScreen(pos);
     var delX = 0, delY = 0;
 
-    if (screen.x < window.innerWidth * marginX) {
-      delX = -1;
-    } else if (screen.x > window.innerWidth * (1 - marginX)) {
-      delX = 1;
+    var mLeft = window.innerWidth * marginX;
+    var mRight = window.innerWidth * (1 - marginX);
+    if (screen.x < mLeft) {
+      delX = -Math.ceil(unit_sToW(mLeft - screen.x));
+    } else if (screen.x > mRight) {
+      delX = Math.ceil(unit_sToW(screen.x - mRight));
     }
-    if (screen.y < window.innerHeight * marginY) {
-      delY = -1;
-    } else if (screen.y > window.innerHeight * (1 - marginY)) {
-      delY = 1;
+
+    var mTop = window.innerHeight * marginY;
+    var mBottom = window.innerHeight * (1 - marginY);
+    if (screen.y < mTop) {
+      delY = -Math.ceil(unit_sToW(mTop - screen.y));
+    } else if (screen.y > mBottom) {
+      delY = Math.ceil(unit_sToW(screen.y - mBottom));
     }
 
     this.scrollDeltaWorld(delX, delY);

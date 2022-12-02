@@ -64,18 +64,6 @@ export function Spaceship() {
   const { viewportManager: vM, inputManager: iM } = gM;
 
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
-  const [dirUpdate, setDirUpdate] = useState<boolean>(false);
-  const updateDir = useCallback(
-    (newDir: Direction) => {
-      setFaceDir(newDir);
-      setDirUpdate(true);
-    },
-    [setFaceDir, setDirUpdate]
-  );
-
-  const [hozDir, setHozDir] = useState<number>(0);
-  const [vertDir, setVertDir] = useState<number>(0);
-
   const [x, setX] = useState<number>(vM.getCenter().x);
   const [y, setY] = useState<number>(vM.getCenter().y);
 
@@ -86,42 +74,36 @@ export function Spaceship() {
   // spaceship control
   const onFrame = useCallback(
     (fc: number) => {
-      motion.setAcceleration(hozDir * 0.01, vertDir * 0.01);
+      const hoz = iM.resolveHozDirection();
+      const vert = iM.resolveVertDirection();
+
+      motion.setAcceleration(hoz * 0.05, vert * 0.05);
       const { x: nX, y: nY } = motion.onFrame();
       if (fc % 3 == 0) {
         setX(nX);
         setY(nY);
       }
     },
-    [iM, setX, setY, motion, hozDir, vertDir]
+    [iM, setX, setY, motion]
   );
   useFrame(onFrame);
 
   const d1 = useCallback(() => {
-    updateDir(Direction.Down);
-  }, []);
+    setFaceDir(Direction.Down);
+  }, [setFaceDir]);
   useKeyDown(KEYS.Down, d1);
   const d2 = useCallback(() => {
-    updateDir(Direction.Up);
-  }, []);
+    setFaceDir(Direction.Up);
+  }, [setFaceDir]);
   useKeyDown(KEYS.Up, d2);
   const d3 = useCallback(() => {
-    updateDir(Direction.Left);
-  }, []);
+    setFaceDir(Direction.Left);
+  }, [setFaceDir]);
   useKeyDown(KEYS.Left, d3);
   const d4 = useCallback(() => {
-    updateDir(Direction.Right);
-  }, []);
+    setFaceDir(Direction.Right);
+  }, [setFaceDir]);
   useKeyDown(KEYS.Right, d4);
-
-  // after a key is pressed, re-resolve inputs
-  useLayoutEffect(() => {
-    if (!dirUpdate) return;
-
-    setHozDir(iM.resolveHozDirection());
-    setVertDir(iM.resolveVertDirection());
-    setDirUpdate(false);
-  }, [dirUpdate]);
 
   // sync chars to direction
   useLayoutEffect(() => {

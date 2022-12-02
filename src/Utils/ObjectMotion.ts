@@ -10,10 +10,11 @@ export class ObjectMotion {
 
   private vx = 0;
   private vy = 0;
+
   private ax = 0;
   private ay = 0;
 
-  private termV = 2 / 60; // 2 units per second
+  private termV = 12 / 60; // 10 units per second
 
   private collides;
 
@@ -60,7 +61,7 @@ export class ObjectMotion {
     this.ry += dy;
     var moveY = Math.round(this.ry);
 
-    if (moveX != 0) {
+    if (moveY != 0) {
       this.ry -= moveY;
 
       if (!this.collides) {
@@ -78,6 +79,10 @@ export class ObjectMotion {
 
   // handlers and callbacks
   public onFrame(): Position {
+    // dampen, then accelerate, then normalize
+    this.vy *= 0.98;
+    this.vx *= 0.98;
+
     this.vx += this.ax;
     this.vy += this.ay;
 
