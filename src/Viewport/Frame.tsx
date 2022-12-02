@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
+import { Wall } from "../Components/Wall";
 import { Position } from "../Utils/types";
 
 function Framer({ x, y }: Position) {
@@ -19,6 +20,10 @@ export function Frame() {
       <Framer x={0} y={height - 1} />
       <Framer x={width - 1} y={0} />
       <Framer x={width - 1} y={height - 1} />
+      <Wall hitbox={{ x: 0, y: 0, width, height: 1 }} />
+      <Wall hitbox={{ x: 0, y: height - 1, width, height: 1 }} />
+      <Wall hitbox={{ x: 0, y: 0, width: 1, height }} />
+      <Wall hitbox={{ x: width - 1, y: 0, width: 1, height }} />
     </>
   );
 }
