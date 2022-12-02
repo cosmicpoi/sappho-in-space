@@ -1,6 +1,6 @@
 import autoBind from "auto-bind";
 import { monomitter, Monomitter, Subscription } from "../Utils/Monomitter";
-import { Direction } from "../Utils/utils";
+import { Direction } from "../Utils/types";
 
 type KeyMap = Map<string, Monomitter<string>>;
 export class InputManager {

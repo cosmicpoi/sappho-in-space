@@ -2,8 +2,9 @@ import * as React from "react";
 import { useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { useGameManager } from "..";
-import { PIXEL_WIDTH, t_v } from "../Utils/consts";
-import { Position, Position3D } from "../Utils/Position";
+import { t_v } from "../Utils/consts";
+import { Position3D } from "../Utils/types";
+import { unit_wToS } from "../Viewport/ViewportManager";
 
 type CharPixelStyle = {
   color?: string;
@@ -15,13 +16,13 @@ type StyledCharPixelProps = CharPixelStyle & {
 
 const StyledCharPixel = styled.span<StyledCharPixelProps>`
   position: absolute;
-  width: ${PIXEL_WIDTH}px;
-  height: ${PIXEL_WIDTH}px;
+  width: ${unit_wToS(1)}px;
+  height: ${unit_wToS(1)}px;
 
   /* background: yellow; */
   /* outline: 1px solid red; */
 
-  line-height: ${PIXEL_WIDTH}px;
+  line-height: ${unit_wToS(1)}px;
   display: inline-block;
 
   ${({ opacity }) => opacity && `opacity: ${opacity};`}
@@ -36,8 +37,10 @@ const Short = styled.span<{ h?: number }>`
 const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
-export type CharPixelProps = Position3D & CharPixelStyle & { char: string };
-export function CharPixel({ x, y, z, char, color, opacity }: CharPixelProps) {
+export type CharPixelProps = Position3D &
+  CharPixelStyle & { char: string | undefined; isWall?: boolean };
+export function CharPixel(props: CharPixelProps) {
+  const { x, y, z, char, color, opacity, isWall } = props;
   const gM = useGameManager();
 
   let content: React.ReactNode | string = char;
@@ -48,15 +51,13 @@ export function CharPixel({ x, y, z, char, color, opacity }: CharPixelProps) {
   const [hidden, setHidden] = useState<boolean>(false);
 
   useLayoutEffect(() => {
-    // if (char === " ") return;
     const unregister = gM.charPixelGridManager.registerPixel(
       { x, y },
-      z || 0,
-      setHidden
+      { z: z || 0, setHidden, isWall: !!isWall, char }
     );
 
     return unregister;
-  }, [x, y, z, char, gM, setHidden]);
+  }, [x, y, z, char, gM, setHidden, isWall]);
 
   return (
     <StyledCharPixel
@@ -64,8 +65,8 @@ export function CharPixel({ x, y, z, char, color, opacity }: CharPixelProps) {
       color={color}
       opacity={opacity}
       style={{
-        left: x * PIXEL_WIDTH + "px",
-        top: y * PIXEL_WIDTH + "px",
+        left: unit_wToS(x) + "px",
+        top: unit_wToS(y) + "px",
       }}
     >
       {content}

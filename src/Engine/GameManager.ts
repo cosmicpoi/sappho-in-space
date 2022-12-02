@@ -2,13 +2,14 @@ import autoBind from "auto-bind";
 import { CharPixelGridManager } from "../CharPixelLib/CharPixelGridManager";
 import { monomitter } from "../Utils/Monomitter";
 import { ViewportManager } from "../Viewport/ViewportManager";
+import { CollisionManager } from "./CollisionManager";
 import { InputManager } from "./InputManager";
 
 export class GameManager {
   public charPixelGridManager: CharPixelGridManager;
-  // public soundManager: SoundManager
   public inputManager: InputManager;
-  public viewportManager: ViewportManager | undefined;
+  public viewportManager: ViewportManager;
+  public collisionManager: CollisionManager;
 
   private frameCount = 0;
   public frame$ = monomitter<number>();
@@ -19,6 +20,7 @@ export class GameManager {
     this.charPixelGridManager = new CharPixelGridManager();
     this.inputManager = new InputManager();
     this.viewportManager = new ViewportManager();
+    this.collisionManager = new CollisionManager();
   }
 
   private loop() {

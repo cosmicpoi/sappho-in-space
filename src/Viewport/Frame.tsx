@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
-import { Position } from "../Utils/Position";
+import { Position } from "../Utils/types";
 
 function Framer({ x, y }: Position) {
   return <CharPixel char="@" z={0} x={x} y={y} color="red" />;

@@ -6,9 +6,10 @@ import {
   useFrame,
   useManyKeysDown,
   useManyKeysUp,
-  useObjectMotion,
+  useActor,
 } from "../Utils/Hooks";
-import { Direction, directionFromKey, directionKeys } from "../Utils/utils";
+import { Direction, Hitbox } from "../Utils/types";
+import { directionFromKey, directionKeys } from "../Utils/utils";
 import {
   SpaceshipPart,
   Collider,
@@ -17,6 +18,7 @@ import {
   MAX_PARTICLE_LIFETIME,
   getParticleId,
 } from "./SpaceshipParts";
+import { DebugBox } from "./Wall";
 
 const spaceshipCharsDown = [
   ["v", " ", "v"],
@@ -46,6 +48,12 @@ const dirChars: string[][][] = [
 ];
 
 const TERM_V = 20; // 12 units / sec
+const spaceshipHitbox: Hitbox = {
+  x: -1,
+  y: -1,
+  width: 3,
+  height: 3,
+};
 export function Spaceship() {
   const gM = useGameManager();
   const { viewportManager: vM, inputManager: iM } = gM;
@@ -55,7 +63,13 @@ export function Spaceship() {
   const [x, setX] = useState<number>(vM.getCenter().x);
   const [y, setY] = useState<number>(vM.getCenter().y);
 
-  const motion = useObjectMotion({ x, y, collides: true, termV: TERM_V });
+  const motion = useActor({
+    x,
+    y,
+    collides: true,
+    termV: TERM_V,
+    hitbox: spaceshipHitbox,
+  });
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
@@ -132,6 +146,7 @@ export function Spaceship() {
 
   return (
     <>
+      {/* <DebugBox hitbox={motion.hitboxAt({ x: 0, y: 0 })} /> */}
       {/* First col */}
       <>
         <SpaceshipPart x={x - 1} y={y - 1} char={chars[0][0]} />

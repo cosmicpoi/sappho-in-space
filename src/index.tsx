@@ -2,7 +2,6 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
-import { Spaceship } from "./Components/Spaceship";
 import { GameManager } from "./Engine/GameManager";
 import { GameWorld } from "./GameWorld";
 import { createDefinedContext } from "./Utils/createDefinedContext";

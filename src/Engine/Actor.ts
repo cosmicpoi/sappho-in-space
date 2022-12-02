@@ -1,10 +1,14 @@
-import { Position } from "./Position";
+import { GameManager } from "./GameManager";
+import { Hitbox, Position } from "../Utils/types";
 
-export type ObjectMotionProps = Position & {
+export type ActorProps = Position & {
   collides?: boolean;
   termV?: number;
+  hitbox?: Hitbox;
 };
-export class ObjectMotion {
+export class ActorData {
+  private gameManager: GameManager;
+
   private rx = 0;
   private ry = 0;
 
@@ -18,15 +22,15 @@ export class ObjectMotion {
   private ay = 0;
 
   private termV: number | undefined;
-
-  private collides;
+  private hitbox: Hitbox;
 
   // initializes with starting coordinates
-  constructor({ x, y, collides, termV }: ObjectMotionProps) {
+  constructor(gameManager: GameManager, { x, y, hitbox, termV }: ActorProps) {
+    this.gameManager = gameManager;
     this.x = x;
     this.y = y;
 
-    this.collides = collides === true;
+    this.hitbox = hitbox;
     this.termV = termV;
   }
 
@@ -40,9 +44,26 @@ export class ObjectMotion {
     return { x: this.x, y: this.y };
   }
 
+  public hitboxAt({ x, y }: Position): Hitbox {
+    return {
+      x: this.x + x + this.hitbox.x,
+      y: this.y + y + this.hitbox.y,
+      width: this.hitbox.width,
+      height: this.hitbox.height,
+    };
+  }
+
+  private shouldCollide(): boolean {
+    return !!this.hitbox;
+  }
+
   // move / collision logic
-  private checkSolids(): void {
-    return;
+  private checkSolids(delPos: Position): boolean {
+    const cM = this.gameManager.collisionManager;
+    const box = this.hitboxAt(delPos);
+    const solid = cM.collides(box, this);
+    // onCollide...
+    return !!solid;
   }
 
   public move(move60: Position) {
@@ -54,14 +75,14 @@ export class ObjectMotion {
     if (moveX !== 0) {
       this.rx -= moveX;
 
-      if (!this.collides) {
+      if (!this.shouldCollide()) {
         this.x += moveX;
       } else {
         const sgn = Math.sign(moveX);
 
         for (let i = 0; i < Math.abs(moveX); i++) {
+          if (this.checkSolids({ x: sgn, y: 0 })) break;
           this.x += sgn;
-          this.checkSolids();
         }
       }
     }
@@ -73,14 +94,14 @@ export class ObjectMotion {
     if (moveY !== 0) {
       this.ry -= moveY;
 
-      if (!this.collides) {
+      if (!this.shouldCollide()) {
         this.y += moveY;
       } else {
         const sgn = Math.sign(moveY);
 
         for (let i = 0; i < Math.abs(moveY); i++) {
+          if (this.checkSolids({ x: 0, y: sgn })) break;
           this.y += sgn;
-          this.checkSolids();
         }
       }
     }

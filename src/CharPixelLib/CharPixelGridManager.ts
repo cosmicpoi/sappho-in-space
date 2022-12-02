@@ -1,11 +1,14 @@
 import autoBind from "auto-bind";
 import { monomitter, Monomitter } from "../Utils/Monomitter";
-import { getPositionKey, Position } from "../Utils/Position";
+import { Position } from "../Utils/types";
+import { getPositionKey } from "../Utils/utils";
 
 type SetHidden = (b: boolean) => void;
 type PixelZData = {
   z: number;
   setHidden: SetHidden;
+  isWall: boolean;
+  char: string | undefined;
 };
 
 type PixelsAtPos = Set<PixelZData>;
@@ -25,6 +28,7 @@ export class CharPixelGridManager {
       this.pixelUpdated$.set(key, monomitter<void>());
   }
 
+  // display the tallest non-undefined character
   private renderPixel(posKey: string) {
     if (!this.pixelMap.has(posKey)) console.error("set doesn't exist!");
 
@@ -33,7 +37,7 @@ export class CharPixelGridManager {
     let max = -Infinity;
     let data: PixelZData | undefined;
     fragments.forEach((zData) => {
-      if (zData.z > max) {
+      if (zData.z > max && zData.char !== undefined) {
         max = zData.z;
         data = zData;
       }
@@ -53,25 +57,19 @@ export class CharPixelGridManager {
 
   // registers a pixel at a particular position in the map
   // returns a callback that unregisters it from the map
-  public registerPixel(
-    pos: Position,
-    z: number,
-    setHidden: SetHidden
-  ): () => void {
+  public registerPixel(pos: Position, zData: PixelZData): () => void {
     const key = getPositionKey(pos);
-
     if (!this.pixelMap.has(key)) this.pixelMap.set(key, new Set());
     const posData = this.pixelMap.get(key);
 
-    const myData: PixelZData = { z, setHidden };
-    posData.add(myData);
+    posData.add(zData);
 
     this.renderPixel(key);
     this.requestPixelUpdated(key);
     this.pixelUpdated$.get(key)?.publish();
 
     return () => {
-      posData.delete(myData);
+      posData.delete(zData);
       this.renderPixel(key);
     };
   }
@@ -86,7 +84,12 @@ export class CharPixelGridManager {
   // has more than one entry
   public isOccupied(pos: Position) {
     const key = getPositionKey(pos);
-    return this.pixelMap.get(key)?.size > 1;
+    let notWalls = 0;
+    this.pixelMap.get(key)?.forEach((data) => {
+      if (!data.isWall) notWalls++;
+    });
+
+    return notWalls > 1;
 
     // if (!this.pixelMap.has(key)) return true;
     // return this.pixelMap.get(key).size == 0;

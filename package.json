@@ -16,7 +16,8 @@
   },
   "scripts": {
     "serve": "esbuild src/index.tsx --bundle --outfile=dist/main.js --servedir=.",
-    "build": "esbuild src/index.tsx --bundle --outfile=dist/main.js"
+    "build": "esbuild src/index.tsx --bundle --outfile=dist/main.js",
+    "lint": "npx eslint src"
   },
   "author": "",
   "license": "ISC",

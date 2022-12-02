@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
 import { Subscription } from "./Monomitter";
-import { ObjectMotion, ObjectMotionProps } from "./ObjectMotion";
+import { ActorData, ActorProps } from "../Engine/Actor";
 
 type Extractor = (
   iM: InputManager
@@ -62,16 +62,8 @@ export function useFrame(cb: (fc: number, lifetime?: number) => void) {
   }, [cb, gM]);
 }
 
-export function useObjectMotion(props: ObjectMotionProps): ObjectMotion {
-  const [motion] = useState<ObjectMotion>(new ObjectMotion(props));
+export function useActor(props: ActorProps): ActorData {
+  const gM = useGameManager();
+  const [motion] = useState<ActorData>(new ActorData(gM, props));
   return motion;
 }
-
-// export function useNthFrame(cb: (fc: number) => void, n: number) {
-//   const gM = useGameManager();
-//   useEffect(() => {
-//     return gM.frame$.subscribe((fc: number) => {
-//       if (fc % n === 0) cb(fc);
-//     }).unsubscribe;
-//   }, [cb, gM, n])
-// }

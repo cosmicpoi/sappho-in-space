@@ -1,5 +1,5 @@
 import { KEYS } from "../Engine/InputManager";
-import { Position } from "./Position";
+import { Direction, Position } from "./types";
 
 // numbers
 export const clamp = (num: number, min: number, max: number): number =>
@@ -13,13 +13,10 @@ export const randomRange = (min: number, max: number): number =>
 export const randIntRange = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
+// position
+export const getPositionKey = ({ x, y }: Position): string => `${x}-${y}`;
+
 // Direction
-export enum Direction {
-  Up,
-  Left,
-  Down,
-  Right,
-}
 export const directionFromKey = (key: string) => {
   if (key === KEYS.Down) return Direction.Down;
   else if (key === KEYS.Up) return Direction.Up;
