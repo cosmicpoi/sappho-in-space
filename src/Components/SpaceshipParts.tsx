@@ -27,7 +27,7 @@ export function Collider({ x, y, z }: Position3D) {
     return sub.unsubscribe;
   }, [x, y, z, cpM, setTop]);
 
-  return <CharPixel x={x} y={y} z={z} char={isTop ? "." : " "} opacity={0.8} />;
+  return <CharPixel x={x} y={y} z={z} char={isTop ? "." : " "} opacity={0.5} />;
 }
 export function SpaceshipPart({
   x,
@@ -84,5 +84,7 @@ export function RocketParticle({
   useFrame(onFrame);
 
   if (!alive) return <></>;
-  return <CharPixel x={x + delta.x} y={y + delta.y} z={z} char="*" />;
+  return (
+    <CharPixel x={x + delta.x} y={y + delta.y} z={z} char="*" opacity={0.5} />
+  );
 }
