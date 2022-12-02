@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
-import { t_v } from "../Utils/consts";
+import { Layer, t_v } from "../Utils/consts";
 import {
   useFrame,
   useManyKeysDown,
@@ -60,7 +60,7 @@ export function Spaceship() {
   // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
   const [x, setX] = useState<number>(vM.getCenter().x);
-  const [y, setY] = useState<number>(vM.getCenter().y);
+  const [y, setY] = useState<number>(vM.getCenter().y + 4);
 
   const motion = useActor({
     x,
@@ -141,48 +141,49 @@ export function Spaceship() {
   // camera control
   useLayoutEffect(() => {
     vM.follow({ x, y });
-    vM.requestColor({x, y});
+    vM.requestColor({ x, y });
   }, [x, y, vM]);
 
+  const [z] = useState<number>(Layer.Spaceship);
 
   return (
     <>
       {/* First col */}
       <>
-        <SpaceshipPart x={x - 1} y={y - 1} char={chars[0][0]} />
-        <SpaceshipPart x={x - 1} y={y + 0} char={chars[1][0]} />
-        <SpaceshipPart x={x - 1} y={y + 1} char={chars[2][0]} />
+        <SpaceshipPart z={z} x={x - 1} y={y - 1} char={chars[0][0]} />
+        <SpaceshipPart z={z} x={x - 1} y={y + 0} char={chars[1][0]} />
+        <SpaceshipPart z={z} x={x - 1} y={y + 1} char={chars[2][0]} />
       </>
       {/* Second col */}
       <>
-        <SpaceshipPart x={x + 0} y={y - 1} char={chars[0][1]} />
-        <SpaceshipPart x={x + 0} y={y + 0} char={chars[1][1]} />
-        <SpaceshipPart x={x + 0} y={y + 1} char={chars[2][1]} />
+        <SpaceshipPart z={z} x={x + 0} y={y - 1} char={chars[0][1]} />
+        <SpaceshipPart z={z} x={x + 0} y={y + 0} char={chars[1][1]} />
+        <SpaceshipPart z={z} x={x + 0} y={y + 1} char={chars[2][1]} />
       </>
       {/* Third col */}
       <>
-        <SpaceshipPart x={x + 1} y={y - 1} char={chars[0][2]} />
-        <SpaceshipPart x={x + 1} y={y + 0} char={chars[1][2]} />
-        <SpaceshipPart x={x + 1} y={y + 1} char={chars[2][2]} />
+        <SpaceshipPart z={z} x={x + 1} y={y - 1} char={chars[0][2]} />
+        <SpaceshipPart z={z} x={x + 1} y={y + 0} char={chars[1][2]} />
+        <SpaceshipPart z={z} x={x + 1} y={y + 1} char={chars[2][2]} />
       </>
       {/* Vertical Colliders */}
-      <Collider x={x - 1} y={y - 2} />
-      <Collider x={x + 0} y={y - 2} />
-      <Collider x={x + 1} y={y - 2} />
-      <Collider x={x - 1} y={y + 2} />
-      <Collider x={x + 0} y={y + 2} />
-      <Collider x={x + 1} y={y + 2} />
+      <Collider z={z} x={x - 1} y={y - 2} />
+      <Collider z={z} x={x + 0} y={y - 2} />
+      <Collider z={z} x={x + 1} y={y - 2} />
+      <Collider z={z} x={x - 1} y={y + 2} />
+      <Collider z={z} x={x + 0} y={y + 2} />
+      <Collider z={z} x={x + 1} y={y + 2} />
       {/* Horizontal Colliders */}
-      <Collider x={x - 2} y={y - 1} />
-      <Collider x={x - 2} y={y + 0} />
-      <Collider x={x - 2} y={y + 1} />
-      <Collider x={x + 2} y={y - 1} />
-      <Collider x={x + 2} y={y + 0} />
-      <Collider x={x + 2} y={y + 1} />
+      <Collider z={z} x={x - 2} y={y - 1} />
+      <Collider z={z} x={x - 2} y={y + 0} />
+      <Collider z={z} x={x - 2} y={y + 1} />
+      <Collider z={z} x={x + 2} y={y - 1} />
+      <Collider z={z} x={x + 2} y={y + 0} />
+      <Collider z={z} x={x + 2} y={y + 1} />
 
       {/* Particles */}
       {particles.map(({ x, y, dir, id }) => (
-        <RocketParticle x={x} y={y} dir={dir} key={id} />
+        <RocketParticle x={x} y={y} dir={dir} key={id} z={Layer.Particles} />
       ))}
     </>
   );

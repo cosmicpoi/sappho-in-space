@@ -53,7 +53,7 @@ export function CharPixel(props: CharPixelProps) {
   useLayoutEffect(() => {
     const unregister = gM.charPixelGridManager.registerPixel(
       { x, y },
-      { z: z || 0, setHidden, isWall: !!isWall, char }
+      { z: z === undefined ? 0 : z, setHidden, isWall: !!isWall, char }
     );
 
     return unregister;

@@ -18,3 +18,9 @@ export type Hitbox = Position & {
   width: number;
   height: number;
 };
+
+export enum TextAlign {
+  Left,
+  Center,
+  Right
+}
