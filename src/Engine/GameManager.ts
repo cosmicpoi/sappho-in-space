@@ -11,7 +11,7 @@ export class GameManager {
   public viewportManager: ViewportManager;
   public collisionManager: CollisionManager;
 
-  private frameCount = 1;
+  private frameCount = 0;
   public frame$ = monomitter<number>();
   private frameRequestId: ReturnType<typeof requestAnimationFrame>;
 
