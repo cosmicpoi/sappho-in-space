@@ -15,7 +15,7 @@ function Collider({ x, y, z }: Position3D) {
 
   useLayoutEffect(() => {
     setTop(gM.charPixelGridManager.isOccupied({ x, y }));
-  }, [x, y, z]);
+  }, [x, y, z, gM]);
 
   return (
     <CharPixel x={x} y={y} z={z} char={isTop ? "." : " "} color={"gray"} />

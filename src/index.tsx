@@ -28,11 +28,11 @@ function App() {
   useEffect(() => {
     if (containerRef.current)
     gameManager.viewportManager.setContainer(containerRef.current);
-  }, [containerRef]);
+  }, [containerRef, gameManager]);
 
   useEffect(() => {
     gameManager.viewportManager.scrollToCenter();
-  }, [containerRef]);
+  }, [containerRef, gameManager]);
 
   const [center] = useState<Position>(gameManager.viewportManager.getCenter());
 

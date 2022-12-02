@@ -7,14 +7,14 @@ export function useKeyDown(key: string, cb: () => void) {
     const { unsubscribe } = gM.inputManager.bindKeyDown(key, cb);
 
     return unsubscribe
-  }, [key, cb])
+  }, [key, cb, gM])
 }
 
 export function useFrame(cb: (fc: number) => void) {
   const gM = useGameManager();
   useEffect(() => {
     return gM.frame$.subscribe(cb).unsubscribe;
-  }, [cb])
+  }, [cb, gM])
 }
 
 export function useNthFrame(cb: (fc: number) => void, n: number) {
@@ -23,5 +23,5 @@ export function useNthFrame(cb: (fc: number) => void, n: number) {
     return gM.frame$.subscribe((fc: number) => {
       if (fc % n == 0) cb(fc);
     }).unsubscribe;
-  }, [cb])
+  }, [cb, gM, n])
 }
