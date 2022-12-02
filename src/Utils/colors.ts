@@ -1,10 +1,14 @@
 export const COLORS = {
-  black: "#111122",
-  white: "#f3f3f3",
+  bgNight: "#111122",
+  bgDay: "#F9E9DA",
+
   bgSummer: "#4C0F3F",
   bgWinter: "#0C344B",
   bgSpring: "#ADEDC3",
   bgAutumn: "#F7D289",
+
+  colorNight: "#f3f3f3",
+  colorDay: "0D0040",
 
   colorSummer: "#F5EE41",
   colorWinter: "#CDE6E9",
@@ -23,8 +27,8 @@ export enum Environment {
 }
 
 export const environmentColor: Record<Environment, string> = [
-  COLORS.white, // Night
-  COLORS.black, // Day
+  COLORS.colorNight, // Night
+  COLORS.colorDay, // Day
   COLORS.colorWinter, // Winter
   COLORS.colorSpring, // Spring
   COLORS.colorSummer, // Summer
@@ -32,8 +36,8 @@ export const environmentColor: Record<Environment, string> = [
 ];
 
 export const environmentBackground: Record<Environment, string> = [
-  COLORS.black, // Night
-  COLORS.white, // Day
+  COLORS.bgNight, // Night
+  COLORS.bgDay, // Day
   COLORS.bgWinter, // Winter
   COLORS.bgSpring, // Spring
   COLORS.bgSummer, // Summer

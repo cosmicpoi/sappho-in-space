@@ -21,7 +21,7 @@ const Container = styled.div<{ color: string; background: string }>`
 
   ${({ color }) => `color: ${color};`}
   ${({ background }) => `background: ${background};`}
-  transition: background 5s, color 5s;
+  transition: background 2s, color 2.5s;
 `;
 
 export const {
@@ -49,8 +49,8 @@ function App() {
   const [environment, setEnvironment] = useState<Environment>(
     Environment.DEFAULT
   );
-  const [color, setColor] = useState<string>(COLORS.white);
-  const [background, setBackground] = useState<string>(COLORS.black);
+  const [color, setColor] = useState<string>(COLORS.colorNight);
+  const [background, setBackground] = useState<string>(COLORS.bgNight);
   useEffect(() => {
     const sub = gameManager.viewportManager.colorChange$.subscribe(
       (e: Environment) => {
