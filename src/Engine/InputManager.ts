@@ -37,6 +37,8 @@ export class InputManager {
 
   public bindListeners(): () => void {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (this.isKeyDown(e.key)) return;
+
       this.keyIsDown.set(e.key, true);
 
       this.requestEmitter(this.keysDown$, e.key);
