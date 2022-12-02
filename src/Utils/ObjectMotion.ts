@@ -14,16 +14,17 @@ export class ObjectMotion {
   private ax = 0;
   private ay = 0;
 
-  private termV = 12 / 60; // 10 units per second
+  private termV: number | undefined;
 
   private collides;
 
   // initializes with starting coordinates
-  constructor(x: number, y: number, collides = false) {
+  constructor(x: number, y: number, collides = false, termV: number | undefined = undefined) {
     this.x = x;
     this.y = y;
 
     this.collides = collides;
+    this.termV = termV;
   }
 
   // basic getters and setters
@@ -42,7 +43,7 @@ export class ObjectMotion {
     this.rx += dx;
     const moveX = Math.round(this.rx);
 
-    if (moveX != 0) {
+    if (moveX !== 0) {
       this.rx -= moveX;
 
       if (!this.collides) {
@@ -61,7 +62,7 @@ export class ObjectMotion {
     this.ry += dy;
     const moveY = Math.round(this.ry);
 
-    if (moveY != 0) {
+    if (moveY !== 0) {
       this.ry -= moveY;
 
       if (!this.collides) {
@@ -78,20 +79,27 @@ export class ObjectMotion {
   }
 
   // handlers and callbacks
-  public onFrame(): Position {
+  public onFrame(dampen = false): Position {
     // dampen, then accelerate, then normalize
-    this.vy *= 0.98;
-    this.vx *= 0.98;
+    if (dampen) {
+      this.vy *= 0.98;
+      this.vx *= 0.98;
+    }
+
 
     this.vx += this.ax;
     this.vy += this.ay;
 
-    const tv = this.termV;
+    if (this.termV !== undefined) {
+      const tv = this.termV;
 
-    this.vx = clamp(this.vx, -tv, tv);
-    this.vy = clamp(this.vy, -tv, tv);
 
-    this.move(this.vx, this.vy);
+      this.vx = clamp(this.vx, -tv, tv);
+      this.vy = clamp(this.vy, -tv, tv);
+
+      this.move(this.vx, this.vy);
+
+    }
 
     return { x: this.x, y: this.y };
   }

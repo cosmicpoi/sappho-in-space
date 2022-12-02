@@ -21,7 +21,7 @@ export function useNthFrame(cb: (fc: number) => void, n: number) {
   const gM = useGameManager();
   useEffect(() => {
     return gM.frame$.subscribe((fc: number) => {
-      if (fc % n == 0) cb(fc);
+      if (fc % n === 0) cb(fc);
     }).unsubscribe;
   }, [cb, gM, n])
 }

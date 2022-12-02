@@ -22,7 +22,7 @@ function Collider({ x, y, z }: Position3D) {
   );
 }
 function SpaceshipPart({ x, y, z, char }: Position3D & { char: string }) {
-  if (char == " ") return <Collider x={x} y={y} z={z} />;
+  if (char === " ") return <Collider x={x} y={y} z={z} />;
   else return <CharPixel x={x} y={y} z={z} char={char} />;
 }
 
@@ -59,6 +59,7 @@ const dirChars: string[][][] = [
   spaceshipCharsRight,
 ];
 
+const TERM_V = 12 / 60; // 12 units / sec
 export function Spaceship() {
   const gM = useGameManager();
   const { viewportManager: vM, inputManager: iM } = gM;
@@ -67,7 +68,7 @@ export function Spaceship() {
   const [x, setX] = useState<number>(vM.getCenter().x);
   const [y, setY] = useState<number>(vM.getCenter().y);
 
-  const [motion] = useState<ObjectMotion>(new ObjectMotion(x, y));
+  const [motion] = useState<ObjectMotion>(new ObjectMotion(x, y, true, TERM_V));
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
@@ -78,8 +79,8 @@ export function Spaceship() {
       const vert = iM.resolveVertDirection();
 
       motion.setAcceleration(hoz * 0.03, vert * 0.03);
-      const { x: nX, y: nY } = motion.onFrame();
-      if (fc % 3 == 0) {
+      const { x: nX, y: nY } = motion.onFrame(true);
+      if (fc % 3 === 0) {
         setX(nX);
         setY(nY);
       }

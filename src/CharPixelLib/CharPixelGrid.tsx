@@ -31,7 +31,7 @@ export class CharPixelGridManager {
       }
     });
 
-    if (data != undefined) data.setHidden(false);
+    if (data !== undefined) data.setHidden(false);
     fragments.forEach((zData) => {
       if (zData !== data) zData.setHidden(true);
     });
