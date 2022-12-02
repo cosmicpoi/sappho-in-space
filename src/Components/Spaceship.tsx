@@ -143,6 +143,7 @@ export function Spaceship() {
     vM.follow({ x, y });
   }, [x, y, vM]);
 
+
   return (
     <>
       {/* First col */}

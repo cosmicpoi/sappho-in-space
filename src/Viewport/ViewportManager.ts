@@ -1,5 +1,7 @@
 import autoBind from "auto-bind";
+import { Environment } from "../Utils/colors";
 import { CANVAS_WIDTH, CANVAS_HEIGHT, PIXEL_WIDTH } from "../Utils/consts";
+import { monomitter, Monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
 import { clamp } from "../Utils/utils";
 
@@ -9,22 +11,36 @@ export const unit_sToW = (w: number) => w / PIXEL_WIDTH;
 export class ViewportManager {
   private width: number = CANVAS_WIDTH;
   private height: number = CANVAS_HEIGHT;
+  public colorChange$: Monomitter<Environment>;
 
   private container: HTMLDivElement;
+
+  environment = 0;
 
   // constructor and setup
   constructor() {
     autoBind(this);
+    this.colorChange$ = monomitter<Environment>(true);
+    this.colorChange$.publish(Environment.DEFAULT);
+
+    setInterval(() => {
+      console.log("Publish");
+      if (this.environment <= Environment.Autumn)
+        this.colorChange$.publish(this.environment++);
+    }, 10000);
   }
 
   public setContainer(container: HTMLDivElement): void {
     this.container = container;
   }
 
-
   // basic getters
-  public getWidth(): number { return this.width; }
-  public getHeight(): number { return this.height; }
+  public getWidth(): number {
+    return this.width;
+  }
+  public getHeight(): number {
+    return this.height;
+  }
 
   public getCenter(): Position {
     return { x: this.width / 2, y: this.height / 2 };
@@ -38,11 +54,14 @@ export class ViewportManager {
   }
 
   private scrollMax(): Position {
-    const maxScrollX_w = Math.ceil(this.width - 1 - unit_sToW(window.innerWidth));
-    const maxScrollY_w = Math.ceil(this.height - 1 - unit_sToW(window.innerHeight));
+    const maxScrollX_w = Math.ceil(
+      this.width - 1 - unit_sToW(window.innerWidth)
+    );
+    const maxScrollY_w = Math.ceil(
+      this.height - 1 - unit_sToW(window.innerHeight)
+    );
 
-
-    return { x: unit_wToS(maxScrollX_w), y: unit_wToS(maxScrollY_w) }
+    return { x: unit_wToS(maxScrollX_w), y: unit_wToS(maxScrollY_w) };
     // return { x: Infinity, y: Infinity };
   }
 
@@ -51,7 +70,7 @@ export class ViewportManager {
     return {
       x: unit_wToS(pos.x) - this.scrollX(),
       y: unit_wToS(pos.y) - this.scrollY(),
-    }
+    };
   }
 
   // scroll fns
@@ -75,9 +94,11 @@ export class ViewportManager {
 
   // follow logic (for following spaceship)
   public follow(pos: Position) {
-    const marginX = 0.4, marginY = 0.4;
+    const marginX = 0.4,
+      marginY = 0.4;
     const screen = this.worldToScreen(pos);
-    let delX = 0, delY = 0;
+    let delX = 0,
+      delY = 0;
 
     const mLeft = window.innerWidth * marginX;
     const mRight = window.innerWidth * (1 - marginX);

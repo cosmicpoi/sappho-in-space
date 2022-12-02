@@ -3,10 +3,20 @@ import { useState } from "react";
 import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { Wall } from "../Components/Wall";
+import { DEBUG } from "../Utils/debug";
 import { Position } from "../Utils/types";
 
 function Framer({ x, y }: Position) {
-  return <CharPixel char="@" z={0} x={x} y={y} color="red" />;
+  return (
+    <CharPixel
+      char="@"
+      z={0}
+      x={x}
+      y={y}
+      opacity={DEBUG ? 1 : 0}
+      color={"red"}
+    />
+  );
 }
 
 export function Frame() {

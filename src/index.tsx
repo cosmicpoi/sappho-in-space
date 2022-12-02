@@ -4,14 +4,24 @@ import { createRoot } from "react-dom/client";
 import styled from "styled-components";
 import { GameManager } from "./Engine/GameManager";
 import { GameWorld } from "./GameWorld";
+import {
+  COLORS,
+  Environment,
+  environmentBackground,
+  environmentColor,
+} from "./Utils/colors";
 import { createDefinedContext } from "./Utils/createDefinedContext";
 import { Frame } from "./Viewport/Frame";
 
-const Container = styled.div`
+const Container = styled.div<{ color: string; background: string }>`
   width: 100%;
   height: 100%;
   overflow: hidden;
   position: relative;
+
+  ${({ color }) => `color: ${color};`}
+  ${({ background }) => `background: ${background};`}
+  transition: background 5s, color 5s;
 `;
 
 export const {
@@ -36,9 +46,28 @@ function App() {
     return gameManager.initialize();
   }, [gameManager]);
 
+  const [environment, setEnvironment] = useState<Environment>(
+    Environment.DEFAULT
+  );
+  const [color, setColor] = useState<string>(COLORS.white);
+  const [background, setBackground] = useState<string>(COLORS.black);
+  useEffect(() => {
+    const sub = gameManager.viewportManager.colorChange$.subscribe(
+      (e: Environment) => {
+        setEnvironment(e);
+      }
+    );
+    return sub.unsubscribe;
+  }, [gameManager, setEnvironment]);
+
+  useEffect(() => {
+    setColor(environmentColor[environment]);
+    setBackground(environmentBackground[environment]);
+  }, [environment, setColor, setBackground]);
+
   return (
     <GameManagerProvider value={gameManager}>
-      <Container ref={containerRef}>
+      <Container ref={containerRef} color={color} background={background}>
         <Frame />
         <GameWorld />
       </Container>
