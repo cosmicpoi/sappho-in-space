@@ -1,30 +1,20 @@
 import * as React from "react";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
-
-import { CharPixel } from "../CharPixelLib/CharPixel";
 import { t_v } from "../Utils/consts";
-import { useFrame, useManyKeysDown, useManyKeysUp } from "../Utils/Hooks";
-import { ObjectMotion } from "../Utils/ObjectMotion";
-import { Position3D } from "../Utils/Position";
+import {
+  useFrame,
+  useManyKeysDown,
+  useManyKeysUp,
+  useObjectMotion,
+} from "../Utils/Hooks";
 import { Direction, directionFromKey, directionKeys } from "../Utils/utils";
-
-function Collider({ x, y, z }: Position3D) {
-  const [isTop, setTop] = useState<boolean>(false);
-  const gM = useGameManager();
-
-  useLayoutEffect(() => {
-    setTop(gM.charPixelGridManager.isOccupied({ x, y }));
-  }, [x, y, z, gM]);
-
-  return (
-    <CharPixel x={x} y={y} z={z} char={isTop ? "." : " "} color={"gray"} />
-  );
-}
-function SpaceshipPart({ x, y, z, char }: Position3D & { char: string }) {
-  if (char === " ") return <Collider x={x} y={y} z={z} />;
-  else return <CharPixel x={x} y={y} z={z} char={char} />;
-}
+import {
+  SpaceshipPart,
+  Collider,
+  RocketParticle,
+  RocketParticleData,
+} from "./SpaceshipParts";
 
 const spaceshipCharsDown = [
   ["v", " ", "v"],
@@ -53,18 +43,26 @@ const dirChars: string[][][] = [
   spaceshipCharsRight,
 ];
 
-const TERM_V = 12 / 60; // 12 units / sec
+const TERM_V = 12; // 12 units / sec
 export function Spaceship() {
   const gM = useGameManager();
   const { viewportManager: vM, inputManager: iM } = gM;
 
+  // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
   const [x, setX] = useState<number>(vM.getCenter().x);
   const [y, setY] = useState<number>(vM.getCenter().y);
 
-  const [motion] = useState<ObjectMotion>(new ObjectMotion(x, y, true, TERM_V));
+  const motion = useObjectMotion({ x, y, collides: true, termV: TERM_V });
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
+
+  // manage particles
+  const [particles, setParticles] = useState<RocketParticleData[]>([]);
+  const newParticle = useCallback(() => {
+    const { x, y } = motion.getPosition();
+    setParticles((p) => [...p, { x, y, dir: faceDir }]);
+  }, [faceDir, motion]);
 
   // spaceship control
   const onFrame = useCallback(
@@ -72,14 +70,18 @@ export function Spaceship() {
       const hoz = iM.resolveHozDirection();
       const vert = iM.resolveVertDirection();
 
-      motion.setAcceleration(hoz * 0.03, vert * 0.03);
-      const { x: nX, y: nY } = motion.onFrame(true);
-      if (fc % 3 === 0) {
-        setX(nX);
-        setY(nY);
+      motion.setAcceleration({ x: hoz * 1.8, y: vert * 1.8 });
+      motion.onFrame(true);
+      const { x: nX, y: nY } = motion.getPosition();
+
+      setX(nX);
+      setY(nY);
+
+      if (fc % 5 === 0) {
+        newParticle();
       }
     },
-    [iM, setX, setY, motion]
+    [iM, setX, setY, motion, newParticle]
   );
   useFrame(onFrame);
 
@@ -143,6 +145,11 @@ export function Spaceship() {
       <Collider x={x + 2} y={y - 1} />
       <Collider x={x + 2} y={y + 0} />
       <Collider x={x + 2} y={y + 1} />
+
+      {/* Particles */}
+      {particles.map(({ x, y, dir }, i) => (
+        <RocketParticle x={x} y={y} dir={dir} z={-1} key={i} />
+      ))}
     </>
   );
 }

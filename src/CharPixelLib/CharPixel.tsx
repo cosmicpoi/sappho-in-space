@@ -5,7 +5,14 @@ import { useGameManager } from "..";
 import { PIXEL_WIDTH, t_v } from "../Utils/consts";
 import { Position, Position3D } from "../Utils/Position";
 
-type StyledCharPixelProps = Position & { hidden?: boolean; color?: string };
+type CharPixelStyle = {
+  color?: string;
+  opacity?: number;
+};
+type StyledCharPixelProps = Position &
+  CharPixelStyle & {
+    hidden?: boolean;
+  };
 
 const StyledCharPixel = styled.span.attrs<StyledCharPixelProps>(({ x, y }) => ({
   style: {
@@ -23,7 +30,8 @@ const StyledCharPixel = styled.span.attrs<StyledCharPixelProps>(({ x, y }) => ({
   line-height: ${PIXEL_WIDTH}px;
   display: inline-block;
 
-  ${({ hidden }) => hidden && "opacity: 0;"}
+  ${({ opacity }) => opacity && `opacity: ${opacity};`}
+  ${({ hidden }) => hidden && "display: none;"}
   ${({ color }) => color && `color: ${color};`}
 `;
 
@@ -34,11 +42,11 @@ const Short = styled.span<{ h?: number }>`
 const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
-export type CharPixelProps = Position3D & { char: string; color?: string };
-export function CharPixel({ x, y, z, char, color }: CharPixelProps) {
+export type CharPixelProps = Position3D & CharPixelStyle & { char: string };
+export function CharPixel({ x, y, z, char, color, opacity }: CharPixelProps) {
   const gM = useGameManager();
 
-  var content: React.ReactNode | string = char;
+  let content: React.ReactNode | string = char;
 
   if (char === "|") content = <ShortPipe />;
   if (char === t_v) content = <ShortTV />;
@@ -54,10 +62,16 @@ export function CharPixel({ x, y, z, char, color }: CharPixelProps) {
     );
 
     return unregister;
-  }, [x, y, z, char]);
+  }, [x, y, z, char, gM, setHidden]);
 
   return (
-    <StyledCharPixel x={x} y={y} hidden={hidden} color={color}>
+    <StyledCharPixel
+      x={x}
+      y={y}
+      hidden={hidden}
+      color={color}
+      opacity={opacity}
+    >
       {content}
     </StyledCharPixel>
   );

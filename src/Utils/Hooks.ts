@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
 import { Subscription } from "./Monomitter";
+import { ObjectMotion, ObjectMotionProps } from "./ObjectMotion";
 
 type Extractor = (
   iM: InputManager
@@ -48,9 +49,22 @@ export function useManyKeysUp(keys: string[], cb: (k: string) => void) {
   useManyKeys(exKeyUp, keys, cb);
 }
 
-export function useFrame(cb: (fc: number) => void) {
+export function useFrame(cb: (fc: number, lifetime?: number) => void) {
   const gM = useGameManager();
-  useEffect(() => gM.frame$.subscribe(cb).unsubscribe, [cb, gM]);
+
+  useLayoutEffect(() => {
+    let lifetime = 0;
+    const sub = gM.frame$.subscribe((fc: number) => {
+      cb(fc, lifetime++);
+    });
+
+    return sub.unsubscribe;
+  }, [cb, gM]);
+}
+
+export function useObjectMotion(props: ObjectMotionProps): ObjectMotion {
+  const [motion] = useState<ObjectMotion>(new ObjectMotion(props));
+  return motion;
 }
 
 // export function useNthFrame(cb: (fc: number) => void, n: number) {

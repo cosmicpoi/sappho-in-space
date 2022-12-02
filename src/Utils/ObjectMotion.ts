@@ -1,5 +1,9 @@
 import { Position } from "./Position";
 
+export type ObjectMotionProps = Position & {
+  collides?: boolean;
+  termV?: number;
+};
 export class ObjectMotion {
   private rx = 0;
   private ry = 0;
@@ -18,18 +22,22 @@ export class ObjectMotion {
   private collides;
 
   // initializes with starting coordinates
-  constructor(x: number, y: number, collides = false, termV: number | undefined = undefined) {
+  constructor({ x, y, collides, termV }: ObjectMotionProps) {
     this.x = x;
     this.y = y;
 
-    this.collides = collides;
+    this.collides = collides === true;
     this.termV = termV;
   }
 
   // basic getters and setters
-  public setAcceleration(ax: number, ay: number): void {
+  public setAcceleration({ x: ax, y: ay }: Position): void {
     this.ay = ay;
     this.ax = ax;
+  }
+
+  public getPosition(): Position {
+    return { x: this.x, y: this.y };
   }
 
   // move / collision logic
@@ -37,9 +45,10 @@ export class ObjectMotion {
     return;
   }
 
-  public move(dx: number, dy: number) {
+  public move(move60: Position) {
+    const { x: dx60, y: dy60 } = move60;
     // move X
-    this.rx += dx;
+    this.rx += dx60 / 60;
     const moveX = Math.round(this.rx);
 
     if (moveX !== 0) {
@@ -58,7 +67,7 @@ export class ObjectMotion {
     }
 
     // move Y
-    this.ry += dy;
+    this.ry += dy60 / 60;
     const moveY = Math.round(this.ry);
 
     if (moveY !== 0) {
@@ -78,7 +87,7 @@ export class ObjectMotion {
   }
 
   // handlers and callbacks
-  public onFrame(dampen = false): Position {
+  public onFrame(dampen = false) {
     // dampen, then accelerate, then normalize
     if (dampen) {
       this.vy *= 0.98;
@@ -97,8 +106,6 @@ export class ObjectMotion {
         this.vy *= tv / norm;
       }
     }
-    this.move(this.vx, this.vy);
-
-    return { x: this.x, y: this.y };
+    this.move({ x: this.vx, y: this.vy });
   }
 }

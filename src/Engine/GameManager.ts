@@ -1,5 +1,5 @@
 import autoBind from "auto-bind";
-import { CharPixelGridManager } from "../CharPixelLib/CharPixelGrid";
+import { CharPixelGridManager } from "../CharPixelLib/CharPixelGridManager";
 import { monomitter } from "../Utils/Monomitter";
 import { ViewportManager } from "../Viewport/ViewportManager";
 import { InputManager } from "./InputManager";
@@ -21,7 +21,6 @@ export class GameManager {
     this.viewportManager = new ViewportManager();
   }
 
-
   private loop() {
     this.frame$.publish(this.frameCount++);
     this.frameRequestId = window.requestAnimationFrame(this.loop);
@@ -34,6 +33,6 @@ export class GameManager {
     return () => {
       window.cancelAnimationFrame(this.frameRequestId);
       unbind();
-    }
+    };
   }
 }

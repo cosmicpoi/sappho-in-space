@@ -1,4 +1,5 @@
 import autoBind from "auto-bind";
+import { monomitter, Monomitter } from "../Utils/Monomitter";
 import { getPositionKey, Position } from "../Utils/Position";
 
 type SetHidden = (b: boolean) => void;
@@ -11,10 +12,17 @@ type PixelsAtPos = Set<PixelZData>;
 
 export class CharPixelGridManager {
   pixelMap: Map<string, PixelsAtPos | undefined>;
+  pixelUpdated$: Map<string, Monomitter<void>>;
 
   constructor() {
     autoBind(this);
     this.pixelMap = new Map();
+    this.pixelUpdated$ = new Map();
+  }
+
+  private requestPixelUpdated(key: string) {
+    if (!this.pixelUpdated$.has(key))
+      this.pixelUpdated$.set(key, monomitter<void>());
   }
 
   private renderPixel(posKey: string) {
@@ -59,11 +67,20 @@ export class CharPixelGridManager {
     posData.add(myData);
 
     this.renderPixel(key);
+    this.requestPixelUpdated(key);
+    this.pixelUpdated$.get(key)?.publish();
 
     return () => {
       posData.delete(myData);
       this.renderPixel(key);
     };
+  }
+
+  public onPixelUpdate({ x, y }: Position, cb: () => void) {
+    const key = getPositionKey({ x, y });
+    this.requestPixelUpdated(key);
+
+    return this.pixelUpdated$.get(key).subscribe(cb);
   }
 
   // has more than one entry
