@@ -71,6 +71,7 @@ export class CharPixelGridManager {
     return () => {
       posData.delete(zData);
       this.renderPixel(key);
+      this.pixelUpdated$.get(key)?.publish();
     };
   }
 

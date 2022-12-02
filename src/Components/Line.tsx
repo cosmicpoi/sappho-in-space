@@ -15,6 +15,7 @@ export function Line({
     const len = text.length;
     if (align === TextAlign.Center) return -Math.floor(len / 2);
     if (align === TextAlign.Right) return -len;
+    else return 0;
   }, [align, text]);
 
   return (
