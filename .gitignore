@@ -1,2 +1,4 @@
 node_modules
 .commit
+src/.DS_Store
+.DS_Store
