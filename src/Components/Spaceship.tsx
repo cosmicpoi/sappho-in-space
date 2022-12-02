@@ -1,11 +1,11 @@
 import * as React from "react";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { KEYS } from "../Engine/InputManager";
 import { t_v } from "../Utils/consts";
-import { useFrame, useKeyDown, useNthFrame } from "../Utils/Hooks";
+import { useFrame, useKeyDown } from "../Utils/Hooks";
 import { ObjectMotion } from "../Utils/ObjectMotion";
 import { Position3D } from "../Utils/Position";
 
@@ -77,7 +77,7 @@ export function Spaceship() {
       const hoz = iM.resolveHozDirection();
       const vert = iM.resolveVertDirection();
 
-      motion.setAcceleration(hoz * 0.05, vert * 0.05);
+      motion.setAcceleration(hoz * 0.03, vert * 0.03);
       const { x: nX, y: nY } = motion.onFrame();
       if (fc % 3 == 0) {
         setX(nX);

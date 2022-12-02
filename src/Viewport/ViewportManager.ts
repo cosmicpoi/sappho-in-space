@@ -77,18 +77,18 @@ export class ViewportManager {
   public follow(pos: Position) {
     const marginX = 0.4, marginY = 0.4;
     const screen = this.worldToScreen(pos);
-    var delX = 0, delY = 0;
+    let delX = 0, delY = 0;
 
-    var mLeft = window.innerWidth * marginX;
-    var mRight = window.innerWidth * (1 - marginX);
+    const mLeft = window.innerWidth * marginX;
+    const mRight = window.innerWidth * (1 - marginX);
     if (screen.x < mLeft) {
       delX = -Math.ceil(unit_sToW(mLeft - screen.x));
     } else if (screen.x > mRight) {
       delX = Math.ceil(unit_sToW(screen.x - mRight));
     }
 
-    var mTop = window.innerHeight * marginY;
-    var mBottom = window.innerHeight * (1 - marginY);
+    const mTop = window.innerHeight * marginY;
+    const mBottom = window.innerHeight * (1 - marginY);
     if (screen.y < mTop) {
       delY = -Math.ceil(unit_sToW(mTop - screen.y));
     } else if (screen.y > mBottom) {

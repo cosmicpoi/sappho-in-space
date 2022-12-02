@@ -19,5 +19,11 @@
     "build": "esbuild src/index.tsx --bundle --outfile=dist/main.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "eslint-plugin-react": "^7.31.11"
+  }
 }

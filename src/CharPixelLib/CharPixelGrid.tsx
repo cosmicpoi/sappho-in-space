@@ -1,5 +1,4 @@
 import autoBind from "auto-bind";
-import * as React from "react";
 import { getPositionKey, Position } from "../Utils/Position";
 
 type SetHidden = (b: boolean) => void;
@@ -23,8 +22,8 @@ export class CharPixelGridManager {
 
     const fragments = this.pixelMap.get(posKey);
 
-    var max: number = -Infinity;
-    var data: PixelZData | undefined;
+    let max = -Infinity;
+    let data: PixelZData | undefined;
     fragments.forEach((zData) => {
       if (zData.z > max) {
         max = zData.z;

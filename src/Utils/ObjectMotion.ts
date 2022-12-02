@@ -34,13 +34,13 @@ export class ObjectMotion {
 
   // move / collision logic
   private checkSolids(): void {
-
+    return;
   }
 
   public move(dx: number, dy: number) {
     // move X
     this.rx += dx;
-    var moveX = Math.round(this.rx);
+    const moveX = Math.round(this.rx);
 
     if (moveX != 0) {
       this.rx -= moveX;
@@ -48,9 +48,9 @@ export class ObjectMotion {
       if (!this.collides) {
         this.x += moveX;
       } else {
-        var sgn = Math.sign(moveX);
+        const sgn = Math.sign(moveX);
 
-        for (var i = 0; i < Math.abs(moveX); i++) {
+        for (let i = 0; i < Math.abs(moveX); i++) {
           this.x += sgn;
           this.checkSolids();
         }
@@ -59,7 +59,7 @@ export class ObjectMotion {
 
     // move Y
     this.ry += dy;
-    var moveY = Math.round(this.ry);
+    const moveY = Math.round(this.ry);
 
     if (moveY != 0) {
       this.ry -= moveY;
@@ -67,9 +67,9 @@ export class ObjectMotion {
       if (!this.collides) {
         this.y += moveY;
       } else {
-        var sgn = Math.sign(moveY);
+        const sgn = Math.sign(moveY);
 
-        for (var i = 0; i < Math.abs(moveY); i++) {
+        for (let i = 0; i < Math.abs(moveY); i++) {
           this.y += sgn;
           this.checkSolids();
         }
