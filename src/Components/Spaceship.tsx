@@ -141,6 +141,7 @@ export function Spaceship() {
   // camera control
   useLayoutEffect(() => {
     vM.follow({ x, y });
+    vM.requestColor({x, y});
   }, [x, y, vM]);
 
 

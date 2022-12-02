@@ -8,14 +8,17 @@ import { clamp } from "../Utils/utils";
 export const unit_wToS = (w: number) => w * PIXEL_WIDTH;
 export const unit_sToW = (w: number) => w / PIXEL_WIDTH;
 
+const ellipseWidth = Math.floor(0.5 * 0.7 * CANVAS_WIDTH);
+const ellipseHeight = Math.floor(0.5 * 0.4 * CANVAS_HEIGHT);
+
 export class ViewportManager {
   private width: number = CANVAS_WIDTH;
   private height: number = CANVAS_HEIGHT;
-  public colorChange$: Monomitter<Environment>;
-
   private container: HTMLDivElement;
 
-  environment = 0;
+  public colorChange$: Monomitter<Environment>;
+
+  public environment = Environment.DEFAULT;
 
   // constructor and setup
   constructor() {
@@ -23,11 +26,11 @@ export class ViewportManager {
     this.colorChange$ = monomitter<Environment>(true);
     this.colorChange$.publish(Environment.DEFAULT);
 
-    setInterval(() => {
-      console.log("Publish");
-      if (this.environment <= Environment.Autumn)
-        this.colorChange$.publish(this.environment++);
-    }, 10000);
+    // setInterval(() => {
+    //   console.log("Publish");
+    //   if (this.environment <= Environment.Autumn)
+    //     this.colorChange$.publish(this.environment++);
+    // }, 10000);
   }
 
   public setContainer(container: HTMLDivElement): void {
@@ -93,6 +96,28 @@ export class ViewportManager {
   }
 
   // follow logic (for following spaceship)
+  public requestColor(pos: Position) {
+    let env = -1;
+    const { x: cx, y: cy } = this.getCenter();
+
+    const delX = pos.x - cx;
+    const delY = pos.y - cy;
+    if ((delX / ellipseWidth) ** 2 + (delY / ellipseHeight) ** 2 < 1) {
+      if (delX < 25) env = Environment.Night;
+      else env = Environment.Day;
+    } else {
+      if (pos.x < cx && pos.y < cy) env = Environment.Winter;
+      else if (pos.x > cx && pos.y < cy) env = Environment.Spring;
+      else if (pos.x > cx && pos.y > cy) env = Environment.Summer;
+      else if (pos.x < cx && pos.y > cy) env = Environment.Autumn;
+    }
+
+    if (env !== this.environment) {
+      console.log("new environment ");
+      this.environment = env;
+      this.colorChange$.publish(this.environment);
+    }
+  }
   public follow(pos: Position) {
     const marginX = 0.4,
       marginY = 0.4;
