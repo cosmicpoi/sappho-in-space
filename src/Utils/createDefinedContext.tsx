@@ -35,4 +35,3 @@ export function createDefinedContext<T>(): ContextHookWithProvider<T> {
     provider: context.Provider,
   };
 }
-type InputManager = {};
