@@ -5,6 +5,8 @@ import { Direction, Position } from "./types";
 export const clamp = (num: number, min: number, max: number): number =>
   Math.min(Math.max(num, min), max);
 
+export const toN = (n: number) => Array.from(Array(n).keys());
+
 // random
 export const randomRange = (min: number, max: number): number =>
   min + Math.random() * (max - min);
@@ -12,6 +14,10 @@ export const randomRange = (min: number, max: number): number =>
 // https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
 export const randIntRange = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
+
+export function randEl<T>(list: T[]): T {
+  return list[randIntRange(0, list.length - 1)];
+}
 
 // position
 export const getPositionKey = ({ x, y }: Position): string => `${x}-${y}`;

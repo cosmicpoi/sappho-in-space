@@ -60,7 +60,7 @@ export function Spaceship() {
   // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
   const [x, setX] = useState<number>(vM.getCenter().x);
-  const [y, setY] = useState<number>(vM.getCenter().y + 4);
+  const [y, setY] = useState<number>(vM.getCenter().y + 6);
 
   const motion = useActor({
     x,

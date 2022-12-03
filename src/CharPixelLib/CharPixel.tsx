@@ -1,18 +1,32 @@
 import * as React from "react";
 import { useLayoutEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
 import { Position3D } from "../Utils/types";
 import { unit_wToS } from "../Viewport/ViewportManager";
 
-type CharPixelStyle = {
+export type CharPixelStyle = {
   color?: string;
   opacity?: number;
+  twinkle?: number;
 };
 type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
 };
+
+const twinkleFrames = keyframes`
+  from {
+    filter: opacity(0.2);
+  }
+
+  to {
+    filter: opacity(1.0);
+  }
+`;
+const twinkleAnim = css`
+  animation: ${twinkleFrames} 1.5s alternate-reverse linear infinite;
+`;
 
 const StyledCharPixel = styled.span<StyledCharPixelProps>`
   position: absolute;
@@ -25,9 +39,9 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   line-height: ${unit_wToS(1)}px;
   display: inline-block;
 
-  ${({ opacity }) => opacity && `opacity: ${opacity};`}
   ${({ hidden }) => hidden && "display: none;"}
   ${({ color }) => color && `color: ${color};`}
+  ${({ twinkle }) => twinkle && twinkleAnim}
 `;
 
 const Short = styled.span<{ h?: number }>`
@@ -39,8 +53,9 @@ const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
 export type CharPixelProps = Position3D &
   CharPixelStyle & { char: string | undefined; isWall?: boolean };
+
 export function CharPixel(props: CharPixelProps) {
-  const { x, y, z, char, color, opacity, isWall } = props;
+  const { x, y, z, char, color, opacity, isWall, twinkle } = props;
   const gM = useGameManager();
 
   let content: React.ReactNode | string = char;
@@ -63,11 +78,15 @@ export function CharPixel(props: CharPixelProps) {
     <StyledCharPixel
       hidden={hidden}
       color={color}
-      opacity={opacity}
+      // opacity={opacity}
       style={{
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",
+        opacity: opacity,
+        animationDelay:
+          twinkle !== undefined ? `${(twinkle % 10) * 0.15}s` : undefined,
       }}
+      twinkle={twinkle}
     >
       {content}
     </StyledCharPixel>
