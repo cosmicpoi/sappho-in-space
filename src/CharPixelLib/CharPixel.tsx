@@ -78,7 +78,6 @@ export function CharPixel(props: CharPixelProps) {
     <StyledCharPixel
       hidden={hidden}
       color={color}
-      // opacity={opacity}
       style={{
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",

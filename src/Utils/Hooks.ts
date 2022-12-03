@@ -1,8 +1,9 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
 import { Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
+import { TextAlign } from "./types";
 
 type Extractor = (
   iM: InputManager
@@ -66,4 +67,14 @@ export function useActor(props: ActorProps): ActorData {
   const gM = useGameManager();
   const [motion] = useState<ActorData>(new ActorData(gM, props));
   return motion;
+}
+
+export function useAlign(len: number, align: TextAlign): number {
+  const offX = useMemo(() => {
+    if (align === TextAlign.Center) return -Math.floor(len / 2);
+    if (align === TextAlign.Right) return -len;
+    else return 0;
+  }, [align, len]);
+
+  return offX;
 }

@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
-import { Layer, t_v } from "../Utils/consts";
+import { t_v } from "../Utils/consts";
 import {
   useFrame,
   useManyKeysDown,
   useManyKeysUp,
   useActor,
 } from "../Utils/Hooks";
-import { Direction, Hitbox } from "../Utils/types";
+import { Direction, Hitbox, Layer } from "../Utils/types";
 import { directionFromKey, directionKeys } from "../Utils/utils";
 import {
   SpaceshipPart,
@@ -60,7 +60,7 @@ export function Spaceship() {
   // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
   const [x, setX] = useState<number>(vM.getCenter().x);
-  const [y, setY] = useState<number>(vM.getCenter().y + 6);
+  const [y, setY] = useState<number>(vM.getCenter().y);
 
   const motion = useActor({
     x,

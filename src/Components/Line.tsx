@@ -1,18 +1,7 @@
 import * as React from "react";
-import { useMemo } from "react";
 import { CharPixel, CharPixelStyle } from "../CharPixelLib/CharPixel";
+import { useAlign } from "../Utils/Hooks";
 import { Position3D, TextAlign } from "../Utils/types";
-
-export function useAlign(text: string, align: TextAlign): number {
-  const offX = useMemo(() => {
-    const len = text.length;
-    if (align === TextAlign.Center) return -Math.floor(len / 2);
-    if (align === TextAlign.Right) return -len;
-    else return 0;
-  }, [align, text]);
-
-  return offX;
-}
 
 export function Line({
   x,
@@ -26,7 +15,7 @@ export function Line({
   twinkle,
 }: Position3D &
   CharPixelStyle & { text: string; isWall?: boolean; align?: TextAlign }) {
-  const offX = useAlign(text, align);
+  const offX = useAlign(text.length, align);
 
   return (
     <>

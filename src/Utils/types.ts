@@ -24,3 +24,11 @@ export enum TextAlign {
   Center,
   Right
 }
+
+export enum Layer {
+  Default = 0,
+  Title = 1,
+  Title2 = 2,
+  Particles = 9,
+  Spaceship = 10,
+}

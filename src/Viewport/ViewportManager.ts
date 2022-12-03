@@ -103,7 +103,7 @@ export class ViewportManager {
     const delX = pos.x - cx;
     const delY = pos.y - cy;
     if ((delX / ellipseWidth) ** 2 + (delY / ellipseHeight) ** 2 < 1) {
-      if (delX < 25) env = Environment.Night;
+      if (delX < 100) env = Environment.Night;
       else env = Environment.Day;
     } else {
       if (pos.x < cx && pos.y < cy) env = Environment.Winter;
