@@ -3,14 +3,9 @@ import { useLayoutEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
-import { Position3D } from "../Utils/types";
 import { unit_wToS } from "../Viewport/ViewportManager";
+import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
 
-export type CharPixelStyle = {
-  color?: string;
-  opacity?: number;
-  twinkle?: number;
-};
 type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
 };
@@ -50,9 +45,6 @@ const Short = styled.span<{ h?: number }>`
 `;
 const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
-
-export type CharPixelProps = Position3D &
-  CharPixelStyle & { char: string | undefined; isWall?: boolean };
 
 export function CharPixel(props: CharPixelProps) {
   const { x, y, z, char, color, opacity, isWall, twinkle } = props;

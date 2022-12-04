@@ -1,7 +1,7 @@
 import * as React from "react";
-import { CharPixel, CharPixelStyle } from "../CharPixelLib/CharPixel";
-import { useAlign } from "../Utils/Hooks";
-import { Position3D, TextAlign } from "../Utils/types";
+import { CharPixel } from "../CharPixelLib/CharPixel";
+import { CharPixelBlockProps } from "../CharPixelLib/CharPixelTypes";
+import { getAlign } from "../Utils/utils";
 
 export function Line({
   x,
@@ -13,25 +13,27 @@ export function Line({
   color,
   opacity,
   twinkle,
-}: Position3D &
-  CharPixelStyle & { text: string; isWall?: boolean; align?: TextAlign }) {
-  const offX = useAlign(text.length, align);
-
+}: CharPixelBlockProps) {
   return (
     <>
-      {text.split("").map((str: string, i: number) => (
-        <CharPixel
-          x={x + i + offX}
-          y={y}
-          z={z}
-          char={str}
-          key={i}
-          isWall={isWall}
-          color={color}
-          opacity={opacity}
-          twinkle={twinkle}
-        />
-      ))}
+      {text
+        .split("")
+        .map(
+          (str: string, i: number) =>
+            str !== "_" && (
+              <CharPixel
+                x={x + i + getAlign(text.length, align)}
+                y={y}
+                z={z}
+                char={str}
+                key={i}
+                isWall={isWall}
+                color={color}
+                opacity={opacity}
+                twinkle={twinkle}
+              />
+            )
+        )}
     </>
   );
 }

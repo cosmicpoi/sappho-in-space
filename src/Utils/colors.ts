@@ -7,7 +7,7 @@ export const COLORS = {
   bgSpring: "#ADEDC3",
   bgAutumn: "#F7D289",
 
-  colorNight: "#f3f3f3",
+  colorNight: "#d8d8d8",
   colorDay: "0D0040",
 
   colorSummer: "#F5EE41",

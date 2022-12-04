@@ -1,9 +1,14 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
-import { useAlign } from "../../Utils/Hooks";
 import { Position3D, TextAlign } from "../../Utils/types";
-import { randEl, randIntRange, randomRange, toN } from "../../Utils/utils";
+import {
+  getAlign,
+  randEl,
+  randIntRange,
+  randomRange,
+  toN,
+} from "../../Utils/utils";
 import { Line } from "../Line";
 
 const verticalPads = 7;
@@ -78,7 +83,7 @@ function PadRow({
     return chars;
   }, [maxLength, gap, idx]);
 
-  const offX = useAlign(chars.length, TextAlign.Center);
+  const offX = useMemo(() => getAlign(chars.length, TextAlign.Center), [chars]);
 
   const twinklers: (number | undefined)[] = useMemo(
     () =>

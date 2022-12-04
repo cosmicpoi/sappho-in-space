@@ -1,48 +1,41 @@
 import * as React from "react";
-import { Line } from "./Components/Line";
+import { useGameManager } from ".";
+import * as F0 from "./Components/Fragments/FragmentComponents/Fragment1to9";
+import * as F1 from "./Components/Fragments/FragmentComponents/Fragment12to19";
+import * as F2 from "./Components/Fragments/FragmentComponents/Fragment20to29";
 import { Spaceship } from "./Components/Spaceship";
 import { Title } from "./Components/Title/Title";
 
 export function GameWorld() {
+  const { viewportManager: vM } = useGameManager();
+  const [cx] = React.useState<number>(vM.getCenter().x);
+  const [cy] = React.useState<number>(vM.getCenter().y);
+
   return (
     <>
       <Title />
-      <Line y={3} x={5} z={-1} text="de" />
-      <Line y={4} x={7} z={-1} text="of my brested friend" />
+      <F0.Fragment1 x={cx - 80} y={cy} />
+      <F0.Fragment2 x={cx + 40} y={cy} />
+      <F0.Fragment3 x={cx + 60} y={cy + 40} />
+      <F0.Fragment4 x={cx + 100} y={cy - 40} />
+      <F0.Fragment5 x={cx - 140} y={cy + 60} />
+      <F0.Fragment6 x={cx - 120} y={cy - 40} />
+      <F0.Fragment7 x={cx - 200} y={cy - 50} />
+      <F0.Fragment8 x={cx - 200} y={cy + 10} />
+      <F0.Fragment9 x={cx - 200} y={cy + 50} />
 
-      {/* <Wall hitbox={{ x: center.x, y: center.y - 10, width: 10, height: 1 }} /> */}
+      <F1.Fragment12 x={2} y={2} />
+      <F1.Fragment15 x={20} y={2} />
+      <F1.Fragment16 x={80} y={2} />
+      <F1.Fragment17 x={160} y={2} />
+      <F1.Fragment18 x={220} y={2} />
+      <F1.Fragment19 x={260} y={2} />
 
-      <Line
-        y={10}
-        x={5}
-        z={-1}
-        text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
-      />
-      <Line
-        y={11}
-        x={5}
-        z={-1}
-        text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
-      />
-      <Line
-        y={12}
-        x={5}
-        z={-1}
-        text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
-      />
-      <Line
-        y={13}
-        x={5}
-        z={-1}
-        text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
-      />
-      <Line
-        y={14}
-        x={5}
-        z={-1}
-        text="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*(){}[]/?|\"
-      />
-
+      <F2.Fragment20 x={300} y={2} />
+      <F2.Fragment21 x={340} y={2} />
+      <F2.Fragment22 x={380} y={2} />
+      <F2.Fragment23 x={430} y={2} />
+      <F2.Fragment24 x={480} y={2} />
       <Spaceship />
     </>
   );

@@ -69,12 +69,13 @@ export function useActor(props: ActorProps): ActorData {
   return motion;
 }
 
-export function useAlign(len: number, align: TextAlign): number {
-  const offX = useMemo(() => {
-    if (align === TextAlign.Center) return -Math.floor(len / 2);
-    if (align === TextAlign.Right) return -len;
-    else return 0;
-  }, [align, len]);
-
-  return offX;
+export function useCleanStr(text: string): string {
+  const cleaned = useMemo(() => {
+    let str = text;
+    if (str.charAt(0) === "\n") str = str.substring(1, str.length);
+    if (str.charAt(str.length - 1) === "\n")
+      str = str.substring(0, str.length - 1);
+    return str;
+  }, [text]);
+  return cleaned;
 }

@@ -6,6 +6,7 @@ import { Layer, TextAlign } from "../../Utils/types";
 import { Line } from "../Line";
 import { Logo } from "./Logo";
 
+const offY = 15;
 export function Title() {
   const { viewportManager: vM } = useGameManager();
 
@@ -14,10 +15,10 @@ export function Title() {
 
   return (
     <>
-      <Logo x={x} y={y - 12} z={Layer.Title} />;
+      <Logo x={x} y={y - 12} z={Layer.Title} />
       <Line
         x={x}
-        y={y + 13}
+        y={y + offY}
         z={Layer.Title}
         align={TextAlign.Center}
         text={`arrow keys <>${t_v}v to move`}
@@ -25,14 +26,14 @@ export function Title() {
       />
       <Line
         x={x}
-        y={y + 13}
+        y={y + offY}
         z={Layer.Title2}
         align={TextAlign.Left}
         text={`<>${t_v}v`}
       />
       <Line
         x={x}
-        y={y + 15}
+        y={y + offY + 2}
         z={Layer.Title}
         align={TextAlign.Center}
         text={`press SPACE to fall in love`}
@@ -40,14 +41,14 @@ export function Title() {
       />
       <Line
         x={x - 7}
-        y={y + 15}
+        y={y + offY + 2}
         z={Layer.Title2}
         align={TextAlign.Left}
         text={`SPACE`}
       />
       <Line
         x={x}
-        y={y + 17}
+        y={y + offY + 4}
         z={Layer.Title}
         align={TextAlign.Center}
         text={`ESC opens the menu`}
@@ -55,7 +56,7 @@ export function Title() {
       />
       <Line
         x={x - 9}
-        y={y + 17}
+        y={y + offY + 4}
         z={Layer.Title2}
         align={TextAlign.Left}
         text={`ESC`}

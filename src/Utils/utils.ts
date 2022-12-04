@@ -1,5 +1,5 @@
 import { KEYS } from "../Engine/InputManager";
-import { Direction, Position } from "./types";
+import { Direction, Position, TextAlign } from "./types";
 
 // numbers
 export const clamp = (num: number, min: number, max: number): number =>
@@ -53,4 +53,11 @@ export function rotateByDirection(
       y: -x,
     };
   }
+}
+
+// strings
+export function getAlign(len: number, align: TextAlign): number {
+  if (align === TextAlign.Center) return -Math.floor(len / 2);
+  if (align === TextAlign.Right) return -len;
+  else return 0;
 }

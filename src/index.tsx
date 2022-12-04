@@ -11,12 +11,13 @@ import {
   environmentColor,
 } from "./Utils/colors";
 import { createDefinedContext } from "./Utils/createDefinedContext";
+import { SCROLL_DEBUG } from "./Utils/debug";
 import { Frame } from "./Viewport/Frame";
 
 const Container = styled.div<{ color: string; background: string }>`
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: ${SCROLL_DEBUG ? "scroll" : "hidden"};
   position: relative;
 
   ${({ color }) => `color: ${color};`}
