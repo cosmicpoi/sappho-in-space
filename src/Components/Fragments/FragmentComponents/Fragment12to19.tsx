@@ -11,7 +11,6 @@ import {
   fragment19text,
 } from "../FragmentText/FragmentText12to19";
 
-
 export function Fragment12({ x, y, z }: Position3D) {
   return <Paragraph x={x} y={y} z={z} text={fragment12text} />;
 }
@@ -19,18 +18,18 @@ export function Fragment12({ x, y, z }: Position3D) {
 export function Fragment15({ x, y, z }: Position3D) {
   return (
     <>
-      <Paragraph x={x} y={y} z={z} text={fragment15Atext} />;
-      <Paragraph x={x + 8} y={y + 20} z={z} text={fragment15Btext} />;
+      <Paragraph x={x} y={y} z={z} text={fragment15Atext} />
+      <Paragraph x={x + 8} y={y + 20} z={z} text={fragment15Btext} />
     </>
   );
 }
 
 export function Fragment16({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment16text} spacing={3} />;
+  return <Paragraph x={x} y={y} z={z} text={fragment16text} />;
 }
 
 export function Fragment17({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment17text} spacing={3} />;
+  return <Paragraph x={x} y={y} z={z} text={fragment17text} />;
 }
 
 export function Fragment18({ x, y, z }: Position3D) {

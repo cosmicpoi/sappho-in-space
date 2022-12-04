@@ -1,2 +1,2 @@
 export const DEBUG = false;
-export const SCROLL_DEBUG = true;
+export const SCROLL_DEBUG = false;

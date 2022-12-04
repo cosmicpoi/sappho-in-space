@@ -36,6 +36,10 @@ export function GameWorld() {
       <F2.Fragment22 x={380} y={2} />
       <F2.Fragment23 x={430} y={2} />
       <F2.Fragment24 x={480} y={2} />
+      <F2.Fragment25 x={540} y={2} />
+      <F2.Fragment26 x={590} y={2} />
+      <F2.Fragment27 x={640} y={2} />
+      <F2.Fragment29 x={700} y={2} />
       <Spaceship />
     </>
   );
