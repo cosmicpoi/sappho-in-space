@@ -1,0 +1,10 @@
+export const fragment70Text = ``;
+export const fragment71Text = ``;
+export const fragment72Text = ``;
+export const fragment73Text = ``;
+export const fragment74Text = ``;
+export const fragment75Text = ``;
+export const fragment76Text = ``;
+export const fragment77Text = ``;
+export const fragment78Text = ``;
+export const fragment79Text = ``;

@@ -493,7 +493,7 @@ for Gyrinno
 `;function F0({hitbox:e}){let{x:t,y:n,width:r,height:o}=e;return!1?Tr.createElement(L0,{x:t,y:n,height:o,width:r}):Tr.createElement(Tr.Fragment,null)}function Fo({hitbox:e}){let{x:t,y:n,width:r,height:o}=e,i=_e();return(0,Vh.useEffect)(()=>i.collisionManager.registerHitbox({x:t,y:n,width:r,height:o}),[t,n,i,r,o]),Tr.createElement(F0,{hitbox:e})}function Gl({x:e,y:t}){return nt.createElement(Ft,{char:"@",z:0,x:e,y:t,opacity:!1?1:0,color:"red"})}function Bh(){let e=_e(),[t]=(0,Ha.useState)(e.viewportManager.getWidth()),[n]=(0,Ha.useState)(e.viewportManager.getHeight());return nt.createElement(nt.Fragment,null,nt.createElement(Gl,{x:0,y:0}),nt.createElement(Gl,{x:0,y:n-1}),nt.createElement(Gl,{x:t-1,y:0}),nt.createElement(Gl,{x:t-1,y:n-1}),nt.createElement(Fo,{hitbox:{x:0,y:0,width:t,height:1}}),nt.createElement(Fo,{hitbox:{x:0,y:n-1,width:t,height:1}}),nt.createElement(Fo,{hitbox:{x:0,y:0,width:1,height:n}}),nt.createElement(Fo,{hitbox:{x:t-1,y:0,width:1,height:n}}))}var $0=Bn.div`
   width: 100%;
   height: 100%;
-  overflow: ${!1?"scroll":"hidden"};
+  overflow: ${!0?"scroll":"hidden"};
   position: relative;
 
   ${({color:e})=>`color: ${e};`}
