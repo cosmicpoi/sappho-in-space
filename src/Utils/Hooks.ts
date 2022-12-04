@@ -1,9 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
 import { Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
-import { TextAlign } from "./types";
 
 type Extractor = (
   iM: InputManager
@@ -53,7 +52,7 @@ export function useManyKeysUp(keys: string[], cb: (k: string) => void) {
 export function useFrame(cb: (fc: number, lifetime?: number) => void) {
   const gM = useGameManager();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let lifetime = 0;
     const sub = gM.frame$.subscribe((fc: number) => {
       cb(fc, lifetime++);

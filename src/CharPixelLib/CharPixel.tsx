@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
@@ -57,7 +57,7 @@ export function CharPixel(props: CharPixelProps) {
 
   const [hidden, setHidden] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const unregister = gM.charPixelGridManager.registerPixel(
       { x, y },
       { z: z === undefined ? 0 : z, setHidden, isWall: !!isWall, char }

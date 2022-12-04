@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
 import {
@@ -139,7 +139,7 @@ export function Spaceship() {
   }, [faceDir]);
 
   // camera control
-  useLayoutEffect(() => {
+  useEffect(() => {
     vM.follow({ x, y });
     vM.requestColor({ x, y });
   }, [x, y, vM]);
