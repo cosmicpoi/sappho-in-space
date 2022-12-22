@@ -7,11 +7,17 @@ import {
   useManyKeysDown,
   useManyKeysUp,
   useActor,
+  useKeyDown,
 } from "../Utils/Hooks";
 import { Direction, Hitbox, Layer } from "../Utils/types";
 import { directionFromKey, directionKeys } from "../Utils/utils";
 import { Particles, ParticlesHandle } from "./ParticleSystem/Particles";
-import { SpaceshipPart, Collider, RocketParticle } from "./SpaceshipParts";
+import {
+  SpaceshipPart,
+  Collider,
+  RocketParticle,
+  HeartParticle,
+} from "./SpaceshipParts";
 
 const spaceshipCharsDown = [
   ["v", " ", "v"],
@@ -66,8 +72,11 @@ export function Spaceship() {
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
   // manage particles
-  const [particlesHandle] = useState<ParticlesHandle<RocketParticle>>(
+  const [rocketHandle] = useState<ParticlesHandle<RocketParticle>>(
     new ParticlesHandle<RocketParticle>()
+  );
+  const [heartHandle] = useState<ParticlesHandle<HeartParticle>>(
+    new ParticlesHandle<HeartParticle>()
   );
 
   // spaceship control
@@ -77,7 +86,7 @@ export function Spaceship() {
       const hoz = iM.resolveHozDirection();
       const vert = iM.resolveVertDirection();
 
-      motion.setAcceleration({ x: hoz * 1.8, y: vert * 1.8 });
+      motion.setAcceleration({ x: hoz * 0.008, y: vert * 0.008 });
       motion.onFrame(true);
 
       const { x: nX, y: nY } = motion.getPosition();
@@ -87,29 +96,54 @@ export function Spaceship() {
       // make new particles
       if (hoz !== 0 || vert !== 0) {
         if (fc % 10 === 0)
-          particlesHandle.newParticle(new RocketParticle(gM, nX, nY, faceDir));
+          rocketHandle.newParticle(new RocketParticle(gM, nX, nY, faceDir));
       }
     },
-    [iM, setX, setY, motion, particlesHandle, gM, faceDir]
+    [iM, setX, setY, motion, rocketHandle, gM, faceDir]
   );
   useFrame(onFrame);
 
-  const onKeyDown = useCallback(
+  const onArrowDown = useCallback(
     (k: string) => {
       setFaceDir(directionFromKey(k));
     },
     [setFaceDir]
   );
-  useManyKeysDown(directionKeys, onKeyDown);
+  useManyKeysDown(directionKeys, onArrowDown);
 
-  const onKeyUp = useCallback(
+  const onSpaceDown = useCallback(() => {
+    heartHandle.newParticles([
+      new HeartParticle(gM, x, y, 3, 0),
+      new HeartParticle(gM, x, y, 3, -1),
+      new HeartParticle(gM, x, y, 3, -2),
+
+      new HeartParticle(gM, x, y, -3, 0),
+      new HeartParticle(gM, x, y, -3, -1),
+      new HeartParticle(gM, x, y, -3, -2),
+
+      new HeartParticle(gM, x, y, -2, -3),
+      new HeartParticle(gM, x, y, -1, -3),
+      new HeartParticle(gM, x, y, 0, -2),
+      new HeartParticle(gM, x, y, 1, -3),
+      new HeartParticle(gM, x, y, 2, -3),
+
+      new HeartParticle(gM, x, y, -2, 1),
+      new HeartParticle(gM, x, y, 2, 1),
+      new HeartParticle(gM, x, y, -1, 2),
+      new HeartParticle(gM, x, y, 1, 2),
+      new HeartParticle(gM, x, y, 0, 3),
+    ]);
+  }, [gM, heartHandle, x, y]);
+  useKeyDown(" ", onSpaceDown);
+
+  const onArrowUp = useCallback(
     (_k: string) => {
       const single = gM.inputManager.getSingleDirection();
       if (single !== undefined) setFaceDir(single);
     },
     [gM]
   );
-  useManyKeysUp(directionKeys, onKeyUp);
+  useManyKeysUp(directionKeys, onArrowUp);
   // sync chars to direction
   useLayoutEffect(() => {
     setChars(dirChars[faceDir]);
@@ -159,7 +193,8 @@ export function Spaceship() {
       <Collider z={z} x={x + 2} y={y + 1} />
 
       {/* Particles */}
-      <Particles handle={particlesHandle} opacity={0.5} />
+      <Particles handle={rocketHandle} opacity={0.5} />
+      <Particles handle={heartHandle} opacity={0.5} />
     </>
   );
 }

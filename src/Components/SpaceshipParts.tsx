@@ -5,7 +5,7 @@ import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { GameManager } from "../Engine/GameManager";
 import { Position3D, Position, Direction } from "../Utils/types";
-import { rotateByDirection } from "../Utils/utils";
+import { randIntRange, rotateByDirection } from "../Utils/utils";
 import { Particle } from "./ParticleSystem/Particles";
 
 // if there is more than one fragment on a pixel, turns into a .
@@ -52,13 +52,15 @@ export const MAX_PARTICLE_LIFETIME = 60;
 export class RocketParticle extends Particle {
   private dir: Direction;
   constructor(gM: GameManager, x: number, y: number, dir: Direction) {
-    super(gM, x, y, "*");
+    const delta = rotateByDirection({ x: randIntRange(-1, 1), y: 2 }, dir);
+
+    super(gM, x + delta.x, y + delta.y, "*");
     autoBind(this);
     this.dir = dir;
   }
 
   public onFrame(_fc: number) {
-    let displ = { x: 0, y: 20 };
+    let displ = { x: 0, y: 0.33 };
     displ = rotateByDirection(displ, this.dir);
 
     if (this.lifetime > MAX_PARTICLE_LIFETIME) {
@@ -70,6 +72,37 @@ export class RocketParticle extends Particle {
     }
 
     this.motion.setVelocity(displ);
+    super.onFrame(_fc);
+  }
+}
+
+const HEART_LENGTH = 30;
+export class HeartParticle extends Particle {
+  targetx: number;
+  targety: number;
+
+  tx: number;
+  ty: number;
+
+  constructor(gM: GameManager, x: number, y: number, tx: number, ty: number) {
+    super(gM, x, y, "+");
+    autoBind(this);
+
+    this.targetx = x + tx;
+    this.targety = y + ty;
+    this.tx = tx;
+    this.ty = ty;
+  }
+
+  public onFrame(_fc: number) {
+    if (this.x !== this.targetx || this.y !== this.targety) {
+      this.motion.setVelocity({
+        x: this.tx / HEART_LENGTH,
+        y: this.ty / HEART_LENGTH,
+      });
+    } else {
+      this.motion.setVelocity({ x: 0, y: 0 });
+    }
     super.onFrame(_fc);
   }
 }

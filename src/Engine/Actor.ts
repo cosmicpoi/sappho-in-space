@@ -69,10 +69,10 @@ export class ActorData {
     return !!solid;
   }
 
-  public move(move60: Position) {
-    const { x: dx60, y: dy60 } = move60;
+  public move(move: Position) {
+    const { x: dx, y: dy } = move;
     // move X
-    this.rx += dx60 / 60;
+    this.rx += dx;
     const moveX = Math.round(this.rx);
 
     if (moveX !== 0) {
@@ -91,7 +91,7 @@ export class ActorData {
     }
 
     // move Y
-    this.ry += dy60 / 60;
+    this.ry += dy;
     const moveY = Math.round(this.ry);
 
     if (moveY !== 0) {

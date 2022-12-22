@@ -48,14 +48,17 @@ export class Particle {
 }
 
 export class ParticlesHandle<T extends Particle> {
-  newParticle$: Monomitter<T>;
+  newParticles$: Monomitter<T[]>;
 
   constructor() {
-    this.newParticle$ = monomitter();
+    this.newParticles$ = monomitter();
   }
 
   public newParticle(p: T) {
-    this.newParticle$.publish(p);
+    this.newParticles$.publish([p]);
+  }
+  public newParticles(p: T[]) {
+    this.newParticles$.publish(p);
   }
 }
 
@@ -70,39 +73,43 @@ export function Particles<T extends Particle>({
 }) {
   const [particles, setParticles] = useState<T[]>(Array(16).fill(undefined));
 
-  const pushParticle = useCallback(
-    (newP: T) => {
+  const pushParticles = useCallback(
+    (newPs: T[]) => {
       setParticles((oldpl: T[]) => {
-        // if there exists a dead particle, replace it in-place
-        let pl: T[];
-        let idx = -1;
-        for (let i = 0; i < oldpl.length; i++) {
-          if (oldpl[i]?.alive !== true) {
-            idx = i;
-            pl = [...oldpl];
-            pl[i] = newP;
-            break;
+        let newpl = [...oldpl];
+
+        for (const newP of newPs) {
+          // if there exists a dead particle, replace it in-place
+          let idx = -1;
+          for (let i = 0; i < newpl.length; i++) {
+            if (newpl[i]?.alive !== true) {
+              idx = i;
+              newpl[i] = newP;
+              break;
+            }
+          }
+
+          // if there was nowhere to add it, increase array size
+          if (idx === -1) {
+            const len = newpl.length;
+            newpl = [...newpl, ...Array(undefined).fill(len)];
+            newpl[len] = newP;
           }
         }
 
-        // if there was nowhere to add it, increase array size
-        if (idx === -1) {
-          pl = [...oldpl, ...Array(undefined).fill(oldpl.length)];
-        }
-
-        return pl;
+        return newpl;
       });
     },
     [setParticles]
   );
 
   useEffect(() => {
-    const sub = handle.newParticle$.subscribe((p: T) => {
-      pushParticle(p);
+    const sub = handle.newParticles$.subscribe((p: T[]) => {
+      pushParticles(p);
     });
 
     return sub.unsubscribe;
-  }, [handle, pushParticle]);
+  }, [handle, pushParticles]);
 
   const onFrame = useCallback(
     (fc: number) => {
