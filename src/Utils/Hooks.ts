@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
-import { Subscription } from "./Monomitter";
+import { Monomitter, Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
 import { Position } from "./types";
 
@@ -50,6 +50,7 @@ export function useManyKeysUp(keys: string[], cb: (k: string) => void) {
   useManyKeys(exKeyUp, keys, cb);
 }
 
+// bind a callback to frames
 export function useFrame(cb: (fc: number, lifetime?: number) => void) {
   const gM = useGameManager();
 
@@ -63,12 +64,14 @@ export function useFrame(cb: (fc: number, lifetime?: number) => void) {
   }, [cb, gM]);
 }
 
+// register Actor data to a component
 export function useActor(props: ActorProps): ActorData {
   const gM = useGameManager();
   const [motion] = useState<ActorData>(new ActorData(gM, props));
   return motion;
 }
 
+// trim leading and trailing newlines - so that we can use string literals ``
 export function useCleanStr(text: string): string {
   const cleaned = useMemo(() => {
     let str = text;
@@ -80,14 +83,34 @@ export function useCleanStr(text: string): string {
   return cleaned;
 }
 
+// return the center of the map
 export function useCenter(): Position {
   const gM = useGameManager();
   const center = useMemo(() => gM.viewportManager.getCenter(), [gM]);
   return center;
 }
 
+// log a value
 export function useLog<T>(val: T) {
   useEffect(() => {
     console.log(val);
   }, [val]);
+}
+
+// bind a value to a read-only function on every update
+export function useUpdatedValue<T>(
+  getter: () => T,
+  update$: Monomitter<void>
+): T {
+  const [val, setVal] = useState<T>(getter());
+
+  useEffect(() => {
+    const sub = update$.subscribe(() => {
+      setVal(getter());
+    });
+
+    return sub.unsubscribe;
+  }, [setVal, getter, update$]);
+
+  return val;
 }

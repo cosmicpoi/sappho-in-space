@@ -1,5 +1,6 @@
 import autoBind from "auto-bind";
 import { CharPixelGridManager } from "../CharPixelLib/CharPixelGridManager";
+import { DataManager } from "../Data/FragmentData";
 import { monomitter } from "../Utils/Monomitter";
 import { ViewportManager } from "../Viewport/ViewportManager";
 import { CollisionManager } from "./CollisionManager";
@@ -10,6 +11,7 @@ export class GameManager {
   public inputManager: InputManager;
   public viewportManager: ViewportManager;
   public collisionManager: CollisionManager;
+  public dataManager: DataManager;
 
   private frameCount = 0;
   public frame$ = monomitter<number>();
@@ -21,6 +23,7 @@ export class GameManager {
     this.inputManager = new InputManager();
     this.viewportManager = new ViewportManager();
     this.collisionManager = new CollisionManager();
+    this.dataManager = new DataManager();
   }
 
   private loop() {
