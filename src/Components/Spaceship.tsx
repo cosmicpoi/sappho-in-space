@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
-import { DEBUG_START_POS } from "../Utils/debug";
+import { DEBUG_START_POS, SCROLL_DEBUG } from "../Utils/debug";
 import {
   useFrame,
   useManyKeysDown,
@@ -15,7 +15,6 @@ import {
   addPos,
   directionFromKey,
   directionKeys,
-  getPositionKey,
 } from "../Utils/utils";
 import { Particles, ParticlesHandle } from "./ParticleSystem/Particles";
 import {
@@ -138,7 +137,7 @@ export function Spaceship() {
 
   // camera control
   useEffect(() => {
-    vM.follow(pos);
+    if (!SCROLL_DEBUG) vM.follow(pos);
     vM.requestEnvironment(pos);
   }, [pos, vM]);
 

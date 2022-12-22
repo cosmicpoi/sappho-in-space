@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useGameManager } from ".";
 import { Fragment1 } from "./Components/Fragments/FragmentComponents/Fragment1to9";
-import { ZoneAutumn } from "./Components/Fragments/ZoneAutumn";
-import { ZoneDay } from "./Components/Fragments/ZoneDay";
-import { ZoneNight } from "./Components/Fragments/ZoneNight";
-import { ZoneSpring } from "./Components/Fragments/ZoneSpring";
-import { ZoneSummer } from "./Components/Fragments/ZoneSummer";
-import { ZoneWinter } from "./Components/Fragments/ZoneWinter";
+import { ZoneAutumn } from "./Components/Fragments/Zones/ZoneAutumn";
+import { ZoneDay } from "./Components/Fragments/Zones/ZoneDay";
+import { ZoneNight } from "./Components/Fragments/Zones/ZoneNight";
+import { ZoneSpring } from "./Components/Fragments/Zones/ZoneSpring";
+import { ZoneSummer } from "./Components/Fragments/Zones/ZoneSummer";
+import { ZoneWinter } from "./Components/Fragments/Zones/ZoneWinter";
 import { Spaceship } from "./Components/Spaceship";
 import { Title } from "./Components/Title/Title";
 

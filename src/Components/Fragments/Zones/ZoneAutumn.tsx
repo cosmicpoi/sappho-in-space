@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useCenter } from "../../Utils/Hooks";
-import { Fragment26 } from "./FragmentComponents/Fragment20to29";
+import { useCenter } from "../../../Utils/Hooks";
+import { Fragment26 } from "../FragmentComponents/Fragment20to29";
 
 export function ZoneAutumn() {
   const { x: cx, y: cy } = useCenter();
