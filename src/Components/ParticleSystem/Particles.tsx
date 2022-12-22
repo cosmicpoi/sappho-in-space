@@ -112,7 +112,7 @@ export function Particles<T extends Particle>({
           if (newpl[i]?.alive === true) newpl[i].onFrame(fc);
         }
 
-        if (fc % 10 === 0) {
+        if (fc % 3 === 0) {
           let update = false;
           for (let i = 0; i < newpl.length; i++) {
             if (newpl[i]?.updated === false) update = true;
