@@ -8,8 +8,8 @@ import { clamp } from "../Utils/utils";
 export const unit_wToS = (w: number) => w * PIXEL_WIDTH;
 export const unit_sToW = (w: number) => w / PIXEL_WIDTH;
 
-export const ellipseHalfWidth = Math.floor(0.5 * 0.7 * CANVAS_WIDTH);
-export const ellipseHalfHeight = Math.floor(0.5 * 0.4 * CANVAS_HEIGHT);
+export const ellipseHalfWidth = 750 / 2;
+export const ellipseHalfHeight = 500 / 2;
 export const dayNightMargin = 90;
 
 export class ViewportManager {
@@ -97,7 +97,7 @@ export class ViewportManager {
   }
 
   // follow logic (for following spaceship)
-  public requestColor(pos: Position) {
+  public getEnvironment(pos: Position) {
     let env = -1;
     const { x: cx, y: cy } = this.getCenter();
 
@@ -113,8 +113,13 @@ export class ViewportManager {
       else if (pos.x < cx && pos.y > cy) env = Environment.Autumn;
     }
 
+    return env;
+  }
+
+  public requestEnvironment(pos: Position) {
+    const env = this.getEnvironment(pos);
+
     if (env !== this.environment) {
-      console.log("new environment ");
       this.environment = env;
       this.colorChange$.publish(this.environment);
     }

@@ -152,7 +152,7 @@ export function Spaceship() {
   // camera control
   useEffect(() => {
     vM.follow({ x, y });
-    vM.requestColor({ x, y });
+    vM.requestEnvironment({ x, y });
   }, [x, y, vM]);
 
   const [z] = useState<number>(Layer.Spaceship);

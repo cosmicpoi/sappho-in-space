@@ -1,10 +1,12 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
+import { ENVIRONMENT_DEBUG } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
 import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
+import { environmentColor } from "../Utils/colors";
 
 type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
@@ -32,7 +34,7 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   display: inline-block;
 
   ${({ hidden }) => hidden && "display: none;"}
-  ${({ clr: color }) => color && `color: ${color};`}
+  ${({ clr }) => clr && `color: ${clr};`}
   ${({ twinkle }) => twinkle && twinkleAnim}
 `;
 
@@ -44,7 +46,7 @@ const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
 export function CharPixel(props: CharPixelProps) {
-  const { x, y, z, char, clr: color, opacity, isWall, twinkle } = props;
+  const { x, y, z, char, clr, opacity, isWall, twinkle } = props;
   const gM = useGameManager();
 
   let content: React.ReactNode | string = char;
@@ -63,10 +65,16 @@ export function CharPixel(props: CharPixelProps) {
     return unregister;
   }, [x, y, z, char, gM, setHidden, isWall]);
 
+  const zoneColor: string | undefined = useMemo(() => {
+    if (!ENVIRONMENT_DEBUG) return undefined;
+
+    return environmentColor[gM.viewportManager.getEnvironment({ x, y })];
+  }, [gM, x, y]);
+
   return (
     <StyledCharPixel
       hidden={hidden}
-      clr={color}
+      clr={zoneColor ? zoneColor : clr}
       style={{
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",

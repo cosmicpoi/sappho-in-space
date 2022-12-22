@@ -20,8 +20,9 @@ const Container = styled.div<{ clr: string; background: string }>`
   height: 100%;
   overflow: ${SCROLL_DEBUG ? "scroll" : "hidden"};
   position: relative;
+  /* z-index: -10; */
 
-  ${({ clr: color }) => `color: ${color};`}
+  ${({ clr }) => !ENVIRONMENT_DEBUG && `color: ${clr};`}
   ${({ background }) => `background: ${background};`}
   transition: background 2s, color 2.5s;
 `;

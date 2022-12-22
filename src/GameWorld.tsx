@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useGameManager } from ".";
 import { Fragment1 } from "./Components/Fragments/FragmentComponents/Fragment1to9";
+import { Fragments } from "./Components/Fragments/Fragments";
 import { ZoneAutumn } from "./Components/Fragments/ZoneAutumn";
 import { ZoneDay } from "./Components/Fragments/ZoneDay";
 import { ZoneNight } from "./Components/Fragments/ZoneNight";
@@ -21,6 +22,7 @@ export function GameWorld() {
       <Title />
       <Spaceship />
       <Fragment1 x={cx - 80} y={cy} />
+      {/* <Fragments /> */}
 
       <ZoneSpring />
       <ZoneWinter />

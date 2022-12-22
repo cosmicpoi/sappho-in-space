@@ -3,6 +3,7 @@ import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
 import { Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
+import { Position } from "./types";
 
 type Extractor = (
   iM: InputManager
@@ -77,6 +78,12 @@ export function useCleanStr(text: string): string {
     return str;
   }, [text]);
   return cleaned;
+}
+
+export function useCenter(): Position {
+  const gM = useGameManager();
+  const center = useMemo(() => gM.viewportManager.getCenter(), [gM]);
+  return center;
 }
 
 export function useLog<T>(val: T) {

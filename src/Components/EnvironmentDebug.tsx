@@ -2,8 +2,8 @@ import * as React from "react";
 import { useMemo } from "react";
 import styled from "styled-components";
 import { useGameManager } from "..";
+import { COLORS } from "../Utils/colors";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../Utils/consts";
-import { useLog } from "../Utils/Hooks";
 import { Position } from "../Utils/types";
 import {
   dayNightMargin,
@@ -17,18 +17,14 @@ type BoxProps = {
   height: number;
   x: number;
   y: number;
-  line?: boolean;
 };
 
-const StyledBox = styled.div<BoxProps>`
+const StyledBox = styled.div<BoxProps & { background?: string }>`
   position: absolute;
   z-index: 0;
-  ${({ line, width }) =>
-    line
-      ? width === 0
-        ? `border-left: 5px solid red;`
-        : `border-top: 5px solid red;`
-      : ` border: 5px solid red;`}
+  border: 5px solid red;
+
+  ${({ background }) => `background: ${background};`}
 
   ${({ width, height, x, y }) => `
     width: ${unit_wToS(width)}px;
@@ -40,6 +36,7 @@ const StyledBox = styled.div<BoxProps>`
 
 const StyledEllipse = styled(StyledBox)`
   border-radius: 50%;
+  overflow: hidden;
 `;
 
 export function EnvironmentDebug() {
@@ -59,52 +56,60 @@ export function EnvironmentDebug() {
     };
   }, [center]);
 
-  useLog(dayNightBorder);
-
   return (
     <>
-      <StyledEllipse
-        width={ellipseHalfWidth * 2}
-        height={ellipseHalfHeight * 2}
-        x={center.x - ellipseHalfWidth}
-        y={center.y - ellipseHalfHeight}
-      />
       <StyledBox
         width={dayNightBorder.width}
         height={dayNightBorder.height}
         x={dayNightBorder.x}
         y={dayNightBorder.y}
-        line
+        // line
       />
 
       <StyledBox
-        width={CANVAS_WIDTH / 2 - ellipseHalfWidth}
-        height={0}
-        x={center.x + ellipseHalfWidth}
-        y={center.y}
-        line
-      />
-      <StyledBox
-        width={CANVAS_WIDTH / 2 - ellipseHalfWidth}
-        height={0}
+        width={CANVAS_WIDTH / 2}
+        height={CANVAS_HEIGHT / 2}
         x={0}
-        y={center.y}
-        line
+        y={0}
+        background={COLORS.bgWinter}
       />
       <StyledBox
-        height={CANVAS_HEIGHT / 2 - ellipseHalfHeight}
-        width={0}
-        x={center.x}
-        y={center.y + ellipseHalfHeight}
-        line
-      />
-      <StyledBox
-        height={CANVAS_HEIGHT / 2 - ellipseHalfHeight}
-        width={0}
+        width={CANVAS_WIDTH / 2}
+        height={CANVAS_HEIGHT / 2}
         x={center.x}
         y={0}
-        line
+        background={COLORS.bgSpring}
       />
+      <StyledBox
+        width={CANVAS_WIDTH / 2}
+        height={CANVAS_HEIGHT / 2}
+        x={0}
+        y={center.y}
+        background={COLORS.bgAutumn}
+      />
+      <StyledBox
+        width={CANVAS_WIDTH / 2}
+        height={CANVAS_HEIGHT / 2}
+        x={center.x}
+        y={center.y}
+        background={COLORS.bgSummer}
+      />
+
+      <StyledEllipse
+        width={ellipseHalfWidth * 2}
+        height={ellipseHalfHeight * 2}
+        x={center.x - ellipseHalfWidth}
+        y={center.y - ellipseHalfHeight}
+        background={COLORS.bgNight}
+      >
+        <StyledBox
+          width={ellipseHalfWidth}
+          height={ellipseHalfHeight * 4}
+          x={ellipseHalfWidth + dayNightMargin}
+          y={0}
+          background={COLORS.bgDay}
+        />
+      </StyledEllipse>
     </>
   );
 }
