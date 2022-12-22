@@ -12,7 +12,7 @@ export function Paragraph({
   text,
   isWall,
   align,
-  color,
+  clr: color,
   opacity,
   twinkle,
   spacing,
@@ -33,7 +33,7 @@ export function Paragraph({
               z={z}
               text={line}
               isWall={isWall}
-              color={color}
+              clr={color}
               opacity={opacity}
               twinkle={twinkle}
             />

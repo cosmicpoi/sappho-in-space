@@ -78,3 +78,9 @@ export function useCleanStr(text: string): string {
   }, [text]);
   return cleaned;
 }
+
+export function useLog<T>(val: T) {
+  useEffect(() => {
+    console.log(val);
+  }, [val]);
+}

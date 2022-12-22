@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
+import { EnvironmentDebug } from "./Components/EnvironmentDebug";
 import { GameManager } from "./Engine/GameManager";
 import { GameWorld } from "./GameWorld";
 import {
@@ -11,16 +12,16 @@ import {
   environmentColor,
 } from "./Utils/colors";
 import { createDefinedContext } from "./Utils/createDefinedContext";
-import { SCROLL_DEBUG } from "./Utils/debug";
+import { ENVIRONMENT_DEBUG, SCROLL_DEBUG } from "./Utils/debug";
 import { Frame } from "./Viewport/Frame";
 
-const Container = styled.div<{ color: string; background: string }>`
+const Container = styled.div<{ clr: string; background: string }>`
   width: 100%;
   height: 100%;
   overflow: ${SCROLL_DEBUG ? "scroll" : "hidden"};
   position: relative;
 
-  ${({ color }) => `color: ${color};`}
+  ${({ clr: color }) => `color: ${color};`}
   ${({ background }) => `background: ${background};`}
   transition: background 2s, color 2.5s;
 `;
@@ -68,8 +69,9 @@ function App() {
 
   return (
     <GameManagerProvider value={gameManager}>
-      <Container ref={containerRef} color={color} background={background}>
+      <Container ref={containerRef} clr={color} background={background}>
         <Frame />
+        {ENVIRONMENT_DEBUG && <EnvironmentDebug />}
         <GameWorld />
       </Container>
     </GameManagerProvider>

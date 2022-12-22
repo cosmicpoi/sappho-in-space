@@ -1,7 +1,7 @@
 import { Position3D, TextAlign } from "../Utils/types";
 
 export type CharPixelStyle = {
-  color?: string;
+  clr?: string;
   opacity?: number;
   twinkle?: number;
 };

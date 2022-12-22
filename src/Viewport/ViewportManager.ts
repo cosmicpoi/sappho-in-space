@@ -8,8 +8,9 @@ import { clamp } from "../Utils/utils";
 export const unit_wToS = (w: number) => w * PIXEL_WIDTH;
 export const unit_sToW = (w: number) => w / PIXEL_WIDTH;
 
-const ellipseWidth = Math.floor(0.5 * 0.7 * CANVAS_WIDTH);
-const ellipseHeight = Math.floor(0.5 * 0.4 * CANVAS_HEIGHT);
+export const ellipseHalfWidth = Math.floor(0.5 * 0.7 * CANVAS_WIDTH);
+export const ellipseHalfHeight = Math.floor(0.5 * 0.4 * CANVAS_HEIGHT);
+export const dayNightMargin = 90;
 
 export class ViewportManager {
   private width: number = CANVAS_WIDTH;
@@ -102,8 +103,8 @@ export class ViewportManager {
 
     const delX = pos.x - cx;
     const delY = pos.y - cy;
-    if ((delX / ellipseWidth) ** 2 + (delY / ellipseHeight) ** 2 < 1) {
-      if (delX < 100) env = Environment.Night;
+    if ((delX / ellipseHalfWidth) ** 2 + (delY / ellipseHalfHeight) ** 2 < 1) {
+      if (delX < dayNightMargin) env = Environment.Night;
       else env = Environment.Day;
     } else {
       if (pos.x < cx && pos.y < cy) env = Environment.Winter;
