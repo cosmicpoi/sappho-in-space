@@ -12,7 +12,11 @@ import {
   environmentColor,
 } from "./Utils/colors";
 import { createDefinedContext } from "./Utils/createDefinedContext";
-import { ENVIRONMENT_DEBUG, SCROLL_DEBUG } from "./Utils/debug";
+import {
+  DEBUG_START_POS,
+  ENVIRONMENT_DEBUG,
+  SCROLL_DEBUG,
+} from "./Utils/debug";
 import { Frame } from "./Viewport/Frame";
 
 const Container = styled.div<{ clr: string; background: string }>`
@@ -42,7 +46,13 @@ function App() {
   }, [containerRef, gameManager]);
 
   useEffect(() => {
-    gameManager.viewportManager.scrollToCenter();
+    if (DEBUG_START_POS !== undefined) {
+      const c = gameManager.viewportManager.getCenter();
+      gameManager.viewportManager.scrollWorld(
+        c.x + DEBUG_START_POS.x,
+        c.y + DEBUG_START_POS.y
+      );
+    } else gameManager.viewportManager.scrollToCenter();
   }, [containerRef, gameManager]);
 
   useEffect(() => {

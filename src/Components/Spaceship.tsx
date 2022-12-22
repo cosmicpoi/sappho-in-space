@@ -2,6 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
+import { DEBUG_START_POS } from "../Utils/debug";
 import {
   useFrame,
   useManyKeysDown,
@@ -9,14 +10,20 @@ import {
   useActor,
   useKeyDown,
 } from "../Utils/Hooks";
-import { Direction, Hitbox, Layer } from "../Utils/types";
-import { directionFromKey, directionKeys } from "../Utils/utils";
+import { Direction, Hitbox, Layer, Position } from "../Utils/types";
+import {
+  addPos,
+  directionFromKey,
+  directionKeys,
+  getPositionKey,
+} from "../Utils/utils";
 import { Particles, ParticlesHandle } from "./ParticleSystem/Particles";
 import {
   SpaceshipPart,
   Collider,
   RocketParticle,
   HeartParticle,
+  heartParticles,
 } from "./SpaceshipParts";
 
 const spaceshipCharsDown = [
@@ -59,12 +66,13 @@ export function Spaceship() {
 
   // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
-  const [x, setX] = useState<number>(vM.getCenter().x);
-  const [y, setY] = useState<number>(vM.getCenter().y);
+  const [pos, setPos] = useState<Position>(
+    DEBUG_START_POS ? addPos(DEBUG_START_POS, vM.getCenter()) : vM.getCenter()
+  );
 
   const motion = useActor({
-    x,
-    y,
+    x: pos.x,
+    y: pos.y,
     termV: TERM_V,
     hitbox: spaceshipHitbox,
   });
@@ -90,8 +98,7 @@ export function Spaceship() {
       motion.onFrame(true);
 
       const { x: nX, y: nY } = motion.getPosition();
-      setX(nX);
-      setY(nY);
+      setPos({ x: nX, y: nY });
 
       // make new particles
       if (hoz !== 0 || vert !== 0) {
@@ -99,7 +106,7 @@ export function Spaceship() {
           rocketHandle.newParticle(new RocketParticle(gM, nX, nY, faceDir));
       }
     },
-    [iM, setX, setY, motion, rocketHandle, gM, faceDir]
+    [iM, setPos, motion, rocketHandle, gM, faceDir]
   );
   useFrame(onFrame);
 
@@ -112,28 +119,8 @@ export function Spaceship() {
   useManyKeysDown(directionKeys, onArrowDown);
 
   const onSpaceDown = useCallback(() => {
-    heartHandle.newParticles([
-      new HeartParticle(gM, x, y, 3, 0),
-      new HeartParticle(gM, x, y, 3, -1),
-      new HeartParticle(gM, x, y, 3, -2),
-
-      new HeartParticle(gM, x, y, -3, 0),
-      new HeartParticle(gM, x, y, -3, -1),
-      new HeartParticle(gM, x, y, -3, -2),
-
-      new HeartParticle(gM, x, y, -2, -3),
-      new HeartParticle(gM, x, y, -1, -3),
-      new HeartParticle(gM, x, y, 0, -2),
-      new HeartParticle(gM, x, y, 1, -3),
-      new HeartParticle(gM, x, y, 2, -3),
-
-      new HeartParticle(gM, x, y, -2, 1),
-      new HeartParticle(gM, x, y, 2, 1),
-      new HeartParticle(gM, x, y, -1, 2),
-      new HeartParticle(gM, x, y, 1, 2),
-      new HeartParticle(gM, x, y, 0, 3),
-    ]);
-  }, [gM, heartHandle, x, y]);
+    heartHandle.newParticles(heartParticles(gM, pos.x, pos.y));
+  }, [gM, heartHandle, pos]);
   useKeyDown(" ", onSpaceDown);
 
   const onArrowUp = useCallback(
@@ -151,11 +138,13 @@ export function Spaceship() {
 
   // camera control
   useEffect(() => {
-    vM.follow({ x, y });
-    vM.requestEnvironment({ x, y });
-  }, [x, y, vM]);
+    vM.follow(pos);
+    vM.requestEnvironment(pos);
+  }, [pos, vM]);
 
   const [z] = useState<number>(Layer.Spaceship);
+
+  const { x, y } = pos;
 
   return (
     <>

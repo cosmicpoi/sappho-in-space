@@ -1,13 +1,13 @@
 import * as React from "react";
 import { useCenter } from "../../Utils/Hooks";
-import { Fragment83 } from "./FragmentComponents/Fragment80to89";
+import { Fragment112 } from "./FragmentComponents/Fragment110to119";
 
 export function ZoneDay() {
   const { x: cx, y: cy } = useCenter();
 
   return (
     <>
-      <Fragment83 x={cx + 270} y={cy + 80} />
+      <Fragment112 x={cx + 250} y={cy + 80} />
     </>
   );
 }

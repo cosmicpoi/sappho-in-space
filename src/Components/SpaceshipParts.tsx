@@ -106,3 +106,29 @@ export class HeartParticle extends Particle {
     super.onFrame(_fc);
   }
 }
+
+export const heartParticles = (
+  gM: GameManager,
+  x: number,
+  y: number
+): HeartParticle[] => [
+  new HeartParticle(gM, x, y, 3, 0),
+  new HeartParticle(gM, x, y, 3, -1),
+  new HeartParticle(gM, x, y, 3, -2),
+
+  new HeartParticle(gM, x, y, -3, 0),
+  new HeartParticle(gM, x, y, -3, -1),
+  new HeartParticle(gM, x, y, -3, -2),
+
+  new HeartParticle(gM, x, y, -2, -3),
+  new HeartParticle(gM, x, y, -1, -3),
+  new HeartParticle(gM, x, y, 0, -2),
+  new HeartParticle(gM, x, y, 1, -3),
+  new HeartParticle(gM, x, y, 2, -3),
+
+  new HeartParticle(gM, x, y, -2, 1),
+  new HeartParticle(gM, x, y, 2, 1),
+  new HeartParticle(gM, x, y, -1, 2),
+  new HeartParticle(gM, x, y, 1, 2),
+  new HeartParticle(gM, x, y, 0, 3),
+];

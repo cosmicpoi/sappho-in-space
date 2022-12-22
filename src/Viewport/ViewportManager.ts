@@ -84,6 +84,13 @@ export class ViewportManager {
     this.container.scroll(clamp(x, 0, maxX), clamp(y, 0, maxY));
   }
 
+  public scrollWorld(x: number, y: number) {
+    this.scroll(
+      unit_wToS(x) - window.innerWidth / 2,
+      unit_wToS(y) - window.innerHeight / 2
+    );
+  }
+
   public scrollToCenter() {
     const { x, y } = this.getCenter();
 

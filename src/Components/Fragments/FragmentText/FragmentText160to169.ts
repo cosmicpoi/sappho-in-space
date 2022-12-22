@@ -7,4 +7,4 @@ export const fragment165Text = ``;
 export const fragment166Text = ``;
 export const fragment167Text = ``;
 export const fragment168Text = ``;
-export const fragment169Text = ``;
+export const fragment169AText = `wedding gifts`;

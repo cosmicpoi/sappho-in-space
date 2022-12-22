@@ -74,7 +74,7 @@ export function CharPixel(props: CharPixelProps) {
   return (
     <StyledCharPixel
       hidden={hidden}
-      clr={zoneColor ? zoneColor : clr}
+      clr={zoneColor || clr}
       style={{
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",

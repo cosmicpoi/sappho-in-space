@@ -22,6 +22,11 @@ export function randEl<T>(list: T[]): T {
 // position
 export const getPositionKey = ({ x, y }: Position): string => `${x}-${y}`;
 
+export const addPos = (
+  { x: x1, y: y1 }: Position,
+  { x: x2, y: y2 }: Position
+): Position => ({ x: x1 + x2, y: y1 + y2 });
+
 // Direction
 export const directionFromKey = (key: string) => {
   if (key === KEYS.Down) return Direction.Down;
