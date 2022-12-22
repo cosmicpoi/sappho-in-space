@@ -28,9 +28,6 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   width: ${unit_wToS(1)}px;
   height: ${unit_wToS(1)}px;
 
-  /* background: yellow; */
-  /* outline: 1px solid red; */
-
   line-height: ${unit_wToS(1)}px;
   display: inline-block;
 

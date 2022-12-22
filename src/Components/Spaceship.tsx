@@ -10,14 +10,8 @@ import {
 } from "../Utils/Hooks";
 import { Direction, Hitbox, Layer } from "../Utils/types";
 import { directionFromKey, directionKeys } from "../Utils/utils";
-import {
-  SpaceshipPart,
-  Collider,
-  RocketParticle,
-  RocketParticleData,
-  MAX_PARTICLE_LIFETIME,
-  getParticleId,
-} from "./SpaceshipParts";
+import { Particles, ParticlesHandle } from "./ParticleSystem/Particles";
+import { SpaceshipPart, Collider, RocketParticle } from "./SpaceshipParts";
 
 const spaceshipCharsDown = [
   ["v", " ", "v"],
@@ -65,7 +59,6 @@ export function Spaceship() {
   const motion = useActor({
     x,
     y,
-    collides: true,
     termV: TERM_V,
     hitbox: spaceshipHitbox,
   });
@@ -73,16 +66,8 @@ export function Spaceship() {
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
   // manage particles
-  const [particles, setParticles] = useState<RocketParticleData[]>([]);
-  const newParticle = useCallback(
-    (createdOn: number) => {
-      const { x, y } = motion.getPosition();
-      setParticles((p) => [
-        ...p,
-        { x, y, dir: faceDir, createdOn, id: getParticleId() },
-      ]);
-    },
-    [faceDir, motion]
+  const [particlesHandle] = useState<ParticlesHandle<RocketParticle>>(
+    new ParticlesHandle<RocketParticle>()
   );
 
   // spaceship control
@@ -101,19 +86,11 @@ export function Spaceship() {
 
       // make new particles
       if (hoz !== 0 || vert !== 0) {
-        if (fc % 5 === 0) newParticle(fc);
-      }
-
-      // clear out old particles every now and then
-      if (fc % (2 * MAX_PARTICLE_LIFETIME) === 0) {
-        setParticles((pl) =>
-          pl.filter(
-            (p: RocketParticleData) => fc - p.createdOn < MAX_PARTICLE_LIFETIME
-          )
-        );
+        if (fc % 10 === 0)
+          particlesHandle.newParticle(new RocketParticle(gM, nX, nY, faceDir));
       }
     },
-    [iM, setX, setY, motion, newParticle, setParticles]
+    [iM, setX, setY, motion, particlesHandle, gM, faceDir]
   );
   useFrame(onFrame);
 
@@ -182,9 +159,7 @@ export function Spaceship() {
       <Collider z={z} x={x + 2} y={y + 1} />
 
       {/* Particles */}
-      {particles.map(({ x, y, dir, id }) => (
-        <RocketParticle x={x} y={y} dir={dir} key={id} z={Layer.Particles} />
-      ))}
+      <Particles handle={particlesHandle} opacity={0.5} />
     </>
   );
 }

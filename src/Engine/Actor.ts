@@ -2,7 +2,6 @@ import { GameManager } from "./GameManager";
 import { Hitbox, Position } from "../Utils/types";
 
 export type ActorProps = Position & {
-  collides?: boolean;
   termV?: number;
   hitbox?: Hitbox;
 };
@@ -22,7 +21,7 @@ export class ActorData {
   private ay = 0;
 
   private termV: number | undefined;
-  private hitbox: Hitbox;
+  private hitbox: Hitbox | undefined;
 
   // initializes with starting coordinates
   constructor(gameManager: GameManager, { x, y, hitbox, termV }: ActorProps) {
@@ -42,6 +41,10 @@ export class ActorData {
 
   public getPosition(): Position {
     return { x: this.x, y: this.y };
+  }
+  public setVelocity({x: vx, y: vy}: Position) {
+    this.vx = vx;
+    this.vy = vy;
   }
 
   public hitboxAt({ x, y }: Position): Hitbox {
@@ -108,7 +111,8 @@ export class ActorData {
   }
 
   // handlers and callbacks
-  public onFrame(dampen = false) {
+  // output: did position update?
+  public onFrame(dampen = false): boolean {
     // dampen, then accelerate, then normalize
     if (dampen) {
       this.vy *= 0.98;
@@ -127,6 +131,12 @@ export class ActorData {
         this.vy *= tv / norm;
       }
     }
+
+    const oldX = this.x;
+    const oldY = this.y;
+
     this.move({ x: this.vx, y: this.vy });
+
+    return oldX !== this.x || oldY !== this.y;
   }
 }

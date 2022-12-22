@@ -1,10 +1,12 @@
+import autoBind from "auto-bind";
 import * as React from "react";
-import { useState, useLayoutEffect, useCallback } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
-import { useFrame, useActor } from "../Utils/Hooks";
+import { GameManager } from "../Engine/GameManager";
 import { Position3D, Position, Direction } from "../Utils/types";
-import { randIntRange, rotateByDirection } from "../Utils/utils";
+import { rotateByDirection } from "../Utils/utils";
+import { Particle } from "./ParticleSystem/Particles";
 
 // if there is more than one fragment on a pixel, turns into a .
 // the effect of this is that when this is on top, it changes its appearance to a .
@@ -46,57 +48,28 @@ export type RocketParticleData = Position & {
 };
 
 export const MAX_PARTICLE_LIFETIME = 60;
-export const getParticleId = (function () {
-  let id = 0;
-  return (): number => {
-    return id++;
-  };
-})();
 
-export function RocketParticle({
-  x,
-  y,
-  z,
-  dir,
-}: Position3D & {
-  dir: Direction;
-}) {
-  const [delta, setDelta] = useState<Position>(
-    rotateByDirection({ x: randIntRange(-1, 1), y: 2 }, dir)
-  );
+export class RocketParticle extends Particle {
+  private dir: Direction;
+  constructor(gM: GameManager, x: number, y: number, dir: Direction) {
+    super(gM, x, y, "*");
+    autoBind(this);
+    this.dir = dir;
+  }
 
-  const motion = useActor(delta);
+  public onFrame(_fc: number) {
+    let displ = { x: 0, y: 20 };
+    displ = rotateByDirection(displ, this.dir);
 
-  const [alive, setAlive] = useState<boolean>(true);
+    if (this.lifetime > MAX_PARTICLE_LIFETIME) {
+      this.alive = false;
+      this.updated = false;
+    } else if (this.lifetime > MAX_PARTICLE_LIFETIME / 2) {
+      this.char = ".";
+      this.updated = false;
+    }
 
-  const [char, setChar] = useState<string>("*");
-
-  const onFrame = useCallback(
-    (fc: number, lt: number) => {
-      let displ = { x: 0, y: 20 };
-      displ = rotateByDirection(displ, dir);
-      motion.move(displ);
-
-      if (lt > 0.5 * MAX_PARTICLE_LIFETIME) {
-        setChar(".");
-      }
-
-      if (fc % 3 === 0) setDelta(motion.getPosition());
-
-      if (lt > MAX_PARTICLE_LIFETIME) setAlive(false);
-    },
-    [motion, dir]
-  );
-  useFrame(onFrame);
-
-  if (!alive) return <></>;
-  return (
-    <CharPixel
-      x={x + delta.x}
-      y={y + delta.y}
-      z={z}
-      char={char}
-      opacity={0.5}
-    />
-  );
+    this.motion.setVelocity(displ);
+    super.onFrame(_fc);
+  }
 }
