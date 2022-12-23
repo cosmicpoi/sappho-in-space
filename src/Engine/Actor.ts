@@ -63,6 +63,11 @@ export class ActorData {
     this.ax = ax;
   }
 
+  public setPosition({x, y}: Position) {
+    this.x = x;
+    this.y = y;
+  }
+
   public getPosition(): Position {
     return { x: this.x, y: this.y };
   }

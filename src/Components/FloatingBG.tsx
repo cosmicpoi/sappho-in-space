@@ -16,6 +16,12 @@ export const blackearthColorData: ColorData = {
   floatBg: `#666666`,
 };
 
+export const crazyColorData: ColorData = {
+  bg: "#5aff65",
+  text: "#707a51",
+  floatBg: `radial-gradient(circle, rgba(90,255,101,1) 0%, rgba(247,125,255,1) 100%)`,
+};
+
 const StyledFloatingBG = styled.div<{ bg: string; visible: boolean }>`
   position: fixed;
   top: 0;

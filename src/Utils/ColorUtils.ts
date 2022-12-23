@@ -45,7 +45,7 @@ export function colorBlend(fg: string, bg: string, alpha: number): string {
   const fgRGB = hexToRgb(fg);
   const bgRGB = hexToRgb(bg);
 
-  if (!fgRGB || !bgRGB) console.error("poorly formatted colors");
+  if (!fgRGB || !bgRGB) console.error("poorly formatted colors", fg, bg);
 
   const clrRGB: RGB = [0, 0, 0];
 

@@ -46,10 +46,10 @@ export class ColorManager {
       if (delX < dayNightMargin) env = Environment.Night;
       else env = Environment.Day;
     } else {
-      if (pos.x < cx && pos.y < cy) env = Environment.Winter;
-      else if (pos.x > cx && pos.y < cy) env = Environment.Spring;
+      if (pos.x <= cx && pos.y <= cy) env = Environment.Winter;
+      else if (pos.x > cx && pos.y <= cy) env = Environment.Spring;
       else if (pos.x > cx && pos.y > cy) env = Environment.Summer;
-      else if (pos.x < cx && pos.y > cy) env = Environment.Autumn;
+      else if (pos.x <= cx && pos.y > cy) env = Environment.Autumn;
     }
 
     return env;

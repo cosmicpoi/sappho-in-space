@@ -154,7 +154,6 @@ function Puzzle132Bulb({
         typist={active[idx]}
         spacing={2}
       />
-      ;
     </>
   );
 }

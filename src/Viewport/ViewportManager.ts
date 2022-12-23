@@ -10,7 +10,6 @@ export class ViewportManager {
   private height: number = CANVAS_HEIGHT;
   private container: HTMLDivElement;
 
-
   // setup
   public setContainer(container: HTMLDivElement): void {
     this.container = container;
@@ -47,6 +46,16 @@ export class ViewportManager {
     // return { x: Infinity, y: Infinity };
   }
 
+  public onScreen({ x, y }: Position): boolean {
+    const m = 10;
+    const xMin = unit_sToW(this.scrollX());
+    const yMin = unit_sToW(this.scrollY());
+    const xMax = unit_sToW(this.scrollX() + window.innerWidth);
+    const yMax = unit_sToW(this.scrollY() + window.innerHeight);
+
+    return x > xMin - m && x < xMax + m && y > yMin - m && y < yMax + m;
+  }
+
   // math
   public worldToScreen(pos: Position): Position {
     return {
@@ -60,6 +69,8 @@ export class ViewportManager {
     if (!this.container) return;
     const { x: maxX, y: maxY } = this.scrollMax();
     this.container.scroll(clamp(x, 0, maxX), clamp(y, 0, maxY));
+
+    this.onScreen({ x: 0, y: 0 });
   }
 
   public scrollWorld(x: number, y: number) {
@@ -105,6 +116,6 @@ export class ViewportManager {
       delY = Math.ceil(unit_sToW(screen.y - mBottom));
     }
 
-    this.scrollDeltaWorld(delX, delY);
+    if (delX !== 0 || delY !== 0) this.scrollDeltaWorld(delX, delY);
   }
 }

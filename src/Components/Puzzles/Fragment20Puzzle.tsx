@@ -335,7 +335,6 @@ export function Fragment20Puzzle({ x, y, z }: Position3DR) {
   const solved = status === FragmentStatus.Solved;
 
   useEffect(() => {
-    console.log(on);
     if (on.reduce((prev: boolean, curr: boolean) => prev && curr)) solve();
   }, [on, solve]);
 
