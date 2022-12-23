@@ -4,7 +4,12 @@ import { useState, useLayoutEffect } from "react";
 import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { GameManager } from "../Engine/GameManager";
-import { Position3D, Position, Direction } from "../Utils/types";
+import {
+  Position3D,
+  Position,
+  Direction,
+  CollisionGroup,
+} from "../Utils/types";
 import { randIntRange, rotateByDirection } from "../Utils/utils";
 import { Particle } from "./ParticleSystem/Particles";
 
@@ -93,7 +98,7 @@ export class HeartParticle extends Particle {
   private lt = 0;
 
   constructor(gM: GameManager, x: number, y: number, tx: number, ty: number) {
-    super(gM, x, y, "+", {});
+    super(gM, x, y, "+", { collisionGroup: CollisionGroup.HeartParticle });
     autoBind(this);
 
     this.targetx = x + tx;

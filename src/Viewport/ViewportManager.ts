@@ -26,12 +26,6 @@ export class ViewportManager {
     autoBind(this);
     this.colorChange$ = monomitter<Environment>(true);
     this.colorChange$.publish(Environment.DEFAULT);
-
-    // setInterval(() => {
-    //   console.log("Publish");
-    //   if (this.environment <= Environment.Autumn)
-    //     this.colorChange$.publish(this.environment++);
-    // }, 10000);
   }
 
   public setContainer(container: HTMLDivElement): void {

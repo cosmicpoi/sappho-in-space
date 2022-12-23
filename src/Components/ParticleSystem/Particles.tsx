@@ -49,8 +49,6 @@ export class Particle {
 
     this.motion = new ActorData(gM, { x, y }, propsWithDefault);
 
-    console.log(propsWithDefault);
-
     this.char = char;
     this.alive = true;
   }

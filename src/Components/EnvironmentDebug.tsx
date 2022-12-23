@@ -45,7 +45,6 @@ export function EnvironmentDebug() {
 
   const dayNightBorder = useMemo<BoxProps>(() => {
     const k = (dayNightMargin / ellipseHalfWidth) ** 2;
-    console.log(k);
     const RHS = ellipseHalfHeight * Math.sqrt(1 - k);
 
     return {
