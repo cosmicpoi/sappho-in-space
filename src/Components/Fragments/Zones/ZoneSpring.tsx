@@ -7,7 +7,7 @@ export function ZoneSpring() {
 
   return (
     <>
-      <Fragment132Puzzle x={cx + 340} y={cy - 450} />
+      <Fragment132Puzzle x={cx + 340} y={cy - 450} z={0}/>
     </>
   );
 }

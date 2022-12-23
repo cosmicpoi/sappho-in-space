@@ -21,7 +21,7 @@ export function Line({
 }: CharPixelBaseProps & { x1: number; y1: number }) {
   const { points, char }: { points: Position[]; char: string } = useMemo(() => {
     const dx = x1 - x;
-    const dy = y1 - y;
+    let dy = y1 - y;
 
     // set char
     const pi = Math.PI;
@@ -29,7 +29,7 @@ export function Line({
     let char = "-";
 
     if (-pi / 8 <= angle && angle < pi / 8) char = "-";
-    else if ((-3 * pi) / 8 <= angle && angle < -pi / 8) char = "\\";
+    else if ((-3 * pi) / 8 <= angle && angle < -pi / 8) char = "/";
     else if ((-5 * pi) / 8 <= angle && angle < (-3 * pi) / 8) char = "|";
     else if ((-7 * pi) / 8 <= angle && angle < (-5 * pi) / 8) char = "/";
     else if (pi / 8 <= angle && angle < (3 * pi) / 8) char = "\\";
@@ -38,12 +38,13 @@ export function Line({
     else char = "-";
 
     // rasterize
-    const points: Position[] = [];
+    let points: Position[] = [];
     let x_ = x;
     let y_ = y;
     const draw = () => points.push({ x: x_, y: y_ });
     draw();
 
+    if (dy < 0) dy *= -1;
     if (dy <= dx) {
       let d = dy - dx / 2;
       while (x_ < x1) {
@@ -68,6 +69,9 @@ export function Line({
         draw();
       }
     }
+
+    if (y1 < y)
+      points = points.map(({ x: px, y: py }) => ({ x: px, y: y - (py - y) }));
 
     return { points, char };
   }, [x, y, x1, y1]);

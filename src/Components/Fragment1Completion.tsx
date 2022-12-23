@@ -6,7 +6,7 @@ import {
   parToPuzzleFrag,
 } from "../Data/FragmentData";
 import { useLines, usePuzzleStatus } from "../Utils/Hooks";
-import { Position3D } from "../Utils/types";
+import { Position3D, Position3DR } from "../Utils/types";
 import { fragment1text } from "./Fragments/FragmentText/FragmentText1to9";
 import {
   PL_Golden,
@@ -81,7 +81,7 @@ function Fragment1PuzzlePar({
   );
 }
 
-export function Fragment1Completion({ x, y, z }: Position3D) {
+export function Fragment1Completion({ x, y, z }: Position3DR) {
   return (
     <>
       <FragmentLabel x={x} y={y - 4} z={z} fkey={FragmentKey.F1} />

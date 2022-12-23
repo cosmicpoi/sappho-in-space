@@ -11,7 +11,13 @@ import {
   useActor,
   useKeyDown,
 } from "../Utils/Hooks";
-import { Direction, Hitbox, Layer, Position } from "../Utils/types";
+import {
+  CollisionGroup,
+  Direction,
+  Hitbox,
+  Layer,
+  Position,
+} from "../Utils/types";
 import { addPos, directionFromKey, directionKeys } from "../Utils/utils";
 import { Particles, ParticlesHandle } from "./ParticleSystem/Particles";
 import {
@@ -68,7 +74,12 @@ export function Spaceship() {
 
   const motion = useActor(
     { x: pos.x, y: pos.y },
-    { termV: TERM_V, hitbox: spaceshipHitbox, solidCollision: true }
+    {
+      termV: TERM_V,
+      hitbox: spaceshipHitbox,
+      solidCollision: true,
+      collisionGroup: CollisionGroup.Spaceship,
+    }
   );
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);

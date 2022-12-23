@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useGameManager } from ".";
 import { Fragment1Completion } from "./Components/Fragment1Completion";
-import { Fragment1 } from "./Components/Fragments/FragmentComponents/Fragment1to9";
 import { ZoneAutumn } from "./Components/Fragments/Zones/ZoneAutumn";
 import { ZoneDay } from "./Components/Fragments/Zones/ZoneDay";
 import { ZoneNight } from "./Components/Fragments/Zones/ZoneNight";

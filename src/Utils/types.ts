@@ -1,3 +1,7 @@
+import * as React from "react";
+
+export type Hook<T> = ReturnType<typeof React.useState<T>>;
+
 export type Position = {
   x: number;
   y: number;
@@ -6,6 +10,8 @@ export type Position = {
 export type Position3D = Position & {
   z?: number;
 };
+
+export type Position3DR = Required<Position3D>;
 
 export enum Direction {
   Up,
@@ -40,5 +46,6 @@ export enum ZIndex {
 }
 
 export enum CollisionGroup {
+  Spaceship,
   HeartParticle,
 }
