@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
+import { KEYS } from "../Engine/InputManager";
 import { t_v } from "../Utils/consts";
 import { DEBUG_START_POS, DEBUG_SCROLL } from "../Utils/debug";
 import {
@@ -114,7 +115,7 @@ export function Spaceship() {
   const onSpaceDown = useCallback(() => {
     heartHandle.newParticles(heartParticles(gM, pos.x, pos.y));
   }, [gM, heartHandle, pos]);
-  useKeyDown(" ", onSpaceDown);
+  useKeyDown(KEYS.Space, onSpaceDown);
 
   const onArrowUp = useCallback(
     (_k: string) => {

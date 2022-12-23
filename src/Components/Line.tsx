@@ -15,6 +15,7 @@ export function Line({
   twinkle,
   bold,
   typist,
+  transition,
 }: CharPixelBlockProps) {
   return (
     <>
@@ -35,6 +36,7 @@ export function Line({
                 twinkle={twinkle}
                 bold={bold}
                 typist={typist}
+                transition={transition}
               />
             )
         )}

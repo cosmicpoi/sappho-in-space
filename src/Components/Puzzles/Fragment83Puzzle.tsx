@@ -39,6 +39,7 @@ function Puzzle83Piece({
   solved: boolean;
   idx: number;
 }) {
+  done = true;
   const [active, setActive] = useState<boolean>(!!done);
   const [str, setStr] = useState<string>(done ? now_again : text);
 
@@ -88,8 +89,8 @@ function Puzzle83Piece({
 
   return (
     <>
-      <CharPixel x={x} y={y} z={z} char="]" clr={color} />
-      <Line x={x + 1} y={y} z={z} text={str} clr={color} />
+      <CharPixel x={x} y={y} z={z} char="]" clr={color} transition={1} />
+      <Line x={x + 1} y={y} z={z} text={str} clr={color} transition={1} />
     </>
   );
 }

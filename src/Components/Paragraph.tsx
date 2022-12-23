@@ -17,6 +17,7 @@ export function Paragraph({
   spacing,
   bold,
   typist,
+  transition,
 }: CharPixelBlockProps & { spacing?: number }) {
   const lines = useLines(text);
   const sp = spacing === undefined ? 2 : spacing;
@@ -38,6 +39,7 @@ export function Paragraph({
               twinkle={twinkle}
               bold={bold}
               typist={typist}
+              transition={transition}
             />
           )
       )}

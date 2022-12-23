@@ -96,7 +96,7 @@ function PadRow({
 
   const twinklers: (number | undefined)[] = useMemo(
     () =>
-      chars.map((_v) => (Math.random() < 0.2 ? randIntRange(0, 9) : undefined)),
+      chars.map((_v) => (Math.random() < 0.5 ? randIntRange(0, 9) : undefined)),
     [chars]
   );
 

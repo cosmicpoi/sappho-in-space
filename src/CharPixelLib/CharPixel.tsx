@@ -16,7 +16,7 @@ type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
 };
 
-const twinklePeriod = 50;
+const twinklePeriod = 60;
 
 const StyledCharPixel = styled.span<StyledCharPixelProps>`
   position: absolute;
@@ -27,7 +27,7 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   line-height: ${unit_wToS(1)}px;
   display: inline-block;
 
-  transition: color 1s;
+  ${({ transition }) => `transition: color ${transition || 1.2}s;`}
 
   ${({ hidden }) => hidden && "display: none;"}
   ${({ clr }) => clr && `color: ${clr};`}
@@ -42,7 +42,8 @@ const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
 export function CharPixel(props: CharPixelProps) {
-  const { x, y, z, char, clr, opacity, isWall, twinkle, bold, typist } = props;
+  const { x, y, z, char } = props;
+  const { clr, opacity, isWall, twinkle, bold, typist, transition } = props;
   const gM = useGameManager();
 
   const content = useMemo<React.ReactNode | string>(() => {
@@ -85,15 +86,16 @@ export function CharPixel(props: CharPixelProps) {
   );
 
   const color: string | undefined = useMemo(() => {
-    if (zoneColor && !clr) return zoneColor;
-
     let o = opacity === undefined ? 1 : opacity;
+    if (clr === undefined && o === 1) return zoneColor || undefined;
+
     o *= isDim ? 0.2 : 1;
-    if (clr === undefined && o === 1) return undefined;
 
-    const tColor = clr ? clr : textColor;
+    const tColor = zoneColor ? zoneColor : textColor;
 
-    return colorBlend(tColor, bgColor, o);
+    const trueColor = clr ? clr : tColor;
+
+    return colorBlend(trueColor, bgColor, o);
   }, [clr, bgColor, textColor, zoneColor, opacity, isDim]);
 
   // typist stuff
@@ -131,8 +133,8 @@ export function CharPixel(props: CharPixelProps) {
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",
       }}
-      twinkle={twinkle}
       bold={bold}
+      transition={transition}
     >
       {typist && !typed ? typeContent : content}
     </StyledCharPixel>

@@ -37,6 +37,11 @@ export class InputManager {
 
   public bindListeners(): () => void {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (KEYS[e.key as keyof typeof KEYS]) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
       if (this.isKeyDown(e.key)) return;
 
       this.keyIsDown.set(e.key, true);
@@ -46,6 +51,11 @@ export class InputManager {
     };
 
     const onKeyUp = (e: KeyboardEvent) => {
+      if (KEYS[e.key as keyof typeof KEYS]) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
       this.keyIsDown.set(e.key, false);
 
       this.requestEmitter(this.keysUp$, e.key);
@@ -93,4 +103,5 @@ export enum KEYS {
   Down = "ArrowDown",
   Left = "ArrowLeft",
   Right = "ArrowRight",
+  Space = " ",
 }
