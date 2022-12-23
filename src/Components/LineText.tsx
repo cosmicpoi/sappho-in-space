@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { CharPixelBlockProps } from "../CharPixelLib/CharPixelTypes";
 import { getAlign } from "../Utils/utils";
@@ -17,13 +18,18 @@ export function LineText({
   typist,
   transition,
 }: CharPixelBlockProps) {
+  const trimmed: number = useMemo(() => {
+    const trimFront = text.replace(/^\s+/gm, "");
+    const trimmed = text.length - trimFront.length;
+    return trimmed;
+  }, [text]);
   return (
     <>
       {text
         .split("")
         .map(
           (str: string, i: number) =>
-            str !== "_" && (
+            i >= trimmed && (
               <CharPixel
                 x={x + i + getAlign(text.length, align)}
                 y={y}

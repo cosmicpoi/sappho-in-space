@@ -6,7 +6,7 @@ and I will pour wine over
 
 export const fragment41Text = `
 for you beautiful ones my thought
-______is not changeable
+      is not changeable
 `;
 
 export const fragment42Text = `
@@ -27,9 +27,9 @@ export const fragment43Text = `
 export const fragment44Text = `
 Kypros
 herald came
-Idaos______swift messenger
+Idaos      swift messenger
 ]
-and of the rest of Asia _____imperishable fame.
+and of the rest of Asia      imperishable fame.
 Hektor and his men are bringing a glancing girl
 from holy Thebe and from onflowing Plakia—
 delicate Andromache on ships over the salt
@@ -41,26 +41,26 @@ And news went through the wide town to friends.
 Then sons of Ilos led mules beneath
 fine-running carts and up climbed a whole crowd
 of women and maidens with tapering ankles,
-but separately the daughters of Priam____ [
-And young men led horses under chariots __[
+but separately the daughters of Priam     [
+And young men led horses under chariots   [
 ]in great style
 ]charioteers
 ]
-_____________________________]like to gods
-_____________________________]holy all together
-set out_____ for Ilios
+                             ]like to gods
+                             ]holy all together
+set out      for Ilios
 and sweetflowing flute and kithara were mingled
 with the clip of castanets and piercingly then the maidens
 sang a holy song and straight up the air went
-amazing sound __________________[
+amazing sound                   [
 and everywhere in the roads was [
-bowls and cups _________________[
+bowls and cups                  [
 myrrh and cassia and frankincense were mingled.
 And all the elder women shouted aloud
 and all the men cried out a lovely song
 calling on Paon farshooting god of the lyre,
 and they were singing a hymn for Hektor and Andromache
-___like to gods.
+   like to gods.
 `;
 export const fragment44AaText = `
 ]
@@ -77,25 +77,25 @@ call her as her name.
 ]
 `;
 export const fragment44AbText = `
-______________________________[
-______________________________[
-______________________________[
-______________________________[
-of the Muses _________________[
-makes and of the Graces_______[
+                              [
+                              [
+                              [
+                              [
+of the Muses                  [
+makes and of the Graces       [
 with slender
-______________________________[
+                              [
 for mortals: there is a share [
 ]
 `;
 
 export const fragment45Text = `as long as you want`;
 export const fragment46Text = `
-______and I on a soft pillow
+      and I on a soft pillow
 will lay down my limbs
 `;
 export const fragment47Text = `
-_____________________________Eros shook my
+                             Eros shook my
 mind like a mountain wind falling on oak trees
 `;
 export const fragment48Text = `
