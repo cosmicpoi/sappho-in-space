@@ -1,6 +1,10 @@
 import * as React from "react";
 import { useMemo } from "react";
-import { FragmentStatus, parToPuzzleFrag } from "../Data/FragmentData";
+import {
+  FragmentKey,
+  FragmentStatus,
+  parToPuzzleFrag,
+} from "../Data/FragmentData";
 import { useLines, useLog, usePuzzleStatus } from "../Utils/Hooks";
 import { Position3D } from "../Utils/types";
 import { fragment1text } from "./Fragments/FragmentText/FragmentText1to9";
@@ -11,6 +15,7 @@ import {
   PL_Crazy,
   PL_Gifts,
   PL_Accomplish,
+  FragmentLabel,
 } from "./Labels";
 import { Paragraph } from "./Paragraph";
 
@@ -86,7 +91,7 @@ function Fragment1PuzzlePar({
 export function Fragment1Completion({ x, y, z }: Position3D) {
   return (
     <>
-      {/* <Paragraph x={x} y={y} z={z} text={fragment1text} /> */}
+      <FragmentLabel x={x} y={y - 4} z={z} fkey={FragmentKey.F1} />
       <Fragment1Paragraph x={x} y={y} z={z} parNo={0} />
 
       <Fragment1PuzzlePar x={x} y={y} z={z} parNo={1}>
