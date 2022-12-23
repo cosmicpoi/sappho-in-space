@@ -7,14 +7,15 @@ import { TriggerData } from "../../Engine/CollisionManager";
 import { useFrame, useLines, useTrigger } from "../../Utils/Hooks";
 import { CollisionGroup, Position3D } from "../../Utils/types";
 import { toN } from "../../Utils/utils";
-import { FragmentLabel } from "../FragmentLabel";
+import { FragmentLabel } from "../Labels";
 import { fragment83Text } from "../Fragments/FragmentText/FragmentText80to89";
 import { Line } from "../Line";
+import { Paragraph } from "../Paragraph";
 
 const delay = 5;
 const now_again = "(now again)";
 
-const extra = 3;
+const extra = 4;
 
 const gap = 3;
 
@@ -80,7 +81,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
 
   return (
     <>
-      <FragmentLabel x={x - 8} y={y - 5} z={z} fkey={FragmentKey.F83} decor />
+      <FragmentLabel x={x - 3} y={y - 5} z={z} fkey={FragmentKey.F83} decor />
 
       {toN(len).map((i: number) => (
         <Puzzle83Piece
@@ -93,7 +94,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
       ))}
       {toN(len).map((i: number) => (
         <Puzzle83Piece
-          x={x - 14 - i * gap}
+          x={x - 15 - i * gap}
           y={y + i * gap}
           z={z}
           text={""}
@@ -102,8 +103,8 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
       ))}
       {toN(len).map((i: number) => (
         <Puzzle83Piece
-          x={x - 14 - i * gap}
-          y={y + len * 2 * gap - i * gap - gap}
+          x={x - 15 - i * gap}
+          y={y + len * 2 * gap - i * gap - gap + 1}
           z={z}
           text={""}
           key={i}
@@ -112,18 +113,33 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
       {toN(len).map((i: number) => (
         <Puzzle83Piece
           x={x + i * gap}
-          y={y + len * 2 * gap - i * gap - gap}
+          y={y + len * 2 * gap - i * gap - gap + 1}
           z={z}
           text={""}
           key={i}
         />
       ))}
+
+      <Paragraph
+        x={x - 20 + ox}
+        y={y + 30}
+        z={z}
+        text={completionPoem}
+        typist
+      />
+
+      <CharPixel x={x - 23 + ox} y={y + 30} z={z} char={"["} opacity={0.5} />
+      <CharPixel x={x - 23 + ox} y={y + 32} z={z} char={"["} opacity={0.5} />
+      <CharPixel x={x - 23 + ox} y={y + 34} z={z} char={"["} opacity={0.5} />
+
+      <CharPixel x={x + 15 + ox} y={y + 30} z={z} char={"]"} opacity={0.5} />
+      <CharPixel x={x + 15 + ox} y={y + 32} z={z} char={"]"} opacity={0.5} />
+      <CharPixel x={x + 15 + ox} y={y + 34} z={z} char={"]"} opacity={0.5} />
     </>
   );
 }
-
-`~ ~ (now again) ~ ~
-
-(now again) my heart is torn in two
-under a blazing sun
-                  my love is born anew`;
+const ox = 2;
+const completionPoem = `
+(now again) my heart tears in two
+under a blazing night
+              my love births anew`;

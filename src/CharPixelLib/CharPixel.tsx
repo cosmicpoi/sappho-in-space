@@ -8,6 +8,8 @@ import { unit_wToS } from "../Viewport/ViewportManager";
 import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
 import { environmentColor } from "../Utils/colors";
 import { ZIndex } from "../Utils/types";
+import { useFrame } from "../Utils/Hooks";
+import { randEl } from "../Utils/utils";
 
 type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
@@ -49,13 +51,14 @@ const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
 export function CharPixel(props: CharPixelProps) {
-  const { x, y, z, char, clr, opacity, isWall, twinkle, bold } = props;
+  const { x, y, z, char, clr, opacity, isWall, twinkle, bold, typist } = props;
   const gM = useGameManager();
 
-  let content: React.ReactNode | string = char;
-
-  if (char === "|") content = <ShortPipe />;
-  if (char === t_v) content = <ShortTV />;
+  const content = useMemo<React.ReactNode | string>(() => {
+    if (char === "|") return <ShortPipe />;
+    if (char === t_v) return <ShortTV />;
+    return char;
+  }, [char]);
 
   const [hidden, setHidden] = useState<boolean>(false);
 
@@ -74,6 +77,22 @@ export function CharPixel(props: CharPixelProps) {
     return environmentColor[gM.viewportManager.getEnvironment({ x, y })];
   }, [gM, x, y]);
 
+  // typist stuff
+  const [typed, setTyped] = useState<boolean>(false);
+  const [typeContent, setTypeContent] = useState<string | undefined>();
+  const onFrame = useMemo(() => {
+    if (!typist) return undefined;
+
+    return (fc: number, lt: number) => {
+      if (fc % 5 === 0) {
+        if (Math.random() < 0.1)
+          setTypeContent(randEl(["#", "%", "*", "*", "@", "^", ".", "."]));
+        if (Math.random() < 0.1 || lt > 120) setTyped(true);
+      }
+    };
+  }, [typist]);
+  useFrame(onFrame);
+
   return (
     <StyledCharPixel
       hidden={hidden}
@@ -88,7 +107,7 @@ export function CharPixel(props: CharPixelProps) {
       twinkle={twinkle}
       bold={bold}
     >
-      {content}
+      {typist && !typed ? typeContent : content}
     </StyledCharPixel>
   );
 }

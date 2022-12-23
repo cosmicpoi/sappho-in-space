@@ -15,6 +15,8 @@ export function Paragraph({
   opacity,
   twinkle,
   spacing,
+  bold,
+  typist,
 }: CharPixelBlockProps & { spacing?: number }) {
   const lines = useLines(text);
   const sp = spacing === undefined ? 2 : spacing;
@@ -34,6 +36,8 @@ export function Paragraph({
               clr={color}
               opacity={opacity}
               twinkle={twinkle}
+              bold={bold}
+              typist={typist}
             />
           )
       )}

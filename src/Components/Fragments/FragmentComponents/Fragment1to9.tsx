@@ -1,5 +1,13 @@
 import * as React from "react";
 import { Position3D } from "../../../Utils/types";
+import {
+  PL_Accomplish,
+  PL_BlackEarth,
+  PL_Crazy,
+  PL_Gifts,
+  PL_Golden,
+  PL_NowAgain,
+} from "../../Labels";
 import { Line } from "../../Line";
 import { Paragraph } from "../../Paragraph";
 import {
@@ -18,12 +26,12 @@ export function Fragment1({ x, y, z }: Position3D) {
   return (
     <>
       <Paragraph x={x} y={y} z={z} text={fragment1text} />
-      <Line x={x + 6} y={y + 16} z={z + 1} text={"golden"} bold />
-      <Line x={x + 24} y={y + 22} z={z + 1} text={"black earth"} bold />
-      <Line x={x + 6} y={y + 36} z={z + 1} text={"(now again)"} bold />
-      <Line x={x + 6} y={y + 42} z={z + 1} text={"crazy"} bold />
-      <Line x={x + 15} y={y + 52} z={z + 1} text={"gifts"} bold />
-      <Line x={x + 3} y={y + 64} z={z + 1} text={"accomplish"} bold />
+      <PL_Golden x={x + 6} y={y + 16} z={z + 1} />
+      <PL_BlackEarth x={x + 24} y={y + 22} z={z + 1} />
+      <PL_NowAgain x={x + 6} y={y + 36} z={z + 1} />
+      <PL_Crazy x={x + 6} y={y + 42} z={z + 1} />
+      <PL_Gifts x={x + 15} y={y + 52} z={z + 1} />
+      <PL_Accomplish x={x + 3} y={y + 64} z={z + 1} />
     </>
   );
 }

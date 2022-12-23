@@ -52,10 +52,12 @@ export function useManyKeysUp(keys: string[], cb: (k: string) => void) {
 }
 
 // bind a callback to frames
-export function useFrame(cb: (fc: number, lifetime?: number) => void) {
+export function useFrame(cb?: (fc: number, lifetime?: number) => void) {
   const gM = useGameManager();
 
   useEffect(() => {
+    if (!cb) return;
+
     let lifetime = 0;
     const sub = gM.frame$.subscribe((fc: number) => {
       cb(fc, lifetime++);
