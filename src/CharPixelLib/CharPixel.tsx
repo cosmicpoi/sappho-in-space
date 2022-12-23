@@ -103,15 +103,25 @@ export function CharPixel(props: CharPixelProps) {
   const [typeContent, setTypeContent] = useState<string | undefined>();
 
   const typistCB = useMemo(() => {
-    if (!typist) return undefined;
+    if (typist === undefined) return undefined;
 
     return (fc: number, lt: number) => {
       if (fc % 5 === 0) {
         if (Math.random() < 0.1)
-          setTypeContent(randEl(["#", "%", "*", "*", "@", "^", ".", "."]));
-        if (Math.random() < 0.1 || lt > 120) setTyped(true);
+          setTypeContent((c: string) => {
+            if (c === undefined && !typist) return;
+            return randEl(["#", "%", "*", "*", "@", "^", ".", "."]);
+          });
+        if (Math.random() < 0.1 || lt > 120) {
+          if (typist) setTyped(true);
+          else setTypeContent(undefined);
+        }
       }
     };
+  }, [typist]);
+
+  useEffect(() => {
+    if (!typist) setTyped(false);
   }, [typist]);
 
   // bind frame events
@@ -136,7 +146,7 @@ export function CharPixel(props: CharPixelProps) {
       bold={bold}
       transition={transition}
     >
-      {typist && !typed ? typeContent : content}
+      {typist !== undefined && !typed ? typeContent : content}
     </StyledCharPixel>
   );
 }

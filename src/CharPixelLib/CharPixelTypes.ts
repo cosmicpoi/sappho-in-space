@@ -9,7 +9,7 @@ export type CharPixelStyle = {
 export type CharPixelBaseProps = Position3D &
   CharPixelStyle & {
     isWall?: boolean;
-    typist?: boolean;
+    typist?: boolean; // boolean (visible) | undefined
     twinkle?: number; // [1...10] | undefined
   };
 
