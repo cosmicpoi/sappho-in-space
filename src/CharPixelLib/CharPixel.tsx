@@ -37,7 +37,7 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   line-height: ${unit_wToS(1)}px;
   display: inline-block;
 
-  transition: color 2.5s;
+  transition: color 1s;
 
   ${({ hidden }) => hidden && "display: none;"}
   ${({ clr }) => clr && `color: ${clr};`}

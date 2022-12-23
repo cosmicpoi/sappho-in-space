@@ -38,8 +38,6 @@ function Puzzle83Piece({
   solved: boolean;
   idx: number;
 }) {
-  done = Math.random() < 0.95;
-
   const [active, setActive] = useState<boolean>(!!done);
   const [str, setStr] = useState<string>(done ? now_again : text);
 
@@ -131,6 +129,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           onDone={onDone}
           solved={solved}
           idx={i}
+          done={lines83[i] === "(now again)"}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -143,6 +142,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           onDone={onDone}
           solved={solved}
           idx={i + len}
+          done={i === 8}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -167,6 +167,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           onDone={onDone}
           solved={solved}
           idx={i + len * 3}
+          done={i === 6}
         />
       ))}
 
