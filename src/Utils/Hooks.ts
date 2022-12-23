@@ -73,7 +73,7 @@ export function useActor(pos: Position, props: ActorProps): ActorData {
 }
 
 // trim leading and trailing newlines - so that we can use string literals ``
-export function useCleanStr(text: string): string {
+export function useLines(text: string): string[] {
   const cleaned = useMemo(() => {
     let str = text;
     if (str.charAt(0) === "\n") str = str.substring(1, str.length);
@@ -81,7 +81,9 @@ export function useCleanStr(text: string): string {
       str = str.substring(0, str.length - 1);
     return str;
   }, [text]);
-  return cleaned;
+
+  const lines = useMemo(() => cleaned.split("\n"), [cleaned]);
+  return lines;
 }
 
 // return the center of the map

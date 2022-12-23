@@ -14,7 +14,8 @@ export function FragmentLabel({
   z,
   clr,
   fkey,
-}: CharPixelBaseProps & { fkey: FragmentKey }) {
+  decor,
+}: CharPixelBaseProps & { fkey: FragmentKey; decor?: boolean }) {
   const { dataManager: dM } = useGameManager();
 
   const status = useUpdatedValue(
@@ -26,7 +27,9 @@ export function FragmentLabel({
 
   return (
     <>
+      {decor && <Line x={x - 4} y={y} z={z} text={"~ ~"} opacity={0.5} />}
       <Line x={x} y={y} z={z} text={str} clr={clr} opacity={0.5} />
+      {decor && <Line x={x + str.length + 1} y={y} z={z} text={"~ ~"} opacity={0.5} />}
     </>
   );
 }

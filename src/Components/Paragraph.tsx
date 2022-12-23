@@ -1,7 +1,6 @@
 import * as React from "react";
-import { useMemo } from "react";
 import { CharPixelBlockProps } from "../CharPixelLib/CharPixelTypes";
-import { useCleanStr } from "../Utils/Hooks";
+import { useLines } from "../Utils/Hooks";
 import { getAlign } from "../Utils/utils";
 import { Line } from "./Line";
 
@@ -16,9 +15,8 @@ export function Paragraph({
   opacity,
   twinkle,
   spacing,
-}: CharPixelBlockProps & {spacing?: number}) {
-  const cleaned = useCleanStr(text);
-  const lines = useMemo(() => cleaned.split("\n"), [cleaned]);
+}: CharPixelBlockProps & { spacing?: number }) {
+  const lines = useLines(text);
   const sp = spacing === undefined ? 2 : spacing;
 
   return (
