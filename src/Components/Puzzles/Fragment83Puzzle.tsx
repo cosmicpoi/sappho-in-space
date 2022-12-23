@@ -7,6 +7,7 @@ import { TriggerData } from "../../Engine/CollisionManager";
 import {
   useFrame,
   useLines,
+  useLog,
   usePuzzleStatus,
   useTrigger,
 } from "../../Utils/Hooks";
@@ -16,6 +17,7 @@ import { FragmentLabel, PL_NowAgain } from "../Labels";
 import { fragment83Text } from "../Fragments/FragmentText/FragmentText80to89";
 import { Line } from "../Line";
 import { Paragraph } from "../Paragraph";
+import { hslToHex } from "../../Utils/ColorUtils";
 
 const delay = 5;
 const now_again = "(now again)";
@@ -38,6 +40,7 @@ function Puzzle83Piece({
   solved: boolean;
   idx: number;
 }) {
+  done = true;
   const [active, setActive] = useState<boolean>(!!done);
   const [str, setStr] = useState<string>(done ? now_again : text);
 
@@ -82,7 +85,7 @@ function Puzzle83Piece({
 
   const color: string | undefined = useMemo(() => {
     if (!solved) return undefined;
-    return `hsl(${((idx + coffset) * 30) % 360}, 80%, 80%)`;
+    return hslToHex(((idx + coffset) * 30) % 360, 80, 80);
   }, [idx, solved, coffset]);
 
   return (

@@ -14,7 +14,7 @@ function Framer({ x, y }: Position) {
       x={x}
       y={y}
       opacity={DEBUG_WALL ? 1 : 0}
-      clr={"red"}
+      clr={"#FF0000"}
     />
   );
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { useGameManager } from "..";
+import { useColors, useGameManager } from "..";
 import { t_v } from "../Utils/consts";
 import { DEBUG_ENVIRONMENT } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
@@ -10,6 +10,7 @@ import { environmentColor } from "../Utils/colors";
 import { ZIndex } from "../Utils/types";
 import { useFrame } from "../Utils/Hooks";
 import { randEl } from "../Utils/utils";
+import { colorBlend } from "../Utils/ColorUtils";
 
 type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
@@ -73,11 +74,24 @@ export function CharPixel(props: CharPixelProps) {
     return unregister;
   }, [x, y, z, char, gM, setHidden, isWall]);
 
+  // color management
+  const { bg: bgColor, text: textColor } = useColors();
+
   const zoneColor: string | undefined = useMemo(() => {
     if (!DEBUG_ENVIRONMENT) return undefined;
 
     return environmentColor[gM.viewportManager.getEnvironment({ x, y })];
   }, [gM, x, y]);
+
+  const color: string | undefined = useMemo(() => {
+    if (zoneColor) return zoneColor;
+    const o = opacity === undefined ? 1 : opacity;
+    if (clr === undefined && o === 1) return undefined;
+
+    const tColor = clr ? clr : textColor;
+
+    return colorBlend(tColor, bgColor, o);
+  }, [clr, bgColor, textColor, zoneColor, opacity]);
 
   // typist stuff
   const [typed, setTyped] = useState<boolean>(false);
@@ -98,11 +112,11 @@ export function CharPixel(props: CharPixelProps) {
   return (
     <StyledCharPixel
       hidden={hidden}
-      clr={zoneColor || clr}
+      clr={color}
       style={{
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",
-        opacity: opacity,
+        // opacity: opacity,
         animationDelay:
           twinkle !== undefined ? `${(twinkle % 10) * 0.15}s` : undefined,
       }}

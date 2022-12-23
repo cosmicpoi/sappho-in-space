@@ -6,6 +6,7 @@ import { EnvironmentDebug } from "./Components/EnvironmentDebug";
 import { GameManager } from "./Engine/GameManager";
 import { GameWorld } from "./GameWorld";
 import {
+  ColorData,
   COLORS,
   Environment,
   environmentBackground,
@@ -38,6 +39,13 @@ export const {
   provider: GameManagerProvider,
 } = createDefinedContext<GameManager>();
 
+export const ColorContext = React.createContext<ColorData>({
+  bg: COLORS.bgNight,
+  text: COLORS.colorNight,
+});
+
+export const useColors = () => React.useContext(ColorContext);
+
 function App() {
   const [gameManager] = useState<GameManager>(new GameManager());
 
@@ -64,29 +72,34 @@ function App() {
   const [environment, setEnvironment] = useState<Environment>(
     Environment.DEFAULT
   );
-  const [color, setColor] = useState<string>(COLORS.colorNight);
-  const [background, setBackground] = useState<string>(COLORS.bgNight);
-  useEffect(() => {
-    const sub = gameManager.viewportManager.colorChange$.subscribe(
-      (e: Environment) => {
-        setEnvironment(e);
-      }
-    );
-    return sub.unsubscribe;
-  }, [gameManager, setEnvironment]);
+  const [cData, setColorData] = useState<ColorData>({
+    bg: COLORS.bgNight,
+    text: COLORS.colorNight,
+  });
 
   useEffect(() => {
-    setColor(environmentColor[environment]);
-    setBackground(environmentBackground[environment]);
-  }, [environment, setColor, setBackground]);
+    const sub = gameManager.viewportManager.colorChange$.subscribe(
+      (e: Environment) => setEnvironment(e)
+    );
+    return sub.unsubscribe;
+  }, [gameManager]);
+
+  useEffect(() => {
+    setColorData({
+      bg: environmentBackground[environment],
+      text: environmentColor[environment],
+    });
+  }, [environment]);
 
   return (
     <GameManagerProvider value={gameManager}>
-      <Container ref={containerRef} clr={color} background={background}>
-        <Frame />
-        {DEBUG_ENVIRONMENT && <EnvironmentDebug />}
-        <GameWorld />
-      </Container>
+      <ColorContext.Provider value={cData}>
+        <Container ref={containerRef} clr={cData.text} background={cData.bg}>
+          <Frame />
+          {DEBUG_ENVIRONMENT && <EnvironmentDebug />}
+          <GameWorld />
+        </Container>
+      </ColorContext.Provider>
     </GameManagerProvider>
   );
 }

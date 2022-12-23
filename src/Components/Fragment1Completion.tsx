@@ -5,7 +5,7 @@ import {
   FragmentStatus,
   parToPuzzleFrag,
 } from "../Data/FragmentData";
-import { useLines, useLog, usePuzzleStatus } from "../Utils/Hooks";
+import { useLines, usePuzzleStatus } from "../Utils/Hooks";
 import { Position3D } from "../Utils/types";
 import { fragment1text } from "./Fragments/FragmentText/FragmentText1to9";
 import {
@@ -69,13 +69,13 @@ function Fragment1PuzzlePar({
 
   return (
     <>
-      <Fragment1Paragraph x={x} y={y} z={z} parNo={parNo} inactive />
-
-      {status === FragmentStatus.Solved && (
+      {status === FragmentStatus.Solved ? (
         <>
           <Fragment1Paragraph x={x} y={y} z={z + 1} parNo={parNo} typist />
           {children}
         </>
+      ) : (
+        <Fragment1Paragraph x={x} y={y} z={z} parNo={parNo} inactive />
       )}
     </>
   );
