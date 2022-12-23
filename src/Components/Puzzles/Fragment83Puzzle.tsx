@@ -14,7 +14,7 @@ import { CollisionGroup, Position3D } from "../../Utils/types";
 import { toN } from "../../Utils/utils";
 import { FragmentLabel, PL_NowAgain } from "../Labels";
 import { fragment83Text } from "../Fragments/FragmentText/FragmentText80to89";
-import { Line } from "../Line";
+import { LineText } from "../LineText";
 import { Paragraph } from "../Paragraph";
 import { hslToHex } from "../../Utils/ColorUtils";
 
@@ -90,7 +90,7 @@ function Puzzle83Piece({
   return (
     <>
       <CharPixel x={x} y={y} z={z} char="]" clr={color} transition={1} />
-      <Line x={x + 1} y={y} z={z} text={str} clr={color} transition={1} />
+      <LineText x={x + 1} y={y} z={z} text={str} clr={color} transition={1} />
     </>
   );
 }

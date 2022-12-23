@@ -8,6 +8,7 @@ export enum FragmentKey {
   F20 = "20",
   F26 = "26",
   F169A = "169A",
+  F132 = "132",
   F112 = "112",
   F83 = "83",
 }
@@ -19,7 +20,7 @@ export enum FragmentStatus {
 }
 
 const puzzleList: FragmentKey[] = [
-  FragmentKey.F2,
+  FragmentKey.F132,
   FragmentKey.F20,
   FragmentKey.F26,
   FragmentKey.F169A,
@@ -30,7 +31,7 @@ const puzzleList: FragmentKey[] = [
 export function parToPuzzleFrag(parNo: number): FragmentKey {
   if (parNo < 1 || parNo > 6) console.error("invalid paragraph number");
   return [
-    FragmentKey.F2,
+    FragmentKey.F132,
     FragmentKey.F20,
     FragmentKey.F83,
     FragmentKey.F26,

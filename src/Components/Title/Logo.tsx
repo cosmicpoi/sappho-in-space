@@ -9,7 +9,7 @@ import {
   randomRange,
   toN,
 } from "../../Utils/utils";
-import { Line } from "../Line";
+import { LineText } from "../LineText";
 
 const verticalPads = 7;
 const baseTitle = "Sappho in Space";
@@ -51,7 +51,7 @@ export function Logo({ x, y, z }: Position3D) {
 }
 
 function LogoText({ x, y, z }: Position3D) {
-  return <Line x={x} y={y} z={z} text={padded} align={TextAlign.Center} />;
+  return <LineText x={x} y={y} z={z} text={padded} align={TextAlign.Center} />;
 }
 
 function PadRow({

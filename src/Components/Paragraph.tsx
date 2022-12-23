@@ -2,7 +2,7 @@ import * as React from "react";
 import { CharPixelBlockProps } from "../CharPixelLib/CharPixelTypes";
 import { useLines } from "../Utils/Hooks";
 import { getAlign } from "../Utils/utils";
-import { Line } from "./Line";
+import { LineText } from "./LineText";
 
 export function Paragraph({
   x,
@@ -27,7 +27,7 @@ export function Paragraph({
       {lines.map(
         (line: string, i: number) =>
           line !== "" && (
-            <Line
+            <LineText
               key={i}
               x={x + getAlign(text.length, align)}
               y={y + i * sp}

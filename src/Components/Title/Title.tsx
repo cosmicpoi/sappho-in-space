@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useGameManager } from "../..";
 import { t_v } from "../../Utils/consts";
 import { Layer, TextAlign } from "../../Utils/types";
-import { Line } from "../Line";
+import { LineText } from "../LineText";
 import { Logo } from "./Logo";
 
 const offY = 15;
@@ -16,7 +16,7 @@ export function Title() {
   return (
     <>
       <Logo x={x} y={y - 12} z={Layer.Title} />
-      <Line
+      <LineText
         x={x}
         y={y + offY}
         z={Layer.Title}
@@ -24,14 +24,14 @@ export function Title() {
         text={`arrow keys <>${t_v}v to move`}
         opacity={0.5}
       />
-      <Line
+      <LineText
         x={x}
         y={y + offY}
         z={Layer.Title2}
         align={TextAlign.Left}
         text={`<>${t_v}v`}
       />
-      <Line
+      <LineText
         x={x}
         y={y + offY + 2}
         z={Layer.Title}
@@ -39,14 +39,14 @@ export function Title() {
         text={`press SPACE to fall in love`}
         opacity={0.5}
       />
-      <Line
+      <LineText
         x={x - 7}
         y={y + offY + 2}
         z={Layer.Title2}
         align={TextAlign.Left}
         text={`SPACE`}
       />
-      <Line
+      <LineText
         x={x}
         y={y + offY + 4}
         z={Layer.Title}
@@ -54,7 +54,7 @@ export function Title() {
         text={`ESC opens the menu`}
         opacity={0.5}
       />
-      <Line
+      <LineText
         x={x - 9}
         y={y + offY + 4}
         z={Layer.Title2}
