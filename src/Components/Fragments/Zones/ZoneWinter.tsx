@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCenter } from "../../../Utils/Hooks";
-import { Fragment20Puzzle } from "../../Puzzles/Fragmet20Puzzle";
+import { Fragment20Puzzle } from "../../Puzzles/Fragment20Puzzle";
 
 export function ZoneWinter() {
   const { x: cx, y: cy } = useCenter();
