@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGameManager } from "..";
 import { InputManager } from "../Engine/InputManager";
 import { Monomitter, Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
 import { Position } from "./types";
 import { SolidData, TriggerData } from "../Engine/CollisionManager";
+import { FragmentKey, FragmentStatus } from "../Data/FragmentData";
 
 type Extractor = (
   iM: InputManager
@@ -118,6 +119,21 @@ export function useUpdatedValue<T>(
   }, [setVal, getter, update$]);
 
   return val;
+}
+
+export function usePuzzleSolved(
+  fkey: FragmentKey
+): [FragmentStatus, () => void] {
+  const { dataManager: dM } = useGameManager();
+
+  const status = useUpdatedValue(
+    () => dM.getFragmentStatus(fkey),
+    dM.dataUpdated$
+  );
+
+  const setStatus = useCallback(() => dM.solvePuzzle(fkey), [dM, fkey]);
+
+  return [status, setStatus];
 }
 
 export function useSolid(data: SolidData): void {

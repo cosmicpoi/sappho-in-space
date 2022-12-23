@@ -35,11 +35,18 @@ export class DataManager {
     }
   }
 
-  public getPuzzleSolved(k: FragmentKey): FragmentStatus {
+  public getFragmentStatus(k: FragmentKey): FragmentStatus {
     if (!isPuzzle(k)) return FragmentStatus.Normal;
 
     return this.puzzlesSolved[k]
       ? FragmentStatus.Solved
       : FragmentStatus.Unsolved;
+  }
+
+  public solvePuzzle(k: FragmentKey): void {
+    if (!isPuzzle(k)) console.error("not a puzzle!");
+
+    this.puzzlesSolved[k] = true;
+    this.dataUpdated$.publish();
   }
 }

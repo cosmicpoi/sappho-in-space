@@ -1,4 +1,3 @@
-
 export type Position = {
   x: number;
   y: number;
@@ -6,7 +5,7 @@ export type Position = {
 
 export type Position3D = Position & {
   z?: number;
-}
+};
 
 export enum Direction {
   Up,
@@ -22,7 +21,7 @@ export type Hitbox = Position & {
 export enum TextAlign {
   Left,
   Center,
-  Right
+  Right,
 }
 
 export enum Layer {

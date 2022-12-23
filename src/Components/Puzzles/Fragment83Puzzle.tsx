@@ -1,22 +1,25 @@
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
-import { FragmentKey } from "../../Data/FragmentData";
+import { FragmentKey, FragmentStatus } from "../../Data/FragmentData";
 import { ActorData } from "../../Engine/Actor";
 import { TriggerData } from "../../Engine/CollisionManager";
-import { useFrame, useLines, useTrigger } from "../../Utils/Hooks";
+import {
+  useFrame,
+  useLines,
+  usePuzzleSolved,
+  useTrigger,
+} from "../../Utils/Hooks";
 import { CollisionGroup, Position3D } from "../../Utils/types";
 import { toN } from "../../Utils/utils";
-import { FragmentLabel } from "../Labels";
+import { FragmentLabel, PL_NowAgain } from "../Labels";
 import { fragment83Text } from "../Fragments/FragmentText/FragmentText80to89";
 import { Line } from "../Line";
 import { Paragraph } from "../Paragraph";
 
 const delay = 5;
 const now_again = "(now again)";
-
 const extra = 4;
-
 const gap = 3;
 
 function Puzzle83Piece({
@@ -25,11 +28,16 @@ function Puzzle83Piece({
   z,
   text,
   done,
-}: Position3D & { text: string; done?: boolean }) {
+  onDone,
+}: Position3D & { text: string; done?: boolean; onDone: () => void }) {
   const [active, setActive] = useState<boolean>(!!done);
   const [str, setStr] = useState<string>(done ? now_again : text);
 
   const [isGrowing, setIsGrowing] = useState<boolean>(!!done);
+
+  useEffect(() => {
+    if (active) onDone();
+  }, [active, onDone]);
 
   const callback = useCallback((data: ActorData) => {
     if (data.collisionGroup === CollisionGroup.HeartParticle) setActive(true);
@@ -76,8 +84,20 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
     () => lines83Raw.map((str) => str.substring(1, str.length)),
     [lines83Raw]
   );
+  const len = useMemo(() => lines83.length + extra, [lines83]);
 
-  const len = lines83.length + extra;
+  const [status, solve] = usePuzzleSolved(FragmentKey.F83);
+
+  const [numComplete, setNumComplete] = useState<number>(0);
+  const onDone = useCallback(() => {
+    setNumComplete((x) => x + 1);
+  }, []);
+
+  useEffect(() => {
+    if (status !== FragmentStatus.Solved) {
+      if (numComplete === len * 4) solve();
+    }
+  }, [numComplete, len, status, solve]);
 
   return (
     <>
@@ -90,6 +110,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           z={z}
           text={i < lines83.length ? lines83[i] : ""}
           key={i}
+          onDone={onDone}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -99,6 +120,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           z={z}
           text={""}
           key={i}
+          onDone={onDone}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -108,6 +130,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           z={z}
           text={""}
           key={i}
+          onDone={onDone}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -117,16 +140,22 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           z={z}
           text={""}
           key={i}
+          onDone={onDone}
         />
       ))}
 
-      <Paragraph
-        x={x - 20 + ox}
-        y={y + 30}
-        z={z}
-        text={completionPoem}
-        typist
-      />
+      {status === FragmentStatus.Solved && (
+        <>
+          <PL_NowAgain x={x - 20 + ox} y={y + 30} z={z} typist />
+          <Paragraph
+            x={x - 20 + ox}
+            y={y + 30}
+            z={z}
+            text={completionPoem}
+            typist
+          />
+        </>
+      )}
 
       <CharPixel x={x - 23 + ox} y={y + 30} z={z} char={"["} opacity={0.5} />
       <CharPixel x={x - 23 + ox} y={y + 32} z={z} char={"["} opacity={0.5} />
