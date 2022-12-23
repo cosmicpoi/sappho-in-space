@@ -32,3 +32,14 @@ export enum Layer {
   Particles = 9,
   Spaceship = 10,
 }
+
+export enum ZIndex {
+  Body = -3,
+  Environment = -2,
+  Walls = -1,
+  Characters = 0,
+}
+
+export enum CollisionGroup {
+  HeartParticle,
+}

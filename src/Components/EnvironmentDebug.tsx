@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useGameManager } from "..";
 import { COLORS } from "../Utils/colors";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../Utils/consts";
-import { Position } from "../Utils/types";
+import { Position, ZIndex } from "../Utils/types";
 import {
   dayNightMargin,
   ellipseHalfHeight,
@@ -21,7 +21,7 @@ type BoxProps = {
 
 const StyledBox = styled.div<BoxProps & { background?: string }>`
   position: absolute;
-  z-index: 0;
+  z-index: ${ZIndex.Environment};
   border: 5px solid red;
 
   ${({ background }) => `background: ${background};`}

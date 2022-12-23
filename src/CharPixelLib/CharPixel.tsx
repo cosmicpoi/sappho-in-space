@@ -7,6 +7,7 @@ import { DEBUG_ENVIRONMENT } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
 import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
 import { environmentColor } from "../Utils/colors";
+import { ZIndex } from "../Utils/types";
 
 type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
@@ -29,6 +30,7 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   position: absolute;
   width: ${unit_wToS(1)}px;
   height: ${unit_wToS(1)}px;
+  z-index: ${ZIndex.Characters};
 
   line-height: ${unit_wToS(1)}px;
   display: inline-block;

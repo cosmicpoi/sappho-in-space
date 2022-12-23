@@ -1,9 +1,9 @@
 import { Hitbox } from "../Utils/types";
 import { ActorData } from "./Actor";
 
-type SolidData = Hitbox;
+export type SolidData = Hitbox;
 
-type TriggerData = Hitbox & {
+export type TriggerData = Hitbox & {
   callback?: (a: ActorData) => void;
 };
 
@@ -29,9 +29,13 @@ export class CollisionManager {
   }
 
   // returns callback to deregister the hitbox
-  public registerHitbox(wall: SolidData): () => void {
-    this.solids.add(wall);
-    return () => this.solids.delete(wall);
+  public registerSolid(solid: SolidData): () => void {
+    this.solids.add(solid);
+    return () => this.solids.delete(solid);
+  }
+  public registerTrigger(trigger: TriggerData): () => void {
+    this.triggers.add(trigger);
+    return () => this.triggers.delete(trigger);
   }
 
   public collidesSolid(hitbox: Hitbox): SolidData | undefined {

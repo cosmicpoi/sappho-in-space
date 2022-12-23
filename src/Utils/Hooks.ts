@@ -4,6 +4,7 @@ import { InputManager } from "../Engine/InputManager";
 import { Monomitter, Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
 import { Position } from "./types";
+import { SolidData, TriggerData } from "../Engine/CollisionManager";
 
 type Extractor = (
   iM: InputManager
@@ -113,4 +114,22 @@ export function useUpdatedValue<T>(
   }, [setVal, getter, update$]);
 
   return val;
+}
+
+export function useSolid(data: SolidData): void {
+  const gM = useGameManager();
+
+  useEffect(() => {
+    return gM.collisionManager.registerSolid(data);
+  }, [gM, data]);
+}
+
+export function useTrigger(data: TriggerData | undefined): void {
+  const gM = useGameManager();
+
+  useEffect(() => {
+    if (!data) return;
+
+    return gM.collisionManager.registerTrigger(data);
+  }, [gM, data]);
 }

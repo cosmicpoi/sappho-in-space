@@ -1,10 +1,9 @@
 import * as React from "react";
-import { useEffect } from "react";
-import { useGameManager } from "..";
 import styled from "styled-components";
 import { DEBUG_WALL } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
-import { Hitbox } from "../Utils/types";
+import { Hitbox, ZIndex } from "../Utils/types";
+import { useSolid } from "../Utils/Hooks";
 
 const StyledDebugBox = styled.div.attrs<Hitbox>(({ x, y }) => ({
   style: {
@@ -15,7 +14,7 @@ const StyledDebugBox = styled.div.attrs<Hitbox>(({ x, y }) => ({
   position: absolute;
   width: ${({ width }) => unit_wToS(width)}px;
   height: ${({ height }) => unit_wToS(height)}px;
-  z-index: -1000;
+  z-index: ${ZIndex.Walls};
 
   background: red;
 `;
@@ -36,16 +35,7 @@ export function DebugBox({ hitbox }: { hitbox: Hitbox }) {
 }
 
 export function Wall({ hitbox }: { hitbox: Hitbox }) {
-  const { x, y, width, height } = hitbox;
-  const gM = useGameManager();
-  useEffect(() => {
-    return gM.collisionManager.registerHitbox({
-      x,
-      y,
-      width,
-      height,
-    });
-  }, [x, y, gM, width, height]);
+  useSolid(hitbox);
 
   return <DebugBox hitbox={hitbox}></DebugBox>;
 }

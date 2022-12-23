@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useGameManager } from "..";
 import { CharPixelBaseProps } from "../CharPixelLib/CharPixelTypes";
 import { FragmentKey, FragmentStatus } from "../Data/FragmentData";

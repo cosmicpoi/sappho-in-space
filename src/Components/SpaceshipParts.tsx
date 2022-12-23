@@ -93,7 +93,7 @@ export class HeartParticle extends Particle {
   private lt = 0;
 
   constructor(gM: GameManager, x: number, y: number, tx: number, ty: number) {
-    super(gM, x, y, "+");
+    super(gM, x, y, "+", {});
     autoBind(this);
 
     this.targetx = x + tx;

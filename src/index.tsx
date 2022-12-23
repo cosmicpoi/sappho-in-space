@@ -17,6 +17,7 @@ import {
   DEBUG_ENVIRONMENT,
   DEBUG_SCROLL,
 } from "./Utils/debug";
+import { ZIndex } from "./Utils/types";
 import { Frame } from "./Viewport/Frame";
 
 const Container = styled.div<{ clr: string; background: string }>`
@@ -24,7 +25,7 @@ const Container = styled.div<{ clr: string; background: string }>`
   height: 100%;
   overflow: ${DEBUG_SCROLL ? "scroll" : "hidden"};
   position: relative;
-  /* z-index: -10; */
+  z-index: ${ZIndex.Body};
 
   ${({ clr }) => !DEBUG_ENVIRONMENT && `color: ${clr};`}
   ${({ background }) => `background: ${background};`}

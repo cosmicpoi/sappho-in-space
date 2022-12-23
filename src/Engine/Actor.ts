@@ -1,14 +1,17 @@
 import { GameManager } from "./GameManager";
-import { Hitbox, Position } from "../Utils/types";
+import { CollisionGroup, Hitbox, Position } from "../Utils/types";
 
 export type ActorProps = {
   termV?: number;
   hitbox?: Hitbox;
   solidCollision?: boolean;
+  collisionGroup?: CollisionGroup;
+  onSolidCollide?: () => void;
 };
 export class ActorData {
   private gameManager: GameManager;
 
+  // movement variables
   private rx = 0;
   private ry = 0;
 
@@ -21,23 +24,37 @@ export class ActorData {
   private ax = 0;
   private ay = 0;
 
+  // props
   private termV: number | undefined;
   private hitbox: Hitbox | undefined;
-
+  public collisionGroup: CollisionGroup | undefined;
   private solidCollision: boolean;
 
+  // collision
+  private onSolidCollide: () => void = () => {};
+
   // initializes with starting coordinates
-  constructor(gameManager: GameManager, { x, y }: Position, props: ActorProps) {
-    const { hitbox, termV, solidCollision } = props;
+  constructor(
+    gameManager: GameManager,
+    { x, y }: Position,
+    props?: ActorProps
+  ) {
     this.gameManager = gameManager;
     this.x = x;
     this.y = y;
 
-    this.hitbox = hitbox;
-    this.termV = termV;
-    this.solidCollision = !!solidCollision;
+    if (props) {
+      const { hitbox, termV, solidCollision, collisionGroup, onSolidCollide } =
+        props;
+      this.hitbox = hitbox;
+      this.termV = termV;
+      this.collisionGroup = collisionGroup;
+      this.solidCollision = !!solidCollision;
 
-    if (this.hitbox) this.checkTriggers({ x: 0, y: 0 });
+      if (onSolidCollide) this.onSolidCollide = onSolidCollide;
+
+      if (this.hitbox) this.checkTriggers({ x: 0, y: 0 });
+    }
   }
 
   // basic getters and setters
@@ -53,7 +70,6 @@ export class ActorData {
     this.vx = vx;
     this.vy = vy;
   }
-
   public hitboxAt({ x, y }: Position): Hitbox {
     return {
       x: this.x + x + this.hitbox.x,
@@ -96,7 +112,10 @@ export class ActorData {
         const sgn = Math.sign(moveX);
 
         for (let i = 0; i < Math.abs(moveX); i++) {
-          if (this.checkSolids({ x: sgn, y: 0 })) break;
+          if (this.checkSolids({ x: sgn, y: 0 })) {
+            this.onSolidCollide();
+            break;
+          }
           this.x += sgn;
         }
       }
@@ -115,7 +134,10 @@ export class ActorData {
         const sgn = Math.sign(moveY);
 
         for (let i = 0; i < Math.abs(moveY); i++) {
-          if (this.checkSolids({ x: 0, y: sgn })) break;
+          if (this.checkSolids({ x: 0, y: sgn })) {
+            this.onSolidCollide();
+            break;
+          }
           this.y += sgn;
         }
       }

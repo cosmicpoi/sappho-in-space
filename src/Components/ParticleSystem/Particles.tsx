@@ -2,7 +2,7 @@ import autoBind from "auto-bind";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
-import { ActorData } from "../../Engine/Actor";
+import { ActorData, ActorProps } from "../../Engine/Actor";
 import { GameManager } from "../../Engine/GameManager";
 import { useFrame } from "../../Utils/Hooks";
 import { monomitter, Monomitter } from "../../Utils/Monomitter";
@@ -26,18 +26,30 @@ export class Particle {
 
   updated = true;
 
-
   constructor(
     gM: GameManager,
     x: number,
     y: number,
     char: string,
-    collides = false
+    props?: ActorProps
   ) {
     autoBind(this);
     this.x = x;
     this.y = y;
-    this.motion = new ActorData(gM, { x, y }, {solidCollision: collides});
+
+    const defaultProps = {
+      hitbox: { x: 0, y: 0, width: 1, height: 1 },
+      solidCollision: true,
+      onSolidCollide: () => this.die(),
+    };
+
+    const propsWithDefault = props?.onSolidCollide
+      ? props
+      : { ...props, ...defaultProps };
+
+    this.motion = new ActorData(gM, { x, y }, propsWithDefault);
+
+    console.log(propsWithDefault);
 
     this.char = char;
     this.alive = true;
