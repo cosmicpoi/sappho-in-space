@@ -6,7 +6,7 @@ import { t_v } from "../Utils/consts";
 import { DEBUG_ENVIRONMENT } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
 import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
-import { environmentColor } from "../Utils/colors";
+import { ColorData, getZoneData } from "../Utils/colors";
 import { ZIndex } from "../Utils/types";
 import { useFrame } from "../Utils/Hooks";
 import { randEl } from "../Utils/utils";
@@ -66,10 +66,9 @@ export function CharPixel(props: CharPixelProps) {
   // color management
   const { bg: bgColor, text: textColor } = useColors();
 
-  const zoneColor: string | undefined = useMemo(() => {
+  const zoneData: ColorData | undefined = useMemo(() => {
     if (!DEBUG_ENVIRONMENT) return undefined;
-
-    return environmentColor[gM.colorManager.getEnvironment({ x, y })];
+    return getZoneData(gM.colorManager.getEnvironment({ x, y }));
   }, [gM, x, y]);
 
   const [isDim, setIsDim] = useState<boolean>(false);
@@ -87,16 +86,17 @@ export function CharPixel(props: CharPixelProps) {
 
   const color: string | undefined = useMemo(() => {
     let o = opacity === undefined ? 1 : opacity;
-    if (clr === undefined && o === 1) return zoneColor || undefined;
+    if (clr === undefined && o === 1) return zoneData?.text || undefined;
 
     o *= isDim ? 0.2 : 1;
 
-    const tColor = zoneColor ? zoneColor : textColor;
-
+    const tColor = zoneData ? zoneData.text : textColor;
     const trueColor = clr ? clr : tColor;
 
-    return colorBlend(trueColor, bgColor, o);
-  }, [clr, bgColor, textColor, zoneColor, opacity, isDim]);
+    const trueBg = zoneData ? zoneData.bg : bgColor;
+
+    return colorBlend(trueColor, trueBg, o);
+  }, [clr, bgColor, textColor, zoneData, opacity, isDim]);
 
   // typist stuff
   const [typed, setTyped] = useState<boolean>(false);

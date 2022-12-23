@@ -50,7 +50,9 @@ export type ColorData = {
   floatBg?: string;
 };
 
-export const defaultColorData: ColorData = {
-  bg: COLORS.bgNight,
-  text: COLORS.colorNight,
-};
+export const getZoneData = (e: Environment) => ({
+  bg: environmentBackground[e],
+  text: environmentColor[e],
+});
+
+export const defaultColorData: ColorData = getZoneData(Environment.Night);
