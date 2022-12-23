@@ -4,4 +4,5 @@ export const DEBUG_WALL = true;
 export const DEBUG_SCROLL = false;
 export const DEBUG_ENVIRONMENT = false;
 
-export const DEBUG_START_POS: Position | undefined = { x: -270, y: -60 };
+export const DEBUG_START_POS: Position | undefined = undefined;
+// = { x: -270, y: -60 };

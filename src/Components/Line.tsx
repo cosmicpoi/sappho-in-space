@@ -10,9 +10,10 @@ export function Line({
   text,
   isWall,
   align,
-  clr: color,
+  clr,
   opacity,
   twinkle,
+  bold,
 }: CharPixelBlockProps) {
   return (
     <>
@@ -28,9 +29,10 @@ export function Line({
                 char={str}
                 key={i}
                 isWall={isWall}
-                clr={color}
+                clr={clr}
                 opacity={opacity}
                 twinkle={twinkle}
+                bold={bold}
               />
             )
         )}

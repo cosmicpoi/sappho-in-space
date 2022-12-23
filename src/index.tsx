@@ -26,7 +26,7 @@ const Container = styled.div<{ clr: string; background: string }>`
   overflow: ${DEBUG_SCROLL ? "scroll" : "hidden"};
   position: relative;
   z-index: ${ZIndex.Body};
-  font-size: 14px;
+  /* font-size: 14px; */
 
   ${({ clr }) => !DEBUG_ENVIRONMENT && `color: ${clr};`}
   ${({ background }) => `background: ${background};`}

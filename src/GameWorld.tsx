@@ -20,7 +20,7 @@ export function GameWorld() {
     <>
       <Title />
       <Spaceship />
-      <Fragment1 x={cx - 80} y={cy} />
+      <Fragment1 x={cx - 80} y={cy} z={0} />
       {/* <Fragments /> */}
 
       <ZoneSpring />

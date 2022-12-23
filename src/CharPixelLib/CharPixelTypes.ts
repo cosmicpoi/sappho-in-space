@@ -4,6 +4,7 @@ export type CharPixelStyle = {
   clr?: string;
   opacity?: number;
   twinkle?: number;
+  bold?: boolean;
 };
 export type CharPixelBaseProps = Position3D &
   CharPixelStyle & { isWall?: boolean };

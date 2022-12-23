@@ -38,6 +38,7 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
   ${({ hidden }) => hidden && "display: none;"}
   ${({ clr }) => clr && `color: ${clr};`}
   ${({ twinkle }) => twinkle && twinkleAnim}
+  ${({ bold }) => bold && `font-weight: 900; font-style: italic;`}
 `;
 
 const Short = styled.span<{ h?: number }>`
@@ -48,7 +49,7 @@ const ShortPipe = () => <Short>|</Short>;
 const ShortTV = () => <Short h={0.6}>{t_v}</Short>;
 
 export function CharPixel(props: CharPixelProps) {
-  const { x, y, z, char, clr, opacity, isWall, twinkle } = props;
+  const { x, y, z, char, clr, opacity, isWall, twinkle, bold } = props;
   const gM = useGameManager();
 
   let content: React.ReactNode | string = char;
@@ -85,6 +86,7 @@ export function CharPixel(props: CharPixelProps) {
           twinkle !== undefined ? `${(twinkle % 10) * 0.15}s` : undefined,
       }}
       twinkle={twinkle}
+      bold={bold}
     >
       {content}
     </StyledCharPixel>
