@@ -1,4 +1,5 @@
 import autoBind from "auto-bind";
+import { DEBUG_NOSAVE } from "../Utils/debug";
 import { monomitter, Monomitter } from "../Utils/Monomitter";
 
 export enum FragmentKey {
@@ -38,6 +39,9 @@ export function parToPuzzleFrag(parNo: number): FragmentKey {
   ][parNo - 1];
 }
 
+export const VERSION = "1";
+export const storageKey = () => "data" + VERSION;
+
 export const isPuzzle = (fkey: FragmentKey): boolean =>
   puzzleList.includes(fkey);
 
@@ -52,11 +56,17 @@ export class DataManager {
   }
 
   private loadPuzzlesSolved() {
-    this.puzzlesSolved = {} as Record<FragmentKey, boolean>;
+    const item = localStorage.getItem(storageKey());
+    if (item === null || DEBUG_NOSAVE) {
+      this.puzzlesSolved = {} as Record<FragmentKey, boolean>;
 
-    for (const key of puzzleList) {
-      this.puzzlesSolved[key] = false;
-    }
+      for (const key of puzzleList) {
+        this.puzzlesSolved[key] = false;
+      }
+    } else this.puzzlesSolved = JSON.parse(item);
+  }
+  private saveData() {
+    localStorage.setItem(storageKey(), JSON.stringify(this.puzzlesSolved));
   }
 
   public getFragmentStatus(k: FragmentKey): FragmentStatus {
@@ -72,5 +82,7 @@ export class DataManager {
 
     this.puzzlesSolved[k] = true;
     this.dataUpdated$.publish();
+
+    this.saveData();
   }
 }

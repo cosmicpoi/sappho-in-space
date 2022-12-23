@@ -65,14 +65,7 @@ function Fragment1PuzzlePar({
   children,
 }: F1ParProps & { children: React.ReactNode }) {
   const fkey = useMemo(() => parToPuzzleFrag(parNo), [parNo]);
-  const [status, solve] = usePuzzleStatus(fkey);
-
-  useLog(fkey);
-
-  React.useEffect(() => {
-    //@ts-ignore
-    window["set" + parNo] = solve;
-  });
+  const [status] = usePuzzleStatus(fkey);
 
   return (
     <>
