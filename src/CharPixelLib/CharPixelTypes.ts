@@ -3,7 +3,7 @@ import { Position3D, TextAlign } from "../Utils/types";
 export type CharPixelStyle = {
   clr?: string;
   opacity?: number;
-  twinkle?: number;
+  twinkle?: number; // [1...10] | undefined
   bold?: boolean;
   typist?: boolean;
 };

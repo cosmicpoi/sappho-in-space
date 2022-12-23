@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
 import { useColors, useGameManager } from "..";
 import { t_v } from "../Utils/consts";
 import { DEBUG_ENVIRONMENT } from "../Utils/debug";
@@ -16,18 +16,7 @@ type StyledCharPixelProps = CharPixelStyle & {
   hidden?: boolean;
 };
 
-const twinkleFrames = keyframes`
-  from {
-    filter: opacity(0.2);
-  }
-
-  to {
-    filter: opacity(1.0);
-  }
-`;
-const twinkleAnim = css`
-  animation: ${twinkleFrames} 1.5s alternate-reverse linear infinite;
-`;
+const twinklePeriod = 50;
 
 const StyledCharPixel = styled.span<StyledCharPixelProps>`
   position: absolute;
@@ -42,7 +31,6 @@ const StyledCharPixel = styled.span<StyledCharPixelProps>`
 
   ${({ hidden }) => hidden && "display: none;"}
   ${({ clr }) => clr && `color: ${clr};`}
-  ${({ twinkle }) => twinkle && twinkleAnim}
   ${({ bold }) => bold && `font-weight: 900; font-style: italic;`}
 `;
 
@@ -83,20 +71,36 @@ export function CharPixel(props: CharPixelProps) {
     return environmentColor[gM.viewportManager.getEnvironment({ x, y })];
   }, [gM, x, y]);
 
+  const [isDim, setIsDim] = useState<boolean>(false);
+  const twinkleCB = useCallback(
+    (fc: number) => {
+      if (fc % 10 === 0 && twinkle !== undefined) {
+        const p = twinklePeriod;
+        if ((fc + (p / 10) * twinkle) % p === 0) {
+          setIsDim((b) => !b);
+        }
+      }
+    },
+    [twinkle]
+  );
+
   const color: string | undefined = useMemo(() => {
-    if (zoneColor) return zoneColor;
-    const o = opacity === undefined ? 1 : opacity;
+    if (zoneColor && !clr) return zoneColor;
+
+    let o = opacity === undefined ? 1 : opacity;
+    o *= isDim ? 0.2 : 1;
     if (clr === undefined && o === 1) return undefined;
 
     const tColor = clr ? clr : textColor;
 
     return colorBlend(tColor, bgColor, o);
-  }, [clr, bgColor, textColor, zoneColor, opacity]);
+  }, [clr, bgColor, textColor, zoneColor, opacity, isDim]);
 
   // typist stuff
   const [typed, setTyped] = useState<boolean>(false);
   const [typeContent, setTypeContent] = useState<string | undefined>();
-  const onFrame = useMemo(() => {
+
+  const typistCB = useMemo(() => {
     if (!typist) return undefined;
 
     return (fc: number, lt: number) => {
@@ -107,6 +111,16 @@ export function CharPixel(props: CharPixelProps) {
       }
     };
   }, [typist]);
+
+  // bind frame events
+  const onFrame = useCallback(
+    (fc: number, lt: number) => {
+      twinkleCB(fc);
+      if (typistCB) typistCB(fc, lt);
+    },
+    [typistCB, twinkleCB]
+  );
+
   useFrame(onFrame);
 
   return (
@@ -116,9 +130,6 @@ export function CharPixel(props: CharPixelProps) {
       style={{
         left: unit_wToS(x) + "px",
         top: unit_wToS(y) + "px",
-        // opacity: opacity,
-        animationDelay:
-          twinkle !== undefined ? `${(twinkle % 10) * 0.15}s` : undefined,
       }}
       twinkle={twinkle}
       bold={bold}

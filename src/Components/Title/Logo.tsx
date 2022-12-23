@@ -2,7 +2,13 @@ import * as React from "react";
 import { useMemo } from "react";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
 import { Position3D, TextAlign } from "../../Utils/types";
-import { getAlign, randEl, randomRange, toN } from "../../Utils/utils";
+import {
+  getAlign,
+  randEl,
+  randIntRange,
+  randomRange,
+  toN,
+} from "../../Utils/utils";
 import { Line } from "../Line";
 
 const verticalPads = 7;
@@ -88,6 +94,12 @@ function PadRow({
     [chars]
   );
 
+  const twinklers: (number | undefined)[] = useMemo(
+    () =>
+      chars.map((_v) => (Math.random() < 0.2 ? randIntRange(0, 9) : undefined)),
+    [chars]
+  );
+
   return (
     <>
       {chars.map(
@@ -100,6 +112,7 @@ function PadRow({
               z={z}
               opacity={fade[i] * Math.max(1 - idx * 0.05, 0.3)}
               key={"c" + i}
+              twinkle={twinklers[i]}
             />
           )
       )}

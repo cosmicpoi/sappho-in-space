@@ -7,7 +7,6 @@ import { TriggerData } from "../../Engine/CollisionManager";
 import {
   useFrame,
   useLines,
-  useLog,
   usePuzzleStatus,
   useTrigger,
 } from "../../Utils/Hooks";
@@ -40,7 +39,6 @@ function Puzzle83Piece({
   solved: boolean;
   idx: number;
 }) {
-  done = true;
   const [active, setActive] = useState<boolean>(!!done);
   const [str, setStr] = useState<string>(done ? now_again : text);
 

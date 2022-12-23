@@ -16,6 +16,7 @@
   },
   "scripts": {
     "serve": "esbuild src/index.tsx --bundle --outfile=dist/main.js --servedir=. '--define:process.env.NODE_ENV=\"production\"'",
+    "serve-dev": "esbuild src/index.tsx --bundle --outfile=dist/main.js --servedir=. '--define:process.env.NODE_ENV=\"development\"'",
     "build": "esbuild src/index.tsx --bundle --outfile=dist/main.js --minify",
     "lint": "npx eslint src"
   },

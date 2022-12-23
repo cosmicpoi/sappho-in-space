@@ -22,7 +22,7 @@ type BoxProps = {
 const StyledBox = styled.div<BoxProps & { background?: string }>`
   position: absolute;
   z-index: ${ZIndex.Environment};
-  border: 5px solid red;
+  /* border: 5px solid red; */
 
   ${({ background }) => `background: ${background};`}
 
