@@ -74,10 +74,12 @@ function Puzzle132Bulb({
   active,
   setActive,
   idx,
+  solved,
 }: Position3D & {
   active: boolean[];
   idx: number;
   setActive: Hook<boolean[]>[1];
+  solved: boolean;
 }) {
   const { x: offX, y: offY } = useMemo(() => {
     if (idx === 0) return { x: -3, y: -3 };
@@ -113,7 +115,7 @@ function Puzzle132Bulb({
   const [interactable, setInteractable] = useState<boolean>(true);
   const onHit = useCallback(
     (data: ActorData) => {
-      if (!interactable) return;
+      if (!interactable || solved) return;
 
       if (data.collisionGroup === CollisionGroup.Spaceship) {
         if (!active[idx]) setBloom(true);
@@ -122,7 +124,7 @@ function Puzzle132Bulb({
         setTimeout(() => setInteractable(true), 3000);
       }
     },
-    [active, idx, setBloom, interactable]
+    [active, idx, setBloom, interactable, solved]
   );
 
   const hitbox: TriggerData | undefined = useMemo(
@@ -193,7 +195,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
 
   return (
     <>
-      <FragmentLabel fkey={FragmentKey.F132} x={x} y={y - 3} z={z} />
+      <FragmentLabel fkey={FragmentKey.F132} x={x + 24} y={y - 4} z={z} decor />
       <Fragment132 x={x} y={y} z={z} />
       <Puzzle132Bulb
         x={ox}
@@ -202,6 +204,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
         active={active}
         setActive={setActive}
         idx={0}
+        solved={solved}
       />
       <Puzzle132Bulb
         x={ox}
@@ -210,6 +213,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
         active={active}
         setActive={setActive}
         idx={1}
+        solved={solved}
       />
       <Puzzle132Bulb
         x={ox + 30}
@@ -218,6 +222,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
         active={active}
         setActive={setActive}
         idx={2}
+        solved={solved}
       />
       <Puzzle132Bulb
         x={ox}
@@ -226,6 +231,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
         active={active}
         setActive={setActive}
         idx={3}
+        solved={solved}
       />
       <Puzzle132Bulb
         x={ox + 30}
@@ -234,6 +240,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
         active={active}
         setActive={setActive}
         idx={4}
+        solved={solved}
       />
       <Puzzle132Bulb
         x={ox + 30}
@@ -242,6 +249,7 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
         active={active}
         setActive={setActive}
         idx={5}
+        solved={solved}
       />
       <Line
         x={ox}

@@ -8,7 +8,6 @@ import {
 } from "../Utils/colors";
 import { Monomitter, monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
-import { unit_wToS } from "../Viewport/ViewportManager";
 import { GameManager } from "./GameManager";
 
 export const ellipseHalfWidth = 750 / 2;
