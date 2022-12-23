@@ -29,7 +29,17 @@ function Puzzle83Piece({
   text,
   done,
   onDone,
-}: Position3D & { text: string; done?: boolean; onDone: () => void }) {
+  solved,
+  idx,
+}: Position3D & {
+  text: string;
+  done?: boolean;
+  onDone: () => void;
+  solved: boolean;
+  idx: number;
+}) {
+  done = Math.random() < 0.95;
+
   const [active, setActive] = useState<boolean>(!!done);
   const [str, setStr] = useState<string>(done ? now_again : text);
 
@@ -47,8 +57,10 @@ function Puzzle83Piece({
     if (active && str.length === 0) setIsGrowing(true);
   }, [str, active]);
 
+  const [coffset, setCoffset] = useState<number>(0);
   const onFrame = useCallback(
     (fc: number) => {
+      if (fc % 120 === 0) setCoffset((x) => x + 1);
       if (fc % delay === 0 && active) {
         if (!isGrowing) {
           setStr((str: string) =>
@@ -70,10 +82,15 @@ function Puzzle83Piece({
 
   useTrigger(hitbox);
 
+  const color: string | undefined = useMemo(() => {
+    if (!solved) return undefined;
+    return `hsl(${((idx + coffset) * 30) % 360}, 80%, 80%)`;
+  }, [idx, solved, coffset]);
+
   return (
     <>
-      <CharPixel x={x} y={y} z={z} char="]" />
-      <Line x={x + 1} y={y} z={z} text={str} />
+      <CharPixel x={x} y={y} z={z} char="]" clr={color} />
+      <Line x={x + 1} y={y} z={z} text={str} clr={color} />
     </>
   );
 }
@@ -87,6 +104,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
   const len = useMemo(() => lines83.length + extra, [lines83]);
 
   const [status, solve] = usePuzzleSolved(FragmentKey.F83);
+  const solved = status === FragmentStatus.Solved;
 
   const [numComplete, setNumComplete] = useState<number>(0);
   const onDone = useCallback(() => {
@@ -111,6 +129,8 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           text={i < lines83.length ? lines83[i] : ""}
           key={i}
           onDone={onDone}
+          solved={solved}
+          idx={i}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -121,6 +141,8 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           text={""}
           key={i}
           onDone={onDone}
+          solved={solved}
+          idx={i + len}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -131,6 +153,8 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           text={""}
           key={i}
           onDone={onDone}
+          solved={solved}
+          idx={i + len * 2}
         />
       ))}
       {toN(len).map((i: number) => (
@@ -141,10 +165,12 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
           text={""}
           key={i}
           onDone={onDone}
+          solved={solved}
+          idx={i + len * 3}
         />
       ))}
 
-      {status === FragmentStatus.Solved && (
+      {solved && (
         <>
           <PL_NowAgain x={x - 20 + ox} y={y + 30} z={z} typist />
           <Paragraph
