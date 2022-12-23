@@ -121,7 +121,8 @@ export function useUpdatedValue<T>(
   return val;
 }
 
-export function usePuzzleSolved(
+// returns [status, solve()]
+export function usePuzzleStatus(
   fkey: FragmentKey
 ): [FragmentStatus, () => void] {
   const { dataManager: dM } = useGameManager();

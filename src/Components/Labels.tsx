@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { CharPixelBaseProps } from "../CharPixelLib/CharPixelTypes";
 import { FragmentKey, FragmentStatus } from "../Data/FragmentData";
-import { usePuzzleSolved } from "../Utils/Hooks";
+import { usePuzzleStatus } from "../Utils/Hooks";
 import { Position3D } from "../Utils/types";
 import { Line } from "./Line";
 
@@ -16,7 +16,7 @@ export function FragmentLabel({
   fkey,
   decor,
 }: CharPixelBaseProps & { fkey: FragmentKey; decor?: boolean }) {
-  const [status] = usePuzzleSolved(fkey);
+  const [status] = usePuzzleStatus(fkey);
 
   const str = useMemo(() => fkey + suffix[status], [fkey, status]);
 

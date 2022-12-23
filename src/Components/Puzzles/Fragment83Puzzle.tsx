@@ -7,7 +7,7 @@ import { TriggerData } from "../../Engine/CollisionManager";
 import {
   useFrame,
   useLines,
-  usePuzzleSolved,
+  usePuzzleStatus,
   useTrigger,
 } from "../../Utils/Hooks";
 import { CollisionGroup, Position3D } from "../../Utils/types";
@@ -101,7 +101,7 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
   );
   const len = useMemo(() => lines83.length + extra, [lines83]);
 
-  const [status, solve] = usePuzzleSolved(FragmentKey.F83);
+  const [status, solve] = usePuzzleStatus(FragmentKey.F83);
   const solved = status === FragmentStatus.Solved;
 
   const [numComplete, setNumComplete] = useState<number>(0);

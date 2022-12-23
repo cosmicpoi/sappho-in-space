@@ -3,6 +3,11 @@ import { monomitter, Monomitter } from "../Utils/Monomitter";
 
 export enum FragmentKey {
   F1 = "1",
+  F2 = "2",
+  F20 = "20",
+  F26 = "26",
+  F169A = "169A",
+  F112 = "112",
   F83 = "83",
 }
 
@@ -12,7 +17,26 @@ export enum FragmentStatus {
   Solved,
 }
 
-const puzzleList: FragmentKey[] = [FragmentKey.F83];
+const puzzleList: FragmentKey[] = [
+  FragmentKey.F2,
+  FragmentKey.F20,
+  FragmentKey.F26,
+  FragmentKey.F169A,
+  FragmentKey.F112,
+  FragmentKey.F83,
+];
+
+export function parToPuzzleFrag(parNo: number): FragmentKey {
+  if (parNo < 1 || parNo > 6) console.error("invalid paragraph number");
+  return [
+    FragmentKey.F2,
+    FragmentKey.F20,
+    FragmentKey.F83,
+    FragmentKey.F26,
+    FragmentKey.F169A,
+    FragmentKey.F112,
+  ][parNo - 1];
+}
 
 export const isPuzzle = (fkey: FragmentKey): boolean =>
   puzzleList.includes(fkey);
