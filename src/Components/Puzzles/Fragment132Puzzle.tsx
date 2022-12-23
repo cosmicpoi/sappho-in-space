@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useGameManager } from "../..";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
 import { FragmentKey, FragmentStatus } from "../../Data/FragmentData";
 import { ActorData } from "../../Engine/Actor";
@@ -11,6 +12,7 @@ import {
   Position3D,
   Position3DR,
 } from "../../Utils/types";
+import { goldenColorData } from "../FloatingBG";
 import { Fragment132 } from "../Fragments/FragmentComponents/Fragment130to139";
 import { FragmentLabel, PL_Golden } from "../Labels";
 import { Line } from "../Line";
@@ -176,6 +178,18 @@ export function Fragment132Puzzle({ x, y, z }: Position3DR) {
       solve();
     }
   }, [active, solve]);
+
+  const { colorManager: cM } = useGameManager();
+  useEffect(() => {
+    if (!solved) return;
+
+    return cM.registerZone({
+      x: x + 23,
+      y: y + 17,
+      radius: 10,
+      data: goldenColorData,
+    });
+  }, [cM, solved, x, y]);
 
   return (
     <>

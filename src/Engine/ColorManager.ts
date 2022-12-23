@@ -8,6 +8,7 @@ import {
 } from "../Utils/colors";
 import { Monomitter, monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
+import { unit_wToS } from "../Viewport/ViewportManager";
 import { GameManager } from "./GameManager";
 
 export const ellipseHalfWidth = 750 / 2;
@@ -16,18 +17,25 @@ export const dayNightMargin = 90;
 
 export type ColorZone = Position & {
   radius: number;
+  data: ColorData;
 };
 
 export class ColorManager {
   private gameManager: GameManager;
+
   public colorData$: Monomitter<ColorData>;
 
-  public environment = Environment.DEFAULT;
+  private zones: Set<ColorZone>;
+
+  private environment = Environment.DEFAULT;
+  private zone: ColorZone | undefined = undefined;
+
   constructor(gameManager: GameManager) {
     autoBind(this);
     this.gameManager = gameManager;
     this.colorData$ = monomitter<ColorData>(true);
     this.colorData$.publish(defaultColorData);
+    this.zones = new Set();
   }
 
   public getEnvironment(pos: Position) {
@@ -49,15 +57,46 @@ export class ColorManager {
     return env;
   }
 
+  public registerZone(zone: ColorZone): () => void {
+    this.zones.add(zone);
+    return () => this.zones.delete(zone);
+  }
+
+  private getZone(pos: Position): ColorZone | undefined {
+    for (const zone of this.zones) {
+      const r = Math.sqrt((pos.x - zone.x) ** 2 + (pos.y - zone.y) ** 2);
+      if (r <= zone.radius) return zone;
+    }
+    return undefined;
+  }
+
   public requestColors(pos: Position) {
+    // see if environment updated
     const env = this.getEnvironment(pos);
+
+    let didUpdate = false;
 
     if (env !== this.environment) {
       this.environment = env;
-      this.colorData$.publish({
-        bg: environmentBackground[this.environment],
-        text: environmentColor[this.environment],
-      });
+      didUpdate = true;
+    }
+
+    // see if zone updated
+    const zone = this.getZone(pos);
+
+    if (zone !== this.zone) {
+      this.zone = zone;
+      didUpdate = true;
+    }
+
+    // update color values if either zone or environment updated
+    if (didUpdate) {
+      if (this.zone) this.colorData$.publish(this.zone.data);
+      else
+        this.colorData$.publish({
+          bg: environmentBackground[this.environment],
+          text: environmentColor[this.environment],
+        });
     }
   }
 }
