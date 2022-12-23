@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   FragmentKey,
   FragmentStatus,
   parToPuzzleFrag,
 } from "../Data/FragmentData";
+import { DEBUG_SOLVE } from "../Utils/debug";
 import { useLines, usePuzzleStatus } from "../Utils/Hooks";
 import { Position3D, Position3DR } from "../Utils/types";
 import { fragment1text } from "./Fragments/FragmentText/FragmentText1to9";
@@ -65,7 +66,13 @@ function Fragment1PuzzlePar({
   children,
 }: F1ParProps & { children: React.ReactNode }) {
   const fkey = useMemo(() => parToPuzzleFrag(parNo), [parNo]);
-  const [status] = usePuzzleStatus(fkey);
+  const [status, solve] = usePuzzleStatus(fkey);
+
+  useEffect(() => {
+    if (DEBUG_SOLVE)
+      //@ts-ignore
+      window["solve" + parNo] = solve;
+  }, [parNo, solve]);
 
   return (
     <>

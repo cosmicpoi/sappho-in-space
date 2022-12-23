@@ -44,8 +44,13 @@ export const environmentBackground: Record<Environment, string> = [
   COLORS.bgAutumn, // Autumn
 ];
 
-
 export type ColorData = {
   bg: string;
   text: string;
-}
+  floatBg?: string;
+};
+
+export const defaultColorData: ColorData = {
+  bg: COLORS.bgNight,
+  text: COLORS.colorNight,
+};

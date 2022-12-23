@@ -1,33 +1,17 @@
-import autoBind from "auto-bind";
-import { Environment } from "../Utils/colors";
 import { CANVAS_WIDTH, CANVAS_HEIGHT, PIXEL_WIDTH } from "../Utils/consts";
-import { monomitter, Monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
 import { clamp } from "../Utils/utils";
 
 export const unit_wToS = (w: number) => w * PIXEL_WIDTH;
 export const unit_sToW = (w: number) => w / PIXEL_WIDTH;
 
-export const ellipseHalfWidth = 750 / 2;
-export const ellipseHalfHeight = 500 / 2;
-export const dayNightMargin = 90;
-
 export class ViewportManager {
   private width: number = CANVAS_WIDTH;
   private height: number = CANVAS_HEIGHT;
   private container: HTMLDivElement;
 
-  public colorChange$: Monomitter<Environment>;
 
-  public environment = Environment.DEFAULT;
-
-  // constructor and setup
-  constructor() {
-    autoBind(this);
-    this.colorChange$ = monomitter<Environment>(true);
-    this.colorChange$.publish(Environment.DEFAULT);
-  }
-
+  // setup
   public setContainer(container: HTMLDivElement): void {
     this.container = container;
   }
@@ -98,33 +82,6 @@ export class ViewportManager {
   }
 
   // follow logic (for following spaceship)
-  public getEnvironment(pos: Position) {
-    let env = -1;
-    const { x: cx, y: cy } = this.getCenter();
-
-    const delX = pos.x - cx;
-    const delY = pos.y - cy;
-    if ((delX / ellipseHalfWidth) ** 2 + (delY / ellipseHalfHeight) ** 2 < 1) {
-      if (delX < dayNightMargin) env = Environment.Night;
-      else env = Environment.Day;
-    } else {
-      if (pos.x < cx && pos.y < cy) env = Environment.Winter;
-      else if (pos.x > cx && pos.y < cy) env = Environment.Spring;
-      else if (pos.x > cx && pos.y > cy) env = Environment.Summer;
-      else if (pos.x < cx && pos.y > cy) env = Environment.Autumn;
-    }
-
-    return env;
-  }
-
-  public requestEnvironment(pos: Position) {
-    const env = this.getEnvironment(pos);
-
-    if (env !== this.environment) {
-      this.environment = env;
-      this.colorChange$.publish(this.environment);
-    }
-  }
   public follow(pos: Position) {
     const marginX = 0.4,
       marginY = 0.4;

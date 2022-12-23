@@ -69,7 +69,7 @@ export function CharPixel(props: CharPixelProps) {
   const zoneColor: string | undefined = useMemo(() => {
     if (!DEBUG_ENVIRONMENT) return undefined;
 
-    return environmentColor[gM.viewportManager.getEnvironment({ x, y })];
+    return environmentColor[gM.colorManager.getEnvironment({ x, y })];
   }, [gM, x, y]);
 
   const [isDim, setIsDim] = useState<boolean>(false);

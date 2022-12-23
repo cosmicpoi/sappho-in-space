@@ -64,7 +64,7 @@ const spaceshipHitbox: Hitbox = {
 };
 export function Spaceship() {
   const gM = useGameManager();
-  const { viewportManager: vM, inputManager: iM } = gM;
+  const { viewportManager: vM, inputManager: iM, colorManager: cM } = gM;
 
   // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
@@ -144,8 +144,8 @@ export function Spaceship() {
   // camera control
   useEffect(() => {
     if (!DEBUG_SCROLL) vM.follow(pos);
-    vM.requestEnvironment(pos);
-  }, [pos, vM]);
+    cM.requestColors(pos);
+  }, [pos, vM, cM]);
 
   const [z] = useState<number>(Layer.Spaceship);
 

@@ -3,21 +3,17 @@ import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
 import { EnvironmentDebug } from "./Components/EnvironmentDebug";
+import { FloatingBG } from "./Components/FloatingBG";
 import { GameManager } from "./Engine/GameManager";
 import { GameWorld } from "./GameWorld";
-import {
-  ColorData,
-  COLORS,
-  Environment,
-  environmentBackground,
-  environmentColor,
-} from "./Utils/colors";
+import { ColorData, COLORS, defaultColorData } from "./Utils/colors";
 import { createDefinedContext } from "./Utils/createDefinedContext";
 import {
   DEBUG_START_POS,
   DEBUG_ENVIRONMENT,
   DEBUG_SCROLL,
 } from "./Utils/debug";
+import { useEmittedValue } from "./Utils/Hooks";
 import { ZIndex } from "./Utils/types";
 import { Frame } from "./Viewport/Frame";
 
@@ -26,7 +22,7 @@ const Container = styled.div<{ clr: string; background: string }>`
   height: 100%;
   overflow: ${DEBUG_SCROLL ? "scroll" : "hidden"};
   position: relative;
-  z-index: ${ZIndex.Body};
+  z-index: ${ZIndex.Container};
   /* font-size: 14px; */
 
   ${({ clr }) => !DEBUG_ENVIRONMENT && `color: ${clr};`}
@@ -69,32 +65,16 @@ function App() {
     return gameManager.initialize();
   }, [gameManager]);
 
-  const [environment, setEnvironment] = useState<Environment>(
-    Environment.DEFAULT
+  const cData = useEmittedValue<ColorData>(
+    gameManager.colorManager.colorData$,
+    defaultColorData
   );
-  const [cData, setColorData] = useState<ColorData>({
-    bg: COLORS.bgNight,
-    text: COLORS.colorNight,
-  });
-
-  useEffect(() => {
-    const sub = gameManager.viewportManager.colorChange$.subscribe(
-      (e: Environment) => setEnvironment(e)
-    );
-    return sub.unsubscribe;
-  }, [gameManager]);
-
-  useEffect(() => {
-    setColorData({
-      bg: environmentBackground[environment],
-      text: environmentColor[environment],
-    });
-  }, [environment]);
 
   return (
     <GameManagerProvider value={gameManager}>
       <ColorContext.Provider value={cData}>
         <Container ref={containerRef} clr={cData.text} background={cData.bg}>
+          <FloatingBG bg={cData.floatBg} />
           <Frame />
           {DEBUG_ENVIRONMENT && <EnvironmentDebug />}
           <GameWorld />

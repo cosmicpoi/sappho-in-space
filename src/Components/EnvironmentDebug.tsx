@@ -2,15 +2,15 @@ import * as React from "react";
 import { useMemo } from "react";
 import styled from "styled-components";
 import { useGameManager } from "..";
+import {
+  dayNightMargin,
+  ellipseHalfWidth,
+  ellipseHalfHeight,
+} from "../Engine/ColorManager";
 import { COLORS } from "../Utils/colors";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../Utils/consts";
 import { Position, ZIndex } from "../Utils/types";
-import {
-  dayNightMargin,
-  ellipseHalfHeight,
-  ellipseHalfWidth,
-  unit_wToS,
-} from "../Viewport/ViewportManager";
+import { unit_wToS } from "../Viewport/ViewportManager";
 
 type BoxProps = {
   width: number;

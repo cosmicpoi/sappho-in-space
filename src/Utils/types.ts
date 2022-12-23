@@ -39,10 +39,11 @@ export enum Layer {
 }
 
 export enum ZIndex {
-  Body = 0,
+  Container = 0,
   Environment = 1,
-  Walls = 2,
-  Characters = 3,
+  FloatingBG = 2,
+  Walls = 3,
+  Characters = 4,
 }
 
 export enum CollisionGroup {

@@ -21,7 +21,6 @@ export function GameWorld() {
       <Title />
       <Spaceship />
       <Fragment1Completion x={cx - 80} y={cy} z={0} />
-      {/* <Fragments /> */}
 
       <ZoneSpring />
       <ZoneWinter />

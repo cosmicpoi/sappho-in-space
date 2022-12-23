@@ -121,6 +121,17 @@ export function useUpdatedValue<T>(
   return val;
 }
 
+export function useEmittedValue<T>(val$: Monomitter<T>, def: T) {
+  const [val, setVal] = useState<T>(def);
+  useEffect(() => {
+    const sub = val$.subscribe((v: T) => setVal(v));
+
+    return sub.unsubscribe;
+  }, [val$, def]);
+
+  return val;
+}
+
 // returns [status, solve()]
 export function usePuzzleStatus(
   fkey: FragmentKey
