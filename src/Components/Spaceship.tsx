@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
-import { DEBUG_START_POS, SCROLL_DEBUG } from "../Utils/debug";
+import { DEBUG_START_POS, DEBUG_SCROLL } from "../Utils/debug";
 import {
   useFrame,
   useManyKeysDown,
@@ -11,11 +11,7 @@ import {
   useKeyDown,
 } from "../Utils/Hooks";
 import { Direction, Hitbox, Layer, Position } from "../Utils/types";
-import {
-  addPos,
-  directionFromKey,
-  directionKeys,
-} from "../Utils/utils";
+import { addPos, directionFromKey, directionKeys } from "../Utils/utils";
 import { Particles, ParticlesHandle } from "./ParticleSystem/Particles";
 import {
   SpaceshipPart,
@@ -69,12 +65,10 @@ export function Spaceship() {
     DEBUG_START_POS ? addPos(DEBUG_START_POS, vM.getCenter()) : vM.getCenter()
   );
 
-  const motion = useActor({
-    x: pos.x,
-    y: pos.y,
-    termV: TERM_V,
-    hitbox: spaceshipHitbox,
-  });
+  const motion = useActor(
+    { x: pos.x, y: pos.y },
+    { termV: TERM_V, hitbox: spaceshipHitbox, solidCollision: true }
+  );
 
   const [chars, setChars] = useState<string[][]>(spaceshipCharsRight);
 
@@ -137,7 +131,7 @@ export function Spaceship() {
 
   // camera control
   useEffect(() => {
-    if (!SCROLL_DEBUG) vM.follow(pos);
+    if (!DEBUG_SCROLL) vM.follow(pos);
     vM.requestEnvironment(pos);
   }, [pos, vM]);
 

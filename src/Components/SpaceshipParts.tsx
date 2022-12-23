@@ -64,11 +64,9 @@ export class RocketParticle extends Particle {
     displ = rotateByDirection(displ, this.dir);
 
     if (this.lifetime > MAX_PARTICLE_LIFETIME) {
-      this.alive = false;
-      this.updated = false;
+      this.die();
     } else if (this.lifetime > MAX_PARTICLE_LIFETIME / 2) {
-      this.char = ".";
-      this.updated = false;
+      this.setChar(".");
     }
 
     this.motion.setVelocity(displ);
@@ -76,13 +74,23 @@ export class RocketParticle extends Particle {
   }
 }
 
-const HEART_LENGTH = 30;
+const HEART_RAMPUP = 30;
+const HEART_DELAY = 60;
+const HEART_RAMPDOWN = 20;
+enum HeartState {
+  RampUp,
+  Full,
+  RampDown,
+}
 export class HeartParticle extends Particle {
   targetx: number;
   targety: number;
 
   tx: number;
   ty: number;
+
+  private state: HeartState = HeartState.RampUp;
+  private lt = 0;
 
   constructor(gM: GameManager, x: number, y: number, tx: number, ty: number) {
     super(gM, x, y, "+");
@@ -95,14 +103,41 @@ export class HeartParticle extends Particle {
   }
 
   public onFrame(_fc: number) {
-    if (this.x !== this.targetx || this.y !== this.targety) {
-      this.motion.setVelocity({
-        x: this.tx / HEART_LENGTH,
-        y: this.ty / HEART_LENGTH,
-      });
-    } else {
-      this.motion.setVelocity({ x: 0, y: 0 });
+    switch (this.state) {
+      case HeartState.RampUp:
+        this.motion.setVelocity({
+          x: this.tx / HEART_RAMPUP,
+          y: this.ty / HEART_RAMPUP,
+        });
+
+        if (this.lt > HEART_RAMPUP) {
+          this.lt = 0;
+          this.state = HeartState.Full;
+        }
+
+        break;
+      case HeartState.Full:
+        this.motion.setVelocity({ x: 0, y: 0 });
+        if (this.lt > HEART_DELAY) {
+          this.lt = 0;
+          this.state = HeartState.RampDown;
+        }
+        break;
+      case HeartState.RampDown:
+        if (this.lt > HEART_RAMPDOWN) {
+          this.die();
+          return;
+        }
+
+        this.motion.setVelocity({
+          x: -this.tx / HEART_RAMPDOWN,
+          y: -this.ty / HEART_RAMPDOWN,
+        });
+
+        break;
     }
+
+    this.lt++;
     super.onFrame(_fc);
   }
 }

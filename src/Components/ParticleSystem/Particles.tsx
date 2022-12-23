@@ -26,17 +26,36 @@ export class Particle {
 
   updated = true;
 
-  constructor(gM: GameManager, x: number, y: number, char: string) {
+
+  constructor(
+    gM: GameManager,
+    x: number,
+    y: number,
+    char: string,
+    collides = false
+  ) {
     autoBind(this);
     this.x = x;
     this.y = y;
-    this.motion = new ActorData(gM, { x, y });
+    this.motion = new ActorData(gM, { x, y }, {solidCollision: collides});
 
     this.char = char;
     this.alive = true;
   }
 
+  public die(): void {
+    this.alive = false;
+    this.updated = false;
+  }
+
+  public setChar(char: string): void {
+    this.char = char;
+    this.updated = false;
+  }
+
   public onFrame(_fc: number) {
+    if (!this.alive) return;
+
     const didChange = this.motion.onFrame();
     const pos = this.motion.getPosition();
     this.x = pos.x;

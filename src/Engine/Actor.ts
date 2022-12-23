@@ -1,9 +1,10 @@
 import { GameManager } from "./GameManager";
 import { Hitbox, Position } from "../Utils/types";
 
-export type ActorProps = Position & {
+export type ActorProps = {
   termV?: number;
   hitbox?: Hitbox;
+  solidCollision?: boolean;
 };
 export class ActorData {
   private gameManager: GameManager;
@@ -23,14 +24,20 @@ export class ActorData {
   private termV: number | undefined;
   private hitbox: Hitbox | undefined;
 
+  private solidCollision: boolean;
+
   // initializes with starting coordinates
-  constructor(gameManager: GameManager, { x, y, hitbox, termV }: ActorProps) {
+  constructor(gameManager: GameManager, { x, y }: Position, props: ActorProps) {
+    const { hitbox, termV, solidCollision } = props;
     this.gameManager = gameManager;
     this.x = x;
     this.y = y;
 
     this.hitbox = hitbox;
     this.termV = termV;
+    this.solidCollision = !!solidCollision;
+
+    if (this.hitbox) this.checkTriggers({ x: 0, y: 0 });
   }
 
   // basic getters and setters
@@ -42,7 +49,7 @@ export class ActorData {
   public getPosition(): Position {
     return { x: this.x, y: this.y };
   }
-  public setVelocity({x: vx, y: vy}: Position) {
+  public setVelocity({ x: vx, y: vy }: Position) {
     this.vx = vx;
     this.vy = vy;
   }
@@ -57,16 +64,21 @@ export class ActorData {
   }
 
   private shouldCollide(): boolean {
-    return !!this.hitbox;
+    return !!this.solidCollision;
   }
 
   // move / collision logic
   private checkSolids(delPos: Position): boolean {
     const cM = this.gameManager.collisionManager;
     const box = this.hitboxAt(delPos);
-    const solid = cM.collides(box, this);
-    // onCollide...
+    const solid = cM.collidesSolid(box);
     return !!solid;
+  }
+  private checkTriggers(delPos: Position): boolean {
+    const cM = this.gameManager.collisionManager;
+    const box = this.hitboxAt(delPos);
+    const trigger = cM.collidesTrigger(box, this);
+    return !!trigger;
   }
 
   public move(move: Position) {
@@ -108,6 +120,9 @@ export class ActorData {
         }
       }
     }
+
+    // finally, check for collisions
+    if (this.hitbox) this.checkTriggers({ x: 0, y: 0 });
   }
 
   // handlers and callbacks

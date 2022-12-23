@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useGameManager } from "..";
 import { CharPixel } from "../CharPixelLib/CharPixel";
 import { Wall } from "../Components/Wall";
-import { DEBUG } from "../Utils/debug";
+import { DEBUG_WALL } from "../Utils/debug";
 import { Position } from "../Utils/types";
 
 function Framer({ x, y }: Position) {
@@ -13,7 +13,7 @@ function Framer({ x, y }: Position) {
       z={0}
       x={x}
       y={y}
-      opacity={DEBUG ? 1 : 0}
+      opacity={DEBUG_WALL ? 1 : 0}
       clr={"red"}
     />
   );

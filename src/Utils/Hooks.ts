@@ -65,9 +65,9 @@ export function useFrame(cb: (fc: number, lifetime?: number) => void) {
 }
 
 // register Actor data to a component
-export function useActor(props: ActorProps): ActorData {
+export function useActor(pos: Position, props: ActorProps): ActorData {
   const gM = useGameManager();
-  const [motion] = useState<ActorData>(new ActorData(gM, props));
+  const [motion] = useState<ActorData>(new ActorData(gM, pos, props));
   return motion;
 }
 

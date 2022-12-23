@@ -1,7 +1,9 @@
 import { Hitbox } from "../Utils/types";
 import { ActorData } from "./Actor";
 
-type SolidData = Hitbox & {
+type SolidData = Hitbox;
+
+type TriggerData = Hitbox & {
   callback?: (a: ActorData) => void;
 };
 
@@ -19,24 +21,35 @@ function collides(box1: Hitbox, box2: Hitbox): boolean {
 
 export class CollisionManager {
   private solids: Set<SolidData>;
+  private triggers: Set<TriggerData>;
+
   constructor() {
     this.solids = new Set();
+    this.triggers = new Set();
   }
 
   // returns callback to deregister the hitbox
   public registerHitbox(wall: SolidData): () => void {
     this.solids.add(wall);
-
-    return () => {
-      this.solids.delete(wall);
-    };
+    return () => this.solids.delete(wall);
   }
 
-  public collides(hitbox: Hitbox, actor: ActorData): SolidData | undefined {
+  public collidesSolid(hitbox: Hitbox): SolidData | undefined {
     for (const solid of this.solids) {
-      if (collides(hitbox, solid)) {
-        if (solid.callback) solid.callback(actor);
-        return solid;
+      if (collides(hitbox, solid)) return solid;
+    }
+
+    return undefined;
+  }
+
+  public collidesTrigger(
+    hitbox: Hitbox,
+    actor: ActorData
+  ): TriggerData | undefined {
+    for (const trigger of this.triggers) {
+      if (collides(hitbox, trigger)) {
+        if (trigger.callback) trigger.callback(actor);
+        return trigger;
       }
     }
 

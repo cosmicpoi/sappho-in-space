@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useGameManager } from "..";
 import styled from "styled-components";
-import { DEBUG } from "../Utils/debug";
+import { DEBUG_WALL } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
 import { Hitbox } from "../Utils/types";
 
@@ -23,7 +23,7 @@ const StyledDebugBox = styled.div.attrs<Hitbox>(({ x, y }) => ({
 export function DebugBox({ hitbox }: { hitbox: Hitbox }) {
   const { x, y, width, height } = hitbox;
 
-  if (DEBUG)
+  if (DEBUG_WALL)
     return (
       <StyledDebugBox
         x={x}

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { useGameManager } from "..";
 import { t_v } from "../Utils/consts";
-import { ENVIRONMENT_DEBUG } from "../Utils/debug";
+import { DEBUG_ENVIRONMENT } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
 import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
 import { environmentColor } from "../Utils/colors";
@@ -66,7 +66,7 @@ export function CharPixel(props: CharPixelProps) {
   }, [x, y, z, char, gM, setHidden, isWall]);
 
   const zoneColor: string | undefined = useMemo(() => {
-    if (!ENVIRONMENT_DEBUG) return undefined;
+    if (!DEBUG_ENVIRONMENT) return undefined;
 
     return environmentColor[gM.viewportManager.getEnvironment({ x, y })];
   }, [gM, x, y]);
