@@ -1,14 +1,19 @@
 import * as React from "react";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useGameManager } from "../..";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
-import { FragmentKey } from "../../Data/FragmentData";
-import { useLines } from "../../Utils/Hooks";
-import { Position3DR } from "../../Utils/types";
+import { FragmentKey, FragmentStatus } from "../../Data/FragmentData";
+import { ActorData } from "../../Engine/Actor";
+import { TriggerData } from "../../Engine/CollisionManager";
+import { useLines, usePuzzleStatus, useTrigger } from "../../Utils/Hooks";
+import { CollisionGroup, Hook, Position3DR } from "../../Utils/types";
 import { toN } from "../../Utils/utils";
+import { blackearthColorData } from "../FloatingBG";
 import { fragment20text } from "../Fragments/FragmentText/FragmentText20to29";
-import { FragmentLabel } from "../Labels";
+import { FragmentLabel, PL_BlackEarth } from "../Labels";
 import { LineText } from "../LineText";
-import { Wall } from "../Wall";
+import { Paragraph } from "../Paragraph";
+import { DebugBox, Wall } from "../Wall";
 
 function End20Corridor({ x, y, z }: Position3DR) {
   const lines = useLines(fragment20text);
@@ -23,7 +28,7 @@ function End20Corridor({ x, y, z }: Position3DR) {
 
       {lines.map((line: string, i: number) => (
         <>
-          <CharPixel x={x} y={y + i * 2} z={z} char={"]"} />
+          <CharPixel x={x} y={y + i * 2} z={z} char={"]"} isWall />
           <LineText
             x={x + 1}
             y={y + i * 2}
@@ -31,7 +36,7 @@ function End20Corridor({ x, y, z }: Position3DR) {
             text={line.substring(1, line.length)}
             opacity={0.5}
           />
-          <CharPixel x={x + 28} y={y + i * 2} z={z} char={"["} />
+          <CharPixel x={x + 28} y={y + i * 2} z={z} char={"["} isWall />
         </>
       ))}
       <LineText x={x + 4} y={y + 10} z={z + 1} text={"black earth"} />
@@ -176,7 +181,6 @@ const edges: Edge[] = (() => {
   );
   return e;
 })();
-// prettier-ignore
 function Maze({ x, y, z }: Position3DR) {
   return (
     <>
@@ -187,6 +191,7 @@ function Maze({ x, y, z }: Position3DR) {
           y={y + j * cellSize}
           z={z}
           char="+"
+          isWall
         />
       ))}
       {edges.map(([[i1, j1], [i2, j2]]) => (
@@ -208,6 +213,7 @@ function Maze({ x, y, z }: Position3DR) {
                 y={y + j1 * cellSize + k * (j2 - j1)}
                 z={z}
                 char={k % 2 === 0 ? (i2 - i1 === 0 ? "|" : "-") : undefined}
+                isWall
               />
             ))}
         </React.Fragment>
@@ -216,12 +222,263 @@ function Maze({ x, y, z }: Position3DR) {
   );
 }
 
-export function Fragment20Puzzle({ x, y, z }: Position3DR) {
+const untriggered = `<3`;
+
+const triggered = `
+ __   __
+/  \\ /  \\
+|   '   |
+|       |
+\\       /
+ \\     /
+  \\   /
+   \\ /
+    v
+`;
+
+function Puzzle20Trigger({
+  x,
+  y,
+  z,
+  row,
+  col,
+  idx,
+  on,
+  setOn,
+}: Position3DR & {
+  row: number;
+  col: number;
+  idx: number;
+  on: boolean[];
+  setOn: Hook<boolean[]>[1];
+}) {
+  const active = useMemo(() => on[idx], [on, idx]);
+  const activate = useCallback(() => {
+    setOn((a: boolean[]) => {
+      const arr = [...a];
+      arr[idx] = true;
+      return arr;
+    });
+  }, [setOn, idx]);
+
+  const { x: px, y: py } = useMemo(
+    () => ({
+      x: Math.round(x + col * cellSize + cellSize / 2),
+      y: Math.round(y + row * cellSize + cellSize / 2),
+    }),
+    [x, y, row, col]
+  );
+
+  const onHit = useCallback(
+    (data: ActorData) => {
+      if (data.collisionGroup === CollisionGroup.HeartParticle) activate();
+    },
+    [activate]
+  );
+
+  const hitbox: TriggerData | undefined = useMemo(() => {
+    if (active) return undefined;
+    else return { x: px - 2, y: py - 2, height: 5, width: 5, callback: onHit };
+  }, [px, py, onHit, active]);
+
+  useTrigger(hitbox);
+
   return (
     <>
-      <FragmentLabel x={x} y={y - 4} z={z} fkey={FragmentKey.F20} decor />
-      <End20Corridor x={x} y={y} z={z} />
-      <Maze x={x} y={y + 48} z={z} />
+      <DebugBox hitbox={hitbox} />
+      {!active && <Paragraph x={px} y={py} z={z} text={untriggered} />}
+      {active && idx !== 4 && (
+        <Paragraph
+          x={px - 4}
+          y={py - 4}
+          z={z + 1}
+          text={triggered}
+          opacity={0.5}
+          spacing={1}
+          typist
+        />
+      )}
+      {active && (
+        <>
+          <CharPixel
+            x={px - 1}
+            y={py + (idx === 4 ? 3 : 0)}
+            z={z + 2}
+            char={"" + (idx + 1)}
+            typist
+          />
+          <CharPixel
+            x={px}
+            y={py + (idx === 4 ? 3 : 0)}
+            z={z + 2}
+            char={"/"}
+            typist
+            opacity={0.5}
+          />
+          <CharPixel
+            x={px + 1}
+            y={py + (idx === 4 ? 3 : 0)}
+            z={z + 2}
+            char={"5"}
+            typist
+          />
+        </>
+      )}
     </>
   );
 }
+
+export function Fragment20Puzzle({ x, y, z }: Position3DR) {
+  const [on, setOn] = useState<boolean[]>(Array(5).fill(false));
+
+  const [status, solve] = usePuzzleStatus(FragmentKey.F20);
+  const solved = status === FragmentStatus.Solved;
+
+  useEffect(() => {
+    console.log(on);
+    if (on.reduce((prev: boolean, curr: boolean) => prev && curr)) solve();
+  }, [on, solve]);
+
+  const sO = solved ? 0.5 : 1;
+
+  const { colorManager: cM } = useGameManager();
+  useEffect(() => {
+    if (!solved) return;
+
+    return cM.registerZone({
+      x: x + 18,
+      y: y - 6,
+      radius: 10,
+      data: blackearthColorData,
+    });
+  }, [cM, solved, x, y]);
+
+  return (
+    <>
+      <FragmentLabel x={x + 13} y={y - 12} z={z} fkey={FragmentKey.F20} decor />
+      <End20Corridor x={x} y={y} z={z} />
+      <Maze x={x} y={y + 48} z={z} />
+      <Puzzle20Trigger
+        x={x}
+        y={y + 48}
+        z={z}
+        row={0}
+        col={4}
+        on={on}
+        idx={0}
+        setOn={setOn}
+      />
+      <Puzzle20Trigger
+        x={x}
+        y={y + 48}
+        z={z}
+        row={3}
+        col={6}
+        on={on}
+        idx={1}
+        setOn={setOn}
+      />
+      <Puzzle20Trigger
+        x={x}
+        y={y + 48}
+        z={z}
+        row={6}
+        col={0}
+        on={on}
+        idx={2}
+        setOn={setOn}
+      />
+      <Puzzle20Trigger
+        x={x}
+        y={y + 48}
+        z={z}
+        row={2}
+        col={2}
+        on={on}
+        idx={3}
+        setOn={setOn}
+      />
+      <Puzzle20Trigger
+        x={x}
+        y={y + 48}
+        z={z}
+        row={-4.25}
+        col={0.5}
+        on={on}
+        idx={4}
+        setOn={setOn}
+      />
+      <CharPixel
+        x={x}
+        y={y - 6}
+        z={z}
+        char={"["}
+        isWall={!solved}
+        opacity={sO}
+      />
+      <CharPixel
+        x={x + 28}
+        y={y - 6}
+        z={z}
+        char={"]"}
+        isWall={!solved}
+        opacity={sO}
+      />
+      <CharPixel
+        x={x}
+        y={y - 4}
+        z={z}
+        char={"["}
+        isWall={!solved}
+        opacity={sO}
+      />
+      <CharPixel
+        x={x + 28}
+        y={y - 2}
+        z={z}
+        char={solved ? "." : "|"}
+        isWall={!solved}
+        typist={!solved}
+        opacity={sO}
+      />
+      <CharPixel
+        x={x}
+        y={y - 2}
+        z={z}
+        char={solved ? "." : "|"}
+        isWall={!solved}
+        typist={!solved}
+        opacity={sO}
+      />
+      <CharPixel
+        x={x + 28}
+        y={y - 4}
+        z={z}
+        char={"]"}
+        isWall={!solved}
+        opacity={sO}
+      />
+      <LineText
+        x={x}
+        y={y - 8}
+        text={"_".repeat(29)}
+        isWall={!solved}
+        typist={!solved}
+      />
+      <Paragraph x={x + 3} y={y - 6} text={completionPoem} typist={solved} />
+      <PL_BlackEarth x={x + 12} y={y - 6} z={z + 1} typist={solved} />
+      {!solved && (
+        <>
+          <Wall hitbox={{ x, y: y - 8, width: 29, height: 1 }} />
+          <Wall hitbox={{ x, y: y - 7, width: 1, height: 7 }} />
+          <Wall hitbox={{ x: x + 28, y: y - 7, width: 1, height: 7 }} />
+        </>
+      )}
+    </>
+  );
+}
+
+const completionPoem = `
+ships of black earth
+    sail on dusty tears
+`;

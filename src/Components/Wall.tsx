@@ -19,16 +19,14 @@ const StyledDebugBox = styled.div.attrs<Hitbox>(({ x, y }) => ({
   background: red;
 `;
 
-export function DebugBox({ hitbox }: { hitbox: Hitbox }) {
-  const { x, y, width, height } = hitbox;
-
-  if (DEBUG_WALL)
+export function DebugBox({ hitbox }: { hitbox?: Hitbox }) {
+  if (DEBUG_WALL && hitbox)
     return (
       <StyledDebugBox
-        x={x}
-        y={y}
-        height={height}
-        width={width}
+        x={hitbox.x}
+        y={hitbox.y}
+        height={hitbox.height}
+        width={hitbox.width}
       ></StyledDebugBox>
     );
   else return <></>;

@@ -10,6 +10,12 @@ export const goldenColorData: ColorData = {
   floatBg: `linear-gradient(120deg, #f6d365 0%, #fda085 100%)`,
 };
 
+export const blackearthColorData: ColorData = {
+  bg: "#666666",
+  text: "#080808",
+  floatBg: `#666666`,
+};
+
 const StyledFloatingBG = styled.div<{ bg: string; visible: boolean }>`
   position: fixed;
   top: 0;
