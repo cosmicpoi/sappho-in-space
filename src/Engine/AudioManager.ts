@@ -148,6 +148,7 @@ export class AudioManager {
   }
   private updateBgm(env: Environment | undefined): void {
     if (env === undefined || !this.isLoaded()) return;
+    this.audio.get(rocket).play();
 
     const bgmName = envBgm[env];
     const bgm = this.audio.get(bgmName);
@@ -170,6 +171,7 @@ export class AudioManager {
     }, 5000);
   }
   public startBgm(): void {
+    console.log("start bgm!");
     const bgm = this.audio.get(envBgm[0]);
     bgm.play();
     this.currentBgm = bgm;
