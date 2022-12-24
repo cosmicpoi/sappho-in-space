@@ -24,6 +24,8 @@ export type Hitbox = Position & {
   height: number;
 };
 
+export type Circle = Position & {radius: number};
+
 export enum TextAlign {
   Left,
   Center,

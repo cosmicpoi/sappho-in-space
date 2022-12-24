@@ -4,7 +4,11 @@ import { InputManager } from "../Engine/InputManager";
 import { Monomitter, Subscription } from "./Monomitter";
 import { ActorData, ActorProps } from "../Engine/Actor";
 import { Position } from "./types";
-import { SolidData, TriggerData } from "../Engine/CollisionManager";
+import {
+  CircleTriggerData,
+  SolidData,
+  TriggerData,
+} from "../Engine/CollisionManager";
 import { FragmentKey, FragmentStatus } from "../Data/FragmentData";
 
 type Extractor = (
@@ -103,7 +107,7 @@ export function useLog<T>(val: T) {
   }, [val]);
 }
 
-// bind a value to a read-only function on every update
+// emitter and value management
 export function useUpdatedValue<T>(
   getter: () => T,
   update$: Monomitter<void>
@@ -121,7 +125,7 @@ export function useUpdatedValue<T>(
   return val;
 }
 
-export function useEmittedValue<T>(val$: Monomitter<T>, def: T) {
+export function useEmittedValue<T>(val$: Monomitter<T>, def: T): T {
   const [val, setVal] = useState<T>(def);
   useEffect(() => {
     const sub = val$.subscribe((v: T) => setVal(v));
@@ -130,6 +134,15 @@ export function useEmittedValue<T>(val$: Monomitter<T>, def: T) {
   }, [val$, def]);
 
   return val;
+}
+
+export function useSpaceshipPos(): Position | undefined {
+  const gM = useGameManager();
+  const pos = useEmittedValue<Position | undefined>(
+    gM.spaceshipPos$,
+    undefined
+  );
+  return pos;
 }
 
 // returns [status, solve()]
@@ -148,6 +161,7 @@ export function usePuzzleStatus(
   return [status, setStatus];
 }
 
+/* Triggers and solids */
 export function useSolid(data: SolidData): void {
   const gM = useGameManager();
 
@@ -161,7 +175,15 @@ export function useTrigger(data: TriggerData | undefined): void {
 
   useEffect(() => {
     if (!data) return;
-
     return gM.collisionManager.registerTrigger(data);
+  }, [gM, data]);
+}
+
+export function useCircleTrigger(data: CircleTriggerData | undefined): void {
+  const gM = useGameManager();
+
+  useEffect(() => {
+    if (!data) return;
+    return gM.collisionManager.registerCircleTrigger(data);
   }, [gM, data]);
 }

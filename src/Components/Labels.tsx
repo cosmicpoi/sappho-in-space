@@ -14,17 +14,31 @@ export function FragmentLabel({
   z,
   fkey,
   decor,
-}: CharPixelBaseProps & { fkey: FragmentKey; decor?: boolean }) {
+  short,
+}: CharPixelBaseProps & {
+  fkey: FragmentKey;
+  decor?: boolean;
+  short?: boolean;
+}) {
   const [status] = usePuzzleStatus(fkey);
 
-  const str = useMemo(() => fkey + suffix[status], [fkey, status]);
+  const str = useMemo(
+    () => fkey + (short ? "" : suffix[status]),
+    [fkey, status, short]
+  );
 
   return (
     <>
       {decor && <LineText x={x - 4} y={y} z={z} text={"~ ~"} opacity={0.5} />}
       <LineText x={x} y={y} z={z} text={str} opacity={0.5} />
       {decor && (
-        <LineText x={x + str.length + 1} y={y} z={z} text={"~ ~"} opacity={0.5} />
+        <LineText
+          x={x + str.length + 1}
+          y={y}
+          z={z}
+          text={"~ ~"}
+          opacity={0.5}
+        />
       )}
     </>
   );

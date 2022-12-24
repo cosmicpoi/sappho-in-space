@@ -3,14 +3,25 @@ import { DEBUG_NOSAVE } from "../Utils/debug";
 import { monomitter, Monomitter } from "../Utils/Monomitter";
 
 export enum FragmentKey {
+  // completion
   F1 = "1",
-  F2 = "2",
+
+  // puzzles
   F20 = "20",
   F26 = "26",
   F169A = "169A",
   F132 = "132",
   F112 = "112",
   F83 = "83",
+
+  // gifts
+  F171 = "171",
+  F172 = "172",
+  F174 = "174",
+  F176 = "176",
+
+  // others
+  F2 = "2",
 }
 
 export enum FragmentStatus {

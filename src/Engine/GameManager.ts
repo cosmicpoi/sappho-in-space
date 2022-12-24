@@ -1,7 +1,8 @@
 import autoBind from "auto-bind";
 import { CharPixelGridManager } from "../CharPixelLib/CharPixelGridManager";
 import { DataManager } from "../Data/FragmentData";
-import { monomitter } from "../Utils/Monomitter";
+import { Monomitter, monomitter } from "../Utils/Monomitter";
+import { Position } from "../Utils/types";
 import { ViewportManager } from "../Viewport/ViewportManager";
 import { CollisionManager } from "./CollisionManager";
 import { ColorManager } from "./ColorManager";
@@ -18,6 +19,8 @@ export class GameManager {
   private frameCount = 0;
   public frame$ = monomitter<number>();
   private frameRequestId: ReturnType<typeof requestAnimationFrame>;
+
+  public spaceshipPos$: Monomitter<Position> = monomitter();
 
   constructor() {
     autoBind(this);
@@ -42,5 +45,10 @@ export class GameManager {
       window.cancelAnimationFrame(this.frameRequestId);
       unbind();
     };
+  }
+
+  // logic
+  public setSpaceshipPos(pos: Position): void {
+    this.spaceshipPos$.publish(pos);
   }
 }

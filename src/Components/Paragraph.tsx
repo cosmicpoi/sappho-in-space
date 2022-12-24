@@ -1,7 +1,6 @@
 import * as React from "react";
 import { CharPixelBlockProps } from "../CharPixelLib/CharPixelTypes";
 import { useLines } from "../Utils/Hooks";
-import { getAlign } from "../Utils/utils";
 import { LineText } from "./LineText";
 
 export function Paragraph({
@@ -10,7 +9,6 @@ export function Paragraph({
   z,
   text,
   isWall,
-  align,
   clr: color,
   opacity,
   twinkle,
@@ -29,7 +27,7 @@ export function Paragraph({
           line !== "" && (
             <LineText
               key={i}
-              x={x + getAlign(text.length, align)}
+              x={x}
               y={y + i * sp}
               z={z}
               text={line}

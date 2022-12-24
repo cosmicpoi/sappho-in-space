@@ -50,7 +50,7 @@ function Puzzle26Letter({
     if (fixed) return undefined;
     else
       return (fc: number) => {
-        if (!gM.viewportManager.onScreen(pos)) return;
+        if (!gM.viewportManager.onScreen(motion.getPosition())) return;
         if (fc % 300 === 0) {
           motion.setVelocity({
             x: randomRange(-0.1, 0.1),

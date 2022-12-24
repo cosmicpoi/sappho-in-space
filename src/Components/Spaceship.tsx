@@ -100,10 +100,10 @@ export function Spaceship() {
       const vert = iM.resolveVertDirection();
 
       motion.setAcceleration({ x: hoz * 0.008, y: vert * 0.008 });
-      motion.onFrame(true);
+      const update = motion.onFrame(true);
 
       const { x: nX, y: nY } = motion.getPosition();
-      setPos({ x: nX, y: nY });
+      if (update) setPos({ x: nX, y: nY });
 
       // make new particles
       if (hoz !== 0 || vert !== 0) {
@@ -145,7 +145,8 @@ export function Spaceship() {
   useEffect(() => {
     if (!DEBUG_SCROLL) vM.follow(pos);
     cM.requestColors(pos);
-  }, [pos, vM, cM]);
+    gM.setSpaceshipPos(pos);
+  }, [pos, vM, cM, gM]);
 
   const [z] = useState<number>(Layer.Spaceship);
 
