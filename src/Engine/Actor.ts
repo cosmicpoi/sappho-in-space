@@ -1,5 +1,6 @@
 import { GameManager } from "./GameManager";
 import { CollisionGroup, Hitbox, Position } from "../Utils/types";
+import { SolidData } from "./CollisionManager";
 
 export type ActorProps = {
   termV?: number;
@@ -63,7 +64,7 @@ export class ActorData {
     this.ax = ax;
   }
 
-  public setPosition({x, y}: Position) {
+  public setPosition({ x, y }: Position) {
     this.x = x;
     this.y = y;
   }
@@ -89,11 +90,11 @@ export class ActorData {
   }
 
   // move / collision logic
-  private checkSolids(delPos: Position): boolean {
+  private checkSolids(delPos: Position): SolidData {
     const cM = this.gameManager.collisionManager;
     const box = this.hitboxAt(delPos);
     const solid = cM.collidesSolid(box);
-    return !!solid;
+    return solid;
   }
   private checkTriggers(delPos: Position): boolean {
     const cM = this.gameManager.collisionManager;
@@ -117,7 +118,9 @@ export class ActorData {
         const sgn = Math.sign(moveX);
 
         for (let i = 0; i < Math.abs(moveX); i++) {
-          if (this.checkSolids({ x: sgn, y: 0 })) {
+          const solid = this.checkSolids({ x: sgn, y: 0 });
+          if (solid) {
+            if (solid.callback) solid.callback(this);
             this.onSolidCollide();
             break;
           }
@@ -139,7 +142,9 @@ export class ActorData {
         const sgn = Math.sign(moveY);
 
         for (let i = 0; i < Math.abs(moveY); i++) {
-          if (this.checkSolids({ x: 0, y: sgn })) {
+          const solid = this.checkSolids({ x: 0, y: sgn });
+          if (solid) {
+            if (solid.callback) solid.callback(this);
             this.onSolidCollide();
             break;
           }

@@ -17,7 +17,7 @@ import {
   TextAlign,
 } from "../../Utils/types";
 import { toN } from "../../Utils/utils";
-import { crazyColorData, giftColorData } from "../FloatingBG";
+import { giftColorData } from "../FloatingBG";
 import { Fragment169A } from "../Fragments/FragmentComponents/Fragment160to169";
 import { FragmentLabel, PL_Gifts } from "../Labels";
 import { Paragraph } from "../Paragraph";
@@ -28,10 +28,9 @@ const giftH = 13;
 const giftM = 6;
 const giftR = Math.ceil(Math.sqrt((giftH / 2) ** 2 + (giftM / 2) ** 2));
 const giftCols = 4;
-const giftRows = 3;
+// const giftRows = 3;
 
 const totalW = giftCols * giftW + (giftCols - 1) * giftM;
-const totalH = giftRows * giftW + (giftRows - 1) * giftW;
 
 const spaces = " ".repeat(giftW - 4);
 

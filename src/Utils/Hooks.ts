@@ -162,10 +162,11 @@ export function usePuzzleStatus(
 }
 
 /* Triggers and solids */
-export function useSolid(data: SolidData): void {
+export function useSolid(data: SolidData | undefined): void {
   const gM = useGameManager();
 
   useEffect(() => {
+    if (!data) return;
     return gM.collisionManager.registerSolid(data);
   }, [gM, data]);
 }

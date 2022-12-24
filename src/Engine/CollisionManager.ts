@@ -1,13 +1,14 @@
 import { Circle, Hitbox } from "../Utils/types";
 import { ActorData } from "./Actor";
 
-export type SolidData = Hitbox;
 
-export type TriggerCB = {
+export type WithCB = {
   callback?: (a: ActorData) => void;
 };
-export type TriggerData = Hitbox & TriggerCB;
-export type CircleTriggerData = Circle & TriggerCB;
+
+export type SolidData = Hitbox & WithCB;
+export type TriggerData = Hitbox & WithCB;
+export type CircleTriggerData = Circle & WithCB;
 
 function collides(box1: Hitbox, box2: Hitbox): boolean {
   const xmax1 = box1.x + box1.width;
@@ -68,7 +69,7 @@ export class CollisionManager {
   public collidesTrigger(
     hitbox: Hitbox,
     actor: ActorData
-  ): TriggerCB | undefined {
+  ): WithCB | undefined {
     for (const trigger of this.triggers) {
       if (collides(trigger, hitbox)) {
         if (trigger.callback) trigger.callback(actor);

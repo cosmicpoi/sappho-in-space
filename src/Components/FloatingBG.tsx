@@ -28,6 +28,12 @@ export const giftColorData: ColorData = {
   floatBg: `linear-gradient( 135deg, #FFCF71 10%, #2376DD 100%)`,
 };
 
+export const accomplishColorData: ColorData = {
+  bg: "#ffd6d6",
+  text: "#7c4200",
+  floatBg: `linear-gradient(to bottom, #e7ffc8, #fcf2c0, #ffe6c3, #ffdccc, #ffd6d6)`,
+};
+
 const StyledFloatingBG = styled.div<{ bg: string; visible: boolean }>`
   position: fixed;
   top: 0;
