@@ -22,6 +22,12 @@ export const crazyColorData: ColorData = {
   floatBg: `radial-gradient(circle, rgba(90,255,101,1) 0%, rgba(247,125,255,1) 100%)`,
 };
 
+export const giftColorData: ColorData = {
+  bg: "#2376DD",
+  text: "#d41259",
+  floatBg: `linear-gradient( 135deg, #FFCF71 10%, #2376DD 100%)`,
+};
+
 const StyledFloatingBG = styled.div<{ bg: string; visible: boolean }>`
   position: fixed;
   top: 0;

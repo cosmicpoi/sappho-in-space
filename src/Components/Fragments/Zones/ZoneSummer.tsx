@@ -7,7 +7,7 @@ export function ZoneSummer() {
 
   return (
     <>
-      <Fragment169APuzzle x={cx + 300} y={cy + 430} z={0} />
+      <Fragment169APuzzle x={cx + 300} y={cy + 400} z={0} />
     </>
   );
 }
