@@ -136,6 +136,12 @@ export class AudioManager {
 
     // fallback for audio
     if (fc % 600 === 0) {
+      console.log(
+        "fallback!",
+        rocketAudio.paused,
+        this.currentBgm,
+        this.currentBgm?.paused
+      );
       if (rocketAudio.paused || !this.currentBgm || this.currentBgm?.paused)
         if (this.isLoaded()) this.startBgm();
     }
