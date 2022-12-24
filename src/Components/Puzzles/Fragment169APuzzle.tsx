@@ -49,6 +49,7 @@ function Puzzle169AGift({
   len,
   fkey,
   offY,
+  gift,
 }: {
   cx: number;
   yTop: number;
@@ -59,6 +60,7 @@ function Puzzle169AGift({
   len: number;
   fkey: FragmentKey;
   offY?: number;
+  gift?: boolean;
 }) {
   const x = cx - totalW / 2 + col * (giftW + giftM);
   const y = yTop + row * (giftH + giftM);
@@ -256,6 +258,7 @@ lyre
 `}
         offY={-1}
         fkey={FragmentKey.F176}
+        gift
       />
 
       <Puzzle169AGift
@@ -264,9 +267,10 @@ lyre
         z={z}
         row={1}
         col={0}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={4}
+        content="dawn"
+        fkey={FragmentKey.F175}
+        gift
       />
       <Puzzle169AGift
         cx={cx}
@@ -274,9 +278,13 @@ lyre
         z={z}
         row={1}
         col={1}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={11}
+        offY={-1}
+        content={`transparent
+
+   dress`}
+        fkey={FragmentKey.F177}
+        gift
       />
       <Puzzle169AGift
         cx={cx}
@@ -284,9 +292,9 @@ lyre
         z={z}
         row={1}
         col={2}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={10}
+        content="I might go"
+        fkey={FragmentKey.F182}
       />
       <Puzzle169AGift
         cx={cx}
@@ -294,9 +302,9 @@ lyre
         z={z}
         row={1}
         col={3}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={6}
+        content="danger"
+        fkey={FragmentKey.F184}
       />
 
       <Puzzle169AGift
@@ -305,9 +313,10 @@ lyre
         z={z}
         row={2}
         col={0}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={11}
+        content="honeyvoiced"
+        fkey={FragmentKey.F185}
+        gift
       />
       <Puzzle169AGift
         cx={cx}
@@ -315,9 +324,9 @@ lyre
         z={z}
         row={2}
         col={1}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={10}
+        content="mythweaver"
+        fkey={FragmentKey.F188}
       />
       <Puzzle169AGift
         cx={cx}
@@ -325,9 +334,9 @@ lyre
         z={z}
         row={2}
         col={2}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={4}
+        content="soda"
+        fkey={FragmentKey.F189}
       />
       <Puzzle169AGift
         cx={cx}
@@ -335,9 +344,9 @@ lyre
         z={z}
         row={2}
         col={3}
-        len={0}
-        content=""
-        fkey={FragmentKey.F171}
+        len={6}
+        content="celery"
+        fkey={FragmentKey.F191}
       />
     </>
   );
