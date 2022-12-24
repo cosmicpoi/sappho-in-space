@@ -46,7 +46,7 @@ export function Title() {
         align={TextAlign.Left}
         text={`SPACE`}
       />
-      <LineText
+      {/* <LineText
         x={x}
         y={y + offY + 4}
         z={Layer.Title}
@@ -60,7 +60,7 @@ export function Title() {
         z={Layer.Title2}
         align={TextAlign.Left}
         text={`ESC`}
-      />
+      /> */}
     </>
   );
 }

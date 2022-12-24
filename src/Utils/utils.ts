@@ -66,3 +66,16 @@ export function getAlign(len: number, align: TextAlign): number {
   if (align === TextAlign.Right) return -len;
   else return 0;
 }
+
+// random
+type Rand = { f: () => number; i: (max: number) => number };
+export function seededRandom(s: number): Rand {
+  let seed = s * 7719;
+
+  const rand = () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+
+  return { f: rand, i: (max: number) => Math.floor(rand() * max) };
+}

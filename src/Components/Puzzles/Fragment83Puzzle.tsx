@@ -17,6 +17,8 @@ import { fragment83Text } from "../Fragments/FragmentText/FragmentText80to89";
 import { LineText } from "../LineText";
 import { Paragraph } from "../Paragraph";
 import { hslToHex } from "../../Utils/ColorUtils";
+import { useGameManager } from "../..";
+import { nowagainColorData } from "../FloatingBG";
 
 const delay = 5;
 const now_again = "(now again)";
@@ -115,6 +117,19 @@ export function Fragment83Puzzle({ x, y, z }: Position3D) {
       if (numComplete === len * 4) solve();
     }
   }, [numComplete, len, status, solve]);
+
+  // colors
+  const { colorManager: cM } = useGameManager();
+  useEffect(() => {
+    if (!solved) return;
+
+    return cM.registerZone({
+      x: x - 20 + ox,
+      y: y + 30,
+      radius: 10,
+      data: nowagainColorData,
+    });
+  }, [cM, solved, x, y]);
 
   return (
     <>

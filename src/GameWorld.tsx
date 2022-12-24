@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useGameManager } from ".";
+import { StarField } from "./Components/Decor/Stars";
 import { Fragment1Completion } from "./Components/Fragment1Completion";
 import { ZoneAutumn } from "./Components/Fragments/Zones/ZoneAutumn";
 import { ZoneDay } from "./Components/Fragments/Zones/ZoneDay";
@@ -29,6 +30,8 @@ export function GameWorld() {
 
       <ZoneNight />
       <ZoneDay />
+
+      <StarField />
     </>
   );
 }

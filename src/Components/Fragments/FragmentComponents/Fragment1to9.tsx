@@ -1,6 +1,5 @@
-import * as React from "react";
-import { Position3D } from "../../../Utils/types";
-import { Paragraph } from "../../Paragraph";
+import { FragmentKey } from "../../../Data/FragmentData";
+import { FragmentN } from "../Fragments";
 import {
   fragment1text,
   fragment2text,
@@ -13,38 +12,12 @@ import {
   fragment9text,
 } from "../FragmentText/FragmentText1to9";
 
-export function Fragment1({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment1text} />;
-}
-
-export function Fragment2({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment2text} />;
-}
-
-export function Fragment3({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment3text} spacing={3} />;
-}
-
-export function Fragment4({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment4text} spacing={3} />;
-}
-
-export function Fragment5({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment5text} />;
-}
-
-export function Fragment6({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment6text} />;
-}
-
-export function Fragment7({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment7text} />;
-}
-
-export function Fragment8({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment8text} spacing={4} />;
-}
-
-export function Fragment9({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment9text} />;
-}
+export const Fragment1 = FragmentN(FragmentKey.F1, fragment1text);
+export const Fragment2 = FragmentN(FragmentKey.F2, fragment2text);
+export const Fragment3 = FragmentN(FragmentKey.F3, fragment3text, 3);
+export const Fragment4 = FragmentN(FragmentKey.F4, fragment4text, 3);
+export const Fragment5 = FragmentN(FragmentKey.F5, fragment5text);
+export const Fragment6 = FragmentN(FragmentKey.F6, fragment6text);
+export const Fragment7 = FragmentN(FragmentKey.F7, fragment7text);
+export const Fragment8 = FragmentN(FragmentKey.F8, fragment8text, 4);
+export const Fragment9 = FragmentN(FragmentKey.F9, fragment9text);

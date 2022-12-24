@@ -30,6 +30,13 @@ export enum FragmentKey {
 
   // others
   F2 = "2",
+  F3 = "3",
+  F4 = "4",
+  F5 = "5",
+  F6 = "6",
+  F7 = "7",
+  F8 = "8",
+  F9 = "9",
 }
 
 export enum FragmentStatus {

@@ -34,6 +34,12 @@ export const accomplishColorData: ColorData = {
   floatBg: `linear-gradient(to bottom, #e7ffc8, #fcf2c0, #ffe6c3, #ffdccc, #ffd6d6)`,
 };
 
+export const nowagainColorData: ColorData = {
+  bg: "#220000",
+  text: "#e3e3e3",
+  floatBg: "#220000",
+};
+
 const StyledFloatingBG = styled.div<{ bg: string; visible: boolean }>`
   position: fixed;
   top: 0;

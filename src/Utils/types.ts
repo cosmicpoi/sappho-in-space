@@ -33,6 +33,7 @@ export enum TextAlign {
 }
 
 export enum Layer {
+  Stars = -1,
   Default = 0,
   Title = 1,
   Title2 = 2,

@@ -8,7 +8,7 @@ import { SolidData } from "../../Engine/CollisionManager";
 import { usePuzzleStatus, useSolid } from "../../Utils/Hooks";
 import { Position, Position3DR } from "../../Utils/types";
 import { accomplishColorData } from "../FloatingBG";
-import { Fragment112 } from "../Fragments/FragmentComponents/Fragment110to119";
+import { fragment112Text } from "../Fragments/FragmentText/FragmentText110to119";
 import { FragmentLabel, PL_Accomplish } from "../Labels";
 import { Paragraph } from "../Paragraph";
 
@@ -93,7 +93,7 @@ export function Fragment112Puzzle({ x, y, z }: Position3DR) {
   return (
     <>
       <FragmentLabel x={cx - 1} y={y} decor fkey={FragmentKey.F112} />
-      <Fragment112 x={x} y={fy} z={z} />
+      <Paragraph x={x} y={fy} z={z} text={fragment112Text} />
       {/* <DebugBox hitbox={{ x, y: fy, width: blockWidth, height: blockHeight }} /> */}
 
       {/* Blocks */}
