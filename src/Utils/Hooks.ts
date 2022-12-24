@@ -149,7 +149,9 @@ export function useSpaceshipPos(): Position | undefined {
 export function usePuzzleStatus(
   fkey: FragmentKey
 ): [FragmentStatus, () => void] {
-  const { dataManager: dM } = useGameManager();
+  const { dataManager: dM, audioManager: aM } = useGameManager();
+
+  const audioLoaded = useAudioLoaded();
 
   const status = useUpdatedValue(
     () => dM.getFragmentStatus(fkey),
@@ -157,8 +159,12 @@ export function usePuzzleStatus(
   );
 
   const setStatus = useCallback(() => dM.solvePuzzle(fkey), [dM, fkey]);
+  const solve = useCallback(() => {
+    aM.playSolve();
+    if (audioLoaded) setStatus();
+  }, [audioLoaded, aM, setStatus]);
 
-  return [status, setStatus];
+  return [status, solve];
 }
 
 export function useAudioLoaded(): boolean {

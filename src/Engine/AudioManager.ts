@@ -95,6 +95,12 @@ export class AudioManager {
     fxa.volume = 0.7;
     fxa.play();
   }
+  public playSolve() {
+    const fxa = this.audio.get(envWin[this.env]);
+    fxa.currentTime = 0;
+    fxa.volume = 0.7;
+    fxa.play();
+  }
 
   // audio management
   private fadeOut(audio: HTMLAudioElement): void {
