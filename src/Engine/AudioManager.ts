@@ -114,7 +114,7 @@ export class AudioManager {
   }
 
   // bgm stuff
-  private onFrame(_fc: number) {
+  private onFrame(fc: number) {
     if (!this.currentBgm) return;
     const rocketAudio = this.audio.get(rocket);
 
@@ -132,6 +132,12 @@ export class AudioManager {
     }
     if (rocketAudio.currentTime >= maxTime - 0.1) {
       rocketAudio.currentTime = 0;
+    }
+
+    // fallback for audio
+    if (fc % 600 === 0) {
+      if (rocketAudio.paused || !this.currentBgm || this.currentBgm?.paused)
+        if (this.isLoaded()) this.startBgm();
     }
   }
   private updateBgm(env: Environment | undefined): void {
