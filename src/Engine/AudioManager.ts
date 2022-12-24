@@ -54,6 +54,7 @@ export class AudioManager {
   private rocketFrames = 0;
 
   private didLoad = false;
+  private hasStarted = false;
 
   constructor(gameManager: GameManager) {
     autoBind(this);
@@ -73,15 +74,25 @@ export class AudioManager {
   private loadAudio(name: string): void {
     const audio = new Audio(url(name));
     this.audio.set(name, audio);
-    audio.addEventListener("canplaythrough", () => {
-      this.loaded.set(name, true);
-      console.log("loaded ", name);
-      this.update$.publish();
-    });
+    audio.addEventListener("canplaythrough", this.canPlayThrough(name));
+  }
+
+  private canPlayThrough(name: string): () => void {
+    return () => {
+      const loaded = this.loaded;
+      const update$ = this.update$;
+
+      if (!loaded.get(name)) {
+        console.log("loaded ", name);
+        loaded.set(name, true);
+        update$.publish();
+      }
+    };
   }
 
   public isLoaded(): boolean {
     if (this.didLoad) return true;
+
     if (
       allAudio
         .map((str) => !!this.loaded.get(str))
@@ -89,7 +100,9 @@ export class AudioManager {
     ) {
       this.didLoad = true;
       console.log("all audio loaded!");
+      return true;
     }
+    return false;
   }
 
   // public playAudio(name: string): void {
@@ -144,7 +157,7 @@ export class AudioManager {
     }
   }
   private updateBgm(env: Environment | undefined): void {
-    if (env === undefined || !this.isLoaded()) return;
+    if (env === undefined || !this.isLoaded() || !this.hasStarted) return;
     this.audio.get(rocket).play();
 
     const bgmName = envBgm[env];
@@ -163,11 +176,9 @@ export class AudioManager {
       bgm.currentTime = lastBgm.currentTime;
     }
     bgm.play();
-    setTimeout(() => {
-      lastBgm.pause();
-    }, 5000);
   }
   public startBgm(): void {
+    this.hasStarted = true;
     console.log("start bgm!");
     const bgm = this.audio.get(envBgm[0]);
     bgm.play();

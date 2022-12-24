@@ -43,7 +43,7 @@ export const ColorContext = React.createContext<ColorData>({
 export const useColors = () => React.useContext(ColorContext);
 
 function App() {
-  const [gameManager] = useState<GameManager>(new GameManager());
+  const [gameManager] = useState<GameManager>(() => new GameManager());
 
   const containerRef = useRef<HTMLDivElement>();
   useEffect(() => {

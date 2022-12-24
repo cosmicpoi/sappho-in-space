@@ -26,6 +26,7 @@ export class GameManager {
 
   constructor() {
     autoBind(this);
+    console.log('making game manager!');
     this.charPixelGridManager = new CharPixelGridManager();
     this.inputManager = new InputManager();
     this.viewportManager = new ViewportManager();
