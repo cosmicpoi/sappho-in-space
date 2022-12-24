@@ -53,6 +53,8 @@ export class AudioManager {
 
   private rocketFrames = 0;
 
+  private didLoad = false;
+
   constructor(gameManager: GameManager) {
     autoBind(this);
     this.gameManager = gameManager;
@@ -79,9 +81,15 @@ export class AudioManager {
   }
 
   public isLoaded(): boolean {
-    return allAudio
-      .map((str) => !!this.loaded.get(str))
-      .reduce((prev: boolean, curr: boolean) => prev && curr);
+    if (this.didLoad) return true;
+    if (
+      allAudio
+        .map((str) => !!this.loaded.get(str))
+        .reduce((prev: boolean, curr: boolean) => prev && curr)
+    ) {
+      this.didLoad = true;
+      console.log("all audio loaded!");
+    }
   }
 
   // public playAudio(name: string): void {
