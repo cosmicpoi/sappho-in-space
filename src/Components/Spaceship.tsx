@@ -99,7 +99,7 @@ export function Spaceship() {
       const hoz = iM.resolveHozDirection();
       const vert = iM.resolveVertDirection();
 
-      motion.setAcceleration({ x: hoz * 0.008, y: vert * 0.008 });
+      motion.setAcceleration({ x: hoz * 0.01, y: vert * 0.01 });
       const update = motion.onFrame(true);
 
       const { x: nX, y: nY } = motion.getPosition();

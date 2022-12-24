@@ -1,6 +1,7 @@
 import * as React from "react";
+import { FragmentKey } from "../../../Data/FragmentData";
 import { Position3D } from "../../../Utils/types";
-import { Paragraph } from "../../Paragraph";
+import { FragmentN } from "../Fragments";
 import {
   fragment12text,
   fragment15Atext,
@@ -11,31 +12,20 @@ import {
   fragment19text,
 } from "../FragmentText/FragmentText12to19";
 
-export function Fragment12({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment12text} />;
-}
+export const Fragment12 = FragmentN(FragmentKey.F12, fragment12text);
+const Fragment15A = FragmentN(FragmentKey.F15A, fragment15Atext);
+const Fragment15B = FragmentN(FragmentKey.F15B, fragment15Btext);
 
 export function Fragment15({ x, y, z }: Position3D) {
   return (
     <>
-      <Paragraph x={x} y={y} z={z} text={fragment15Atext} />
-      <Paragraph x={x + 8} y={y + 20} z={z} text={fragment15Btext} />
+      <Fragment15A x={x} y={y} z={z} />
+      <Fragment15B x={x + 16} y={y + 24} z={z} />
     </>
   );
 }
 
-export function Fragment16({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment16text} />;
-}
-
-export function Fragment17({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment17text} />;
-}
-
-export function Fragment18({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment18text} />;
-}
-
-export function Fragment19({ x, y, z }: Position3D) {
-  return <Paragraph x={x} y={y} z={z} text={fragment19text} />;
-}
+export const Fragment16 = FragmentN(FragmentKey.F16, fragment16text);
+export const Fragment17 = FragmentN(FragmentKey.F17, fragment17text);
+export const Fragment18 = FragmentN(FragmentKey.F18, fragment18text);
+export const Fragment19 = FragmentN(FragmentKey.F19, fragment19text);

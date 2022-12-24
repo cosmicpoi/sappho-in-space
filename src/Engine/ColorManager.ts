@@ -9,9 +9,9 @@ import { Monomitter, monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
 import { GameManager } from "./GameManager";
 
-export const ellipseHalfWidth = 750 / 2;
-export const ellipseHalfHeight = 500 / 2;
-export const dayNightMargin = 90;
+export const ellipseHalfWidth = 430 / 2;
+export const ellipseHalfHeight = 280 / 2;
+export const dayNightMargin = 40;
 
 export type ColorZone = Position & {
   radius: number;

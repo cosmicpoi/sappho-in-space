@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 import { CharPixel } from "../../CharPixelLib/CharPixel";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, t_v, t_v } from "../../Utils/consts";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, t_v } from "../../Utils/consts";
 import { Layer, Position } from "../../Utils/types";
 import { clamp, randEl, seededRandom } from "../../Utils/utils";
 import { Paragraph } from "../Paragraph";
@@ -14,10 +14,10 @@ type StarData = Position & {
   twinkle?: number;
 };
 
-const freq = 30; // smaller -> more
+const freq = 50; // smaller -> more
 const S_W = CANVAS_WIDTH / freq;
 const S_H = CANVAS_HEIGHT / freq;
-const starProb = 0.4;
+const starProb = 0.3;
 const twinkleProb = 0.2;
 const maxOpacity = 0.75;
 

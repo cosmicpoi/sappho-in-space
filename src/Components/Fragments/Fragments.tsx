@@ -8,7 +8,7 @@ export type FragmentProps = Position3D;
 export const FragmentN = (fkey: FragmentKey, text: string, spacing = 2) => {
   const F = ({ x, y, z }: FragmentProps) => (
     <>
-      <FragmentLabel x={x} y={y - 2 * spacing} z={z} fkey={fkey} />
+      <FragmentLabel x={x} y={y - 4} z={z} fkey={fkey} />
       <Paragraph x={x} y={y} z={z} text={text} spacing={spacing} />
     </>
   );
