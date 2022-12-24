@@ -73,6 +73,7 @@ export class AudioManager {
     this.audio.set(name, audio);
     audio.addEventListener("canplaythrough", () => {
       this.loaded.set(name, true);
+      console.log("loaded ", name);
       this.update$.publish();
     });
   }
@@ -114,7 +115,7 @@ export class AudioManager {
   }
 
   // bgm stuff
-  private onFrame(fc: number) {
+  private onFrame(_fc: number) {
     if (!this.currentBgm) return;
     const rocketAudio = this.audio.get(rocket);
 
@@ -132,18 +133,6 @@ export class AudioManager {
     }
     if (rocketAudio.currentTime >= maxTime - 0.1) {
       rocketAudio.currentTime = 0;
-    }
-
-    // fallback for audio
-    if (fc % 600 === 0) {
-      console.log(
-        "fallback!",
-        rocketAudio.paused,
-        this.currentBgm,
-        this.currentBgm?.paused
-      );
-      if (rocketAudio.paused || !this.currentBgm || this.currentBgm?.paused)
-        if (this.isLoaded()) this.startBgm();
     }
   }
   private updateBgm(env: Environment | undefined): void {
@@ -183,11 +172,7 @@ export class AudioManager {
     this.audio.get(envBgm[5]).volume = 0;
 
     const rocketAudio = this.audio.get(rocket);
-    rocketAudio.volume = 0.2;
     rocketAudio.play();
-
-    this.currentBgm.currentTime = 130;
-    rocketAudio.currentTime = 130;
   }
 
   public requestRocket(): void {
