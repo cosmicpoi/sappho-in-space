@@ -6,7 +6,7 @@ import { t_v } from "../Utils/consts";
 import { DEBUG_ENVIRONMENT } from "../Utils/debug";
 import { unit_wToS } from "../Viewport/ViewportManager";
 import { CharPixelStyle, CharPixelProps } from "./CharPixelTypes";
-import { ColorData, getZoneData } from "../Utils/colors";
+import { ColorData, getEnvColorData } from "../Utils/colors";
 import { ZIndex } from "../Utils/types";
 import { useFrame } from "../Utils/Hooks";
 import { randEl } from "../Utils/utils";
@@ -68,7 +68,7 @@ export function CharPixel(props: CharPixelProps) {
 
   const zoneData: ColorData | undefined = useMemo(() => {
     if (!DEBUG_ENVIRONMENT) return undefined;
-    return getZoneData(gM.colorManager.getEnvironment({ x, y }));
+    return getEnvColorData(gM.colorManager.getEnvironment({ x, y }));
   }, [gM, x, y]);
 
   const [isDim, setIsDim] = useState<boolean>(false);

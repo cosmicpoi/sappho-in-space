@@ -47,12 +47,14 @@ export const environmentBackground: Record<Environment, string> = [
 export type ColorData = {
   bg: string;
   text: string;
+  env?: Environment;
   floatBg?: string;
 };
 
-export const getZoneData = (e: Environment) => ({
+export const getEnvColorData = (e: Environment): ColorData => ({
   bg: environmentBackground[e],
   text: environmentColor[e],
+  env: e,
 });
 
-export const defaultColorData: ColorData = getZoneData(Environment.Night);
+export const defaultColorData: ColorData = getEnvColorData(Environment.Night);

@@ -10,6 +10,7 @@ import {
   useManyKeysUp,
   useActor,
   useKeyDown,
+  useAudioLoaded,
 } from "../Utils/Hooks";
 import {
   CollisionGroup,
@@ -64,13 +65,20 @@ const spaceshipHitbox: Hitbox = {
 };
 export function Spaceship() {
   const gM = useGameManager();
-  const { viewportManager: vM, inputManager: iM, colorManager: cM } = gM;
+  const {
+    viewportManager: vM,
+    inputManager: iM,
+    colorManager: cM,
+    audioManager: aM,
+  } = gM;
 
   // basic spaceship stuff
   const [faceDir, setFaceDir] = useState<Direction>(Direction.Up);
   const [pos, setPos] = useState<Position>(
     DEBUG_START_POS ? addPos(DEBUG_START_POS, vM.getCenter()) : vM.getCenter()
   );
+  const [hasMoved, setHasMoved] = useState<boolean>(false);
+  const audioLoaded = useAudioLoaded();
 
   const motion = useActor(
     { x: pos.x, y: pos.y },
@@ -107,16 +115,18 @@ export function Spaceship() {
 
       // make new particles
       if (hoz !== 0 || vert !== 0) {
+        aM.requestRocket();
         if (fc % 10 === 0)
           rocketHandle.newParticle(new RocketParticle(gM, nX, nY, faceDir));
       }
     },
-    [iM, setPos, motion, rocketHandle, gM, faceDir]
+    [iM, setPos, motion, rocketHandle, gM, faceDir, aM]
   );
   useFrame(onFrame);
 
   const onArrowDown = useCallback(
     (k: string) => {
+      setHasMoved(true);
       setFaceDir(directionFromKey(k));
     },
     [setFaceDir]
@@ -124,8 +134,10 @@ export function Spaceship() {
   useManyKeysDown(directionKeys, onArrowDown);
 
   const onSpaceDown = useCallback(() => {
+    setHasMoved(true);
     heartHandle.newParticles(heartParticles(gM, pos.x, pos.y));
-  }, [gM, heartHandle, pos]);
+    if (audioLoaded) aM.playFx();
+  }, [gM, heartHandle, pos, aM, audioLoaded]);
   useKeyDown(KEYS.Space, onSpaceDown);
 
   const onArrowUp = useCallback(
@@ -151,6 +163,10 @@ export function Spaceship() {
   const [z] = useState<number>(Layer.Spaceship);
 
   const { x, y } = pos;
+
+  useEffect(() => {
+    if (audioLoaded && hasMoved) aM.startBgm();
+  }, [audioLoaded, aM, hasMoved]);
 
   return (
     <>

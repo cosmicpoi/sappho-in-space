@@ -17,7 +17,7 @@ type StarData = Position & {
 const freq = 50; // smaller -> more
 const S_W = CANVAS_WIDTH / freq;
 const S_H = CANVAS_HEIGHT / freq;
-const starProb = 0.3;
+const starProb = 0.2;
 const twinkleProb = 0.2;
 const maxOpacity = 0.75;
 

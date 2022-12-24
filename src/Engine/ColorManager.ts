@@ -3,7 +3,7 @@ import {
   ColorData,
   defaultColorData,
   Environment,
-  getZoneData,
+  getEnvColorData,
 } from "../Utils/colors";
 import { Monomitter, monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
@@ -90,7 +90,7 @@ export class ColorManager {
     // update color values if either zone or environment updated
     if (didUpdate) {
       if (this.zone) this.colorData$.publish(this.zone.data);
-      else this.colorData$.publish(getZoneData(this.environment));
+      else this.colorData$.publish(getEnvColorData(this.environment));
     }
   }
 }

@@ -161,6 +161,13 @@ export function usePuzzleStatus(
   return [status, setStatus];
 }
 
+export function useAudioLoaded(): boolean {
+  const { audioManager: aM } = useGameManager();
+  const loaded = useUpdatedValue(() => aM.isLoaded(), aM.update$);
+
+  return loaded;
+}
+
 /* Triggers and solids */
 export function useSolid(data: SolidData | undefined): void {
   const gM = useGameManager();

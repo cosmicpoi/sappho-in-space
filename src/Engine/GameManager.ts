@@ -4,6 +4,7 @@ import { DataManager } from "../Data/FragmentData";
 import { Monomitter, monomitter } from "../Utils/Monomitter";
 import { Position } from "../Utils/types";
 import { ViewportManager } from "../Viewport/ViewportManager";
+import { AudioManager } from "./AudioManager";
 import { CollisionManager } from "./CollisionManager";
 import { ColorManager } from "./ColorManager";
 import { InputManager } from "./InputManager";
@@ -15,6 +16,7 @@ export class GameManager {
   public collisionManager: CollisionManager;
   public dataManager: DataManager;
   public colorManager: ColorManager;
+  public audioManager: AudioManager;
 
   private frameCount = 0;
   public frame$ = monomitter<number>();
@@ -30,6 +32,7 @@ export class GameManager {
     this.collisionManager = new CollisionManager();
     this.dataManager = new DataManager();
     this.colorManager = new ColorManager(this);
+    this.audioManager = new AudioManager(this);
   }
 
   private loop() {
